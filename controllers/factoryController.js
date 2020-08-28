@@ -1,5 +1,6 @@
 const db = require('./databaseController');
 const url = require('url');
+const { orderBy } = require('./databaseController');
 
 exports.addOne = table => async (req, res) => {
   const data = await db.returning('*').insert(req.body).into(table);
@@ -45,14 +46,29 @@ const parseQuery = (query, queryObject) => {
 
   for (let key of queryKeys) {
     let value = queryObject[key];
-    let operator = '=';
-    if (value[0] === '[') {
-      operator = value.split(']');
-      value = operator[1];
-      operator = operator[0].split('[')[1];
-      operator = queryOperators[operator];
+
+    // Handle query WHERE
+    if (key !== 'orderBy') {
+      let operator = '=';
+      if (value[0] === '[') {
+        operator = value.split(']');
+        value = operator[1];
+        operator = operator[0].split('[')[1];
+        operator = queryOperators[operator];
+      }
+      query = query.where(key, operator, value);
     }
-    query = query.where(key, operator, value);
+
+    // Handle query ORDER BY
+    if (key === 'orderBy') {
+      let order = 'asc';
+      if (value[0] === '[') {
+        order = value.split(']');
+        value = order[1];
+        order = order[0].split('[')[1];
+      }
+      query = query.orderBy(value, order);
+    }
   }
   return query;
 };
