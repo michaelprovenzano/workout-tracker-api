@@ -9,7 +9,6 @@ router
   .route('/')
   .post(workoutLogController.addWorkoutLog)
   .get(workoutLogController.getAllWorkoutLogs);
-
 router
   .route('/:id')
   .delete(workoutLogController.deleteWorkoutLog)

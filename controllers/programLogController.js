@@ -7,8 +7,10 @@ exports.addProgramLog = async (req, res) => {
   let id = req.body.program_id;
 
   // Get the workouts for the program
-  let program = await db.select('*').from('programs').where('id', '=', id);
-  program = program[0];
+  let programWorkouts = await db.select('*').from('programs_workouts').where('program_id', '=', id);
+
+  // let program = await db.select('*').from('programs').where('program_id', '=', id);
+  // program = program[0];
 
   // Set start date if one isn't set (necessary for laying out program timeline)
   if (!req.body.start_date) req.body.start_date = new Date(Date.now());
@@ -16,7 +18,7 @@ exports.addProgramLog = async (req, res) => {
 
   // Create an array of dates for the program
   let workoutSchedule = [];
-  program.schedule.forEach(workout => {
+  programWorkouts.forEach(workout => {
     workoutSchedule.push(new Date(workoutDate));
     workoutDate.setDate(workoutDate.getDate() + 1);
   });
@@ -24,15 +26,16 @@ exports.addProgramLog = async (req, res) => {
   // Update the req.body object
   req.body.user_id = req.user.id;
   req.body.created_at = new Date(Date.now());
-  req.body.workouts = program.schedule;
   req.body.workout_schedule = workoutSchedule;
-  req.body.next_workout = program.schedule[0];
+  req.body.next_workout = programWorkouts[0].program_workout_id;
   req.body.next_workout_date = workoutSchedule[0];
+  req.body.next_workout_index = 0;
+  req.body.active_workout_log = undefined;
   req.body.status = 'active';
   req.body.end_date = workoutSchedule[workoutSchedule.length - 1];
 
   // Make all current programs inactive
-  makeAllProgramsInactive();
+  makeAllProgramsInactive(req);
 
   // Add programLog and send response
   factory.addOne('program_logs')(req, res);
@@ -82,14 +85,27 @@ exports.postponeNextWorkout = async (req, res, next) => {
   });
 };
 
-const makeAllProgramsInactive = async () => {
+const makeAllProgramsInactive = async req => {
   let userId = req.user.id;
   await db('program_logs')
-    .where({ status: active, user_id: userId })
+    .where({ status: 'active', user_id: userId })
     .update({ status: 'inactive' });
 };
 
-exports.getProgramLogById = factory.getById('program_logs', true);
-exports.getAllProgramLogs = factory.getAll('program_logs');
-exports.updateProgramLog = factory.updateOne('program_logs');
-exports.deleteProgramLog = factory.deleteById('program_logs');
+exports.getProgramLogById = factory.getById('program_logs', 'program_log_id', true, [
+  {
+    targetTable: 'programs',
+    column: 'program_id',
+    targetColumn: 'program_id',
+  },
+]);
+
+exports.getAllProgramLogs = factory.getAll('program_logs', true, [
+  {
+    targetTable: 'programs',
+    column: 'program_id',
+    targetColumn: 'program_id',
+  },
+]);
+exports.updateProgramLog = factory.updateOne('program_logs', 'program_log_id');
+exports.deleteProgramLog = factory.deleteById('program_logs', 'program_log_id');

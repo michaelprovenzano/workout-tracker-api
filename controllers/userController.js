@@ -35,5 +35,5 @@ exports.register = (req, res) => {
 };
 
 exports.getAllUsers = factory.getAll('users');
-exports.getUserById = factory.getById('users');
-exports.updateUser = factory.updateOne('users');
+exports.getUserById = factory.getById('users', 'id');
+exports.updateUser = factory.updateOne('users', 'id');

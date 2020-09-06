@@ -9,8 +9,12 @@ const exerciseRoutes = require('./routes/exerciseRoutes');
 const exerciseLogRoutes = require('./routes/exerciseLogRoutes');
 const workoutRoutes = require('./routes/workoutRoutes');
 const workoutLogRoutes = require('./routes/workoutLogRoutes');
+const workoutExercisesRoutes = require('./routes/workoutExercisesRoutes');
 const programRoutes = require('./routes/programRoutes');
 const programLogRoutes = require('./routes/programLogRoutes');
+const programWorkoutsRoutes = require('./routes/programWorkoutsRoutes');
+const utilRoutes = require('./routes/utilRoutes');
+
 const authController = require('./controllers/authController');
 const passport = require('./controllers/passportController');
 const errorController = require('./controllers/errorController');
@@ -40,6 +44,9 @@ app.use('/api/workouts', workoutRoutes);
 app.use('/api/workout-logs', workoutLogRoutes);
 app.use('/api/programs', programRoutes);
 app.use('/api/program-logs', programLogRoutes);
+app.use('/api/program-workouts', programWorkoutsRoutes);
+app.use('/api/workout-exercises', workoutExercisesRoutes);
+app.use('/api/util', utilRoutes);
 app.get('/protected', authController.protect, (req, res) => {
   res.send('protected');
 });

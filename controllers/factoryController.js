@@ -1,21 +1,33 @@
 const db = require('./databaseController');
 const url = require('url');
-const { orderBy } = require('./databaseController');
 
 exports.addOne = table => async (req, res) => {
   const data = await db.returning('*').insert(req.body).into(table);
-  return res.status(200).json(data);
+  return res.status(200).json(data[0]);
 };
 
-exports.deleteById = table => async (req, res) => {
+exports.deleteById = (table, idLabel) => async (req, res) => {
   const { id } = req.params;
 
-  await db(table).where('id', '=', id).del();
+  await db(table).where(idLabel, '=', id).del();
   res.status(200).json(null);
 };
 
-exports.getAll = table => async (req, res) => {
-  let query = db.select('*').from(table).where('user_id', '=', req.user.id);
+exports.getAll = (table, restrictToUser, joins) => async (req, res) => {
+  let whereOptions = {};
+  if (restrictToUser) whereOptions.user_id = req.user.id;
+  let query = db.select('*').from(table).where(whereOptions);
+
+  if (joins) {
+    joins.forEach(joinObject => {
+      query = query.join(
+        joinObject.targetTable,
+        `${table}.${joinObject.column}`,
+        '=',
+        `${joinObject.targetTable}.${joinObject.targetColumn}`
+      );
+    });
+  }
 
   const queryParams = url.parse(req.url, true).query;
   query = parseQuery(query, queryParams);
@@ -24,14 +36,26 @@ exports.getAll = table => async (req, res) => {
   res.status(200).json(data);
 };
 
-exports.getById = (table, restrictToUser) => async (req, res) => {
+exports.getById = (table, idLabel, restrictToUser, joins) => async (req, res) => {
   const { id } = req.params;
-  let whereOptions = {
-    id: id,
-  };
+  let whereOptions = {};
+  whereOptions[idLabel] = id;
   if (restrictToUser) whereOptions.user_id = req.user.id;
 
-  const data = await db.select('*').from(table).where(whereOptions);
+  let query = db.select('*').from(table).where(whereOptions);
+
+  if (joins) {
+    joins.forEach(joinObject => {
+      query = query.join(
+        joinObject.targetTable,
+        `${table}.${joinObject.column}`,
+        '=',
+        `${joinObject.targetTable}.${joinObject.targetColumn}`
+      );
+    });
+  }
+
+  const data = await query;
   res.status(200).json(data);
 };
 
@@ -73,15 +97,13 @@ const parseQuery = (query, queryObject) => {
   return query;
 };
 
-exports.updateOne = table => async (req, res) => {
+exports.updateOne = (table, idLabel) => async (req, res) => {
   const { id } = req.params;
+  let whereOptions = {};
+  whereOptions[idLabel] = id;
+  whereOptions.user_id = req.user.id;
 
-  const data = await db
-    .returning('*')
-    .select('*')
-    .from(table)
-    .update(req.body)
-    .where({ id: id, user_id: req.user.id });
+  const data = await db.returning('*').select('*').from(table).update(req.body).where(whereOptions);
 
   res.status(200).json(data[0]);
 };
@@ -92,7 +114,7 @@ exports.adminGetAll = table => async (req, res) => {
   res.status(200).json(data);
 };
 
-exports.adminUpdateOne = table => async (req, res) => {
+exports.adminUpdateOne = (table, idLabel) => async (req, res) => {
   const { id } = req.params;
 
   const data = await db
@@ -100,7 +122,7 @@ exports.adminUpdateOne = table => async (req, res) => {
     .select('*')
     .from(table)
     .update(req.body)
-    .where('id', '=', id);
+    .where(idLabel, '=', id);
 
   res.status(200).json(data[0]);
 };
