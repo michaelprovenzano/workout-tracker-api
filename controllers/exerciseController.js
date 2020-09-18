@@ -6,11 +6,6 @@ exports.addExercise = async (req, res) => {
   res.status(200).json(exercise);
 };
 
-exports.getExerciseById = factory.getById('exercises', 'exercise_id');
-
-exports.getExercises = async (req, res) => {
-  const exercises = await db.select('*').from('exercises');
-  res.status(200).json(exercises);
-};
-
+exports.getExerciseById = factory.getById('exercises', 'exercise_id', true);
+exports.getExercises = factory.getAll('exercises', true);
 exports.updateExercise = factory.updateOne('exercises', 'exercise_id');

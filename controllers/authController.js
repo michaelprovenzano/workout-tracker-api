@@ -5,9 +5,7 @@ const db = require('./databaseController');
 const passport = require('./passportController');
 const catchAsync = require('../utils/catchAsync');
 
-const sendToken = (user, statusCode, res) => {};
-
-exports.login = async (req, res) => {
+exports.login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) return res.status(401).json('Some fields are empty');
@@ -27,19 +25,20 @@ exports.login = async (req, res) => {
         expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
         httpOnly: true,
       };
-      // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+      if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
       res.cookie('jwt', token, cookieOptions);
       return res.status(200).json({ status: 'success', token, ...user });
     }
+
     return res.status(401).json({
       status: 'fail',
       message: 'Incorrect user name or password',
     });
   });
-};
+});
 
-exports.logout = (req, res) => {
+exports.logout = catchAsync((req, res) => {
   if (req.headers && req.headers.authorization) {
     let authorization = req.headers.authorization.split(' ')[1],
       decoded;
@@ -54,9 +53,9 @@ exports.logout = (req, res) => {
     const token = jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: 1 });
     return res.send({ token });
   }
-};
+});
 
-exports.protect = async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   passport.authenticate('jwt', { session: false });
 
   let token;
@@ -78,4 +77,4 @@ exports.protect = async (req, res, next) => {
   if (user.length > 0) req.user = user[0];
 
   next();
-};
+});

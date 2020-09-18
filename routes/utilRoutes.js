@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const workoutLogController = require('../controllers/workoutLogController');
+const programLogController = require('../controllers/programLogController');
 const authController = require('../controllers/authController');
 
 router.use(authController.protect);
 
-router.route('/complete-active-workout').patch(workoutLogController.completeActiveWorkout);
+router.route('/program-log-stats/:programLogId').get(programLogController.getProgramStats);
 
 module.exports = router;

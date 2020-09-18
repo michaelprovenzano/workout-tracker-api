@@ -10,8 +10,6 @@ router
   .post(programLogController.addProgramLog)
   .get(programLogController.getAllProgramLogs);
 
-router.route('/postpone-next-workout').patch(programLogController.postponeNextWorkout);
-
 router
   .route('/:id')
   .get(programLogController.getProgramLogById)
