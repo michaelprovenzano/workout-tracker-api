@@ -5,6 +5,60 @@ const db = require('./databaseController');
 const passport = require('./passportController');
 const catchAsync = require('../utils/catchAsync');
 
+const sendCookie = (res, token) => {
+  const cookieOptions = {
+    expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  return res.cookie('jwt', token, cookieOptions);
+};
+
+const signToken = payload => {
+  const token = jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: '90d' });
+
+  return token;
+};
+
+exports.register = (req, res) => {
+  const { email, password, name } = req.body;
+  if (!email || !password) return res.status(401).json('Some fields are empty');
+  bcrypt.hash(password, 10, (err, hash) => {
+    db.transaction(trx => {
+      trx
+        .insert({
+          email: email,
+          password: hash,
+        })
+        .into('login')
+        .returning('email')
+        .then(loginEmail => {
+          return trx('users')
+            .returning('*')
+            .insert({
+              email: email,
+              name: name,
+              created_at: new Date(),
+              role: 'user',
+            })
+            .then(data => {
+              let user = data[0];
+
+              const token = signToken({ id: user.id });
+
+              sendCookie(res, token);
+
+              return res.status(200).json({ status: 'success', token, ...user });
+            })
+            .catch(err => res.status(400).json(err));
+        })
+        .then(trx.commit)
+        .catch(trx.rollback);
+    });
+  });
+};
+
 exports.login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
@@ -17,17 +71,9 @@ exports.login = catchAsync(async (req, res) => {
 
   bcrypt.compare(password, user.password, (err, result) => {
     if (result) {
-      const payload = { id: user.id };
-      const token = jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: '90d' });
-      user.password = null;
+      const token = signToken({ id: user.id });
 
-      const cookieOptions = {
-        expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-        httpOnly: true,
-      };
-      if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-
-      res.cookie('jwt', token, cookieOptions);
+      sendCookie(res, token);
       return res.status(200).json({ status: 'success', token, ...user });
     }
 

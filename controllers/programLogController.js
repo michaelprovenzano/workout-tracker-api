@@ -4,6 +4,8 @@ const moment = require('moment');
 const catchAsync = require('../utils/catchAsync');
 
 exports.addProgramLog = catchAsync(async (req, res) => {
+  console.log('adding log');
+
   // Get the program id and add it to the log
   let id = req.body.program_id;
 
