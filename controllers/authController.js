@@ -120,7 +120,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   const decoded = await promisify(jwt.verify)(token, process.env.SECRET_OR_KEY);
-  console.log(decoded);
   const user = await db('login')
     .join('users', 'login.email', '=', 'users.email')
     .where('users.user_id', '=', decoded.id);

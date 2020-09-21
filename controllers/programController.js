@@ -2,12 +2,9 @@ const db = require('./databaseController');
 const factory = require('./factoryController');
 const catchAsync = require('../utils/catchAsync');
 
-exports.addProgram = catchAsync(async (req, res) => {
-  const workout = await db.returning('program_id').insert(req.body).into('programs');
-  res.status(200).json(workout);
-});
+exports.addProgram = factory.addOne('programs', false);
 
-exports.getProgramById = factory.getById('programs', 'program_id', true, [
+exports.getProgramById = factory.getById('programs', 'program_id', false, [
   {
     targetTable: 'programs_workouts',
     column: 'id',
@@ -15,20 +12,5 @@ exports.getProgramById = factory.getById('programs', 'program_id', true, [
   },
 ]);
 
-exports.getAllPrograms = catchAsync(async (req, res) => {
-  const workouts = await db.select('*').from('programs');
-  res.status(200).json(workouts);
-});
-
-exports.updateProgram = catchAsync(async (req, res) => {
-  const { id } = req.params;
-
-  const workouts = await db
-    .returning('*')
-    .select('*')
-    .from('programs')
-    .update(req.body)
-    .where('program_id', '=', id);
-
-  res.status(200).json(workouts[0]);
-});
+exports.getAllPrograms = factory.getAll('programs', false);
+exports.updateProgram = factory.updateOne('programs', false);

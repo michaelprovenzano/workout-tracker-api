@@ -1,12 +1,11 @@
-const e = require('express');
-
 const db = require('knex')({
   client: 'pg',
   connection: {
-    host: '127.0.0.1',
-    user: 'michaelprovenzano',
-    password: '',
-    database: 'workout-tracker-api',
+    host: process.env.DATABASE_URL,
+    ssl: true,
+    // user: 'michaelprovenzano',
+    // password: '',
+    // database: 'workout-tracker-api',
   },
 });
 

@@ -52,4 +52,5 @@ exports.getAllWorkoutLogs = factory.getAll('workout_logs', true, [
     targetColumn: 'workout_id',
   },
 ]);
+
 exports.updateWorkoutLog = factory.updateOne('workout_logs', 'workout_log_id');

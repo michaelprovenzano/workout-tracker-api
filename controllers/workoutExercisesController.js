@@ -1,8 +1,7 @@
-const db = require('./databaseController');
 const factory = require('./factoryController');
 
-// exports.addWorkout = factory.addOne('workouts');
-// exports.deleteWorkout = factory.deleteById('workouts');
+exports.addWorkout = factory.addOne('workouts_exercises', false);
+exports.deleteWorkout = factory.deleteById('workouts_exercises', false);
 exports.getAllWorkoutExercises = factory.getAll('workouts_exercises', false, [
   {
     targetTable: 'exercises',
@@ -10,4 +9,4 @@ exports.getAllWorkoutExercises = factory.getAll('workouts_exercises', false, [
     targetColumn: 'exercise_id',
   },
 ]);
-// exports.updateWorkout = factory.updateOne('workouts');
+exports.updateWorkout = factory.updateOne('workouts_exercises', false);

@@ -1,5 +1,3 @@
-const db = require('./databaseController');
-const bcrypt = require('bcrypt');
 const factory = require('./factoryController');
 
 exports.getAllUsers = factory.getAll('users');

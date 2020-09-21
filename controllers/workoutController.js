@@ -1,4 +1,3 @@
-const db = require('./databaseController');
 const factory = require('./factoryController');
 
 exports.addWorkout = factory.addOne('workouts');

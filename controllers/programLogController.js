@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.addProgramLog = catchAsync(async (req, res) => {
   // Get the program id and add it to the log
+  let userId = req.user.user_id;
   let id = req.body.program_id;
 
   // Get the workouts for the program
@@ -22,7 +23,7 @@ exports.addProgramLog = catchAsync(async (req, res) => {
   });
 
   // Update the req.body object
-  req.body.user_id = req.user.user_id;
+  req.body.user_id = userId;
   req.body.created_at = new Date(Date.now());
   req.body.workout_schedule = workoutSchedule;
   req.body.status = 'active';
@@ -30,8 +31,8 @@ exports.addProgramLog = catchAsync(async (req, res) => {
 
   // Make all current programs inactive
   await db('program_logs')
-    .where({ status: 'active', user_id: userId })
-    .update({ status: 'abandoned' });
+    .update({ status: 'abandoned' })
+    .where({ status: 'active', user_id: userId });
 
   // Add programLog and send response
   factory.addOne('program_logs')(req, res);
