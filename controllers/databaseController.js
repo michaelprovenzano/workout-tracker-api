@@ -1,8 +1,9 @@
 const db = require('knex')({
   client: 'pg',
   connection: {
-    host: process.env.DATABASE_URL,
+    connectString: process.env.DATABASE_URL,
     ssl: true,
+    // host: process.env.DATABASE_URL,
     // user: 'michaelprovenzano',
     // password: '',
     // database: 'workout-tracker-api',
