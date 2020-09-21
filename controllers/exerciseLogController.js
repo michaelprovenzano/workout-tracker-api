@@ -6,14 +6,14 @@ exports.addLog = catchAsync(async (req, res) => {
   await db
     .transaction(async trx => {
       // Set user
-      req.body.user_id = req.user.id;
+      req.body.user_id = req.user.user_id;
 
       // Calcluate total weight lifted
       req.body.total_weight_lifted = calcTotalWeightLifted(req.body);
 
       // Get the workout log
       const workoutLog = await trx('workout_logs')
-        .where({ user_id: req.user.id, active: true })
+        .where({ user_id: req.user.user_id, active: true })
         .join(
           'programs_workouts',
           'workout_logs.program_workout_id',
@@ -32,7 +32,7 @@ exports.addLog = catchAsync(async (req, res) => {
       // Update the workout log
       await trx('workout_logs')
         .update({ progress, active: isActive })
-        .where({ user_id: req.user.id, workout_log_id: workoutLogId });
+        .where({ user_id: req.user.user_id, workout_log_id: workoutLogId });
 
       // Update log
       req.body.workout_log_id = workoutLogId;

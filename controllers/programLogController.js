@@ -4,8 +4,6 @@ const moment = require('moment');
 const catchAsync = require('../utils/catchAsync');
 
 exports.addProgramLog = catchAsync(async (req, res) => {
-  console.log('adding log');
-
   // Get the program id and add it to the log
   let id = req.body.program_id;
 
@@ -24,28 +22,19 @@ exports.addProgramLog = catchAsync(async (req, res) => {
   });
 
   // Update the req.body object
-  req.body.user_id = req.user.id;
+  req.body.user_id = req.user.user_id;
   req.body.created_at = new Date(Date.now());
   req.body.workout_schedule = workoutSchedule;
-  req.body.next_workout = programWorkouts[0].program_workout_id;
-  req.body.next_workout_date = workoutSchedule[0];
-  req.body.next_workout_index = 0;
-  req.body.next_program_workout = programWorkouts[0].program_workout_id;
   req.body.status = 'active';
   req.body.end_date = workoutSchedule[workoutSchedule.length - 1];
 
   // Make all current programs inactive
-  makeAllProgramsInactive(req);
-
-  // Add programLog and send response
-  factory.addOne('program_logs')(req, res);
-});
-
-const makeAllProgramsInactive = catchAsync(async req => {
-  let userId = req.user.id;
   await db('program_logs')
     .where({ status: 'active', user_id: userId })
     .update({ status: 'abandoned' });
+
+  // Add programLog and send response
+  factory.addOne('program_logs')(req, res);
 });
 
 exports.getProgramLogById = factory.getById('program_logs', 'program_log_id', true, [
@@ -73,12 +62,12 @@ exports.getProgramStats = catchAsync(async (req, res) => {
     const programLogId = req.params.programLogId;
     const currentLogQuery = trx('workout_logs').where({
       program_log_id: programLogId,
-      user_id: req.user.id,
+      user_id: req.user.user_id,
     });
 
     const programLog = await trx('program_logs').where({
       program_log_id: programLogId,
-      user_id: req.user.id,
+      user_id: req.user.user_id,
     });
 
     const workouts = await trx('programs_workouts')
@@ -88,7 +77,7 @@ exports.getProgramStats = catchAsync(async (req, res) => {
     const workoutLogs = await trx('workout_logs')
       .where({
         program_log_id: programLogId,
-        user_id: req.user.id,
+        user_id: req.user.user_id,
       })
       .orderBy('date');
 

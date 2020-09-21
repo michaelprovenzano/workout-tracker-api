@@ -13,7 +13,7 @@ const strategy = new JwtStrategy(options, (payload, next) => {
   //Get user from DB and put on response
   db.select('*')
     .from('login')
-    .where('id', '=', payload.id)
+    .where('user_id', '=', payload.user_id)
     .then(userArr => {
       const user = userArr[0];
       next(null, user);

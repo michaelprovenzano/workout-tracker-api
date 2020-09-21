@@ -45,7 +45,7 @@ exports.register = (req, res) => {
             .then(data => {
               let user = data[0];
 
-              const token = signToken({ id: user.id });
+              const token = signToken({ id: user.user_id });
 
               sendCookie(res, token);
 
@@ -64,14 +64,16 @@ exports.login = catchAsync(async (req, res) => {
 
   if (!email || !password) return res.status(401).json('Some fields are empty');
 
-  const data = await db.select('*').from('login').where('email', '=', email);
+  const data = await db('login')
+    .join('users', 'login.email', '=', 'users.email')
+    .where('login.email', '=', email);
 
   let user = await data[0];
-  if (!user.id) return res.status(401).send('User not found');
+  if (!user.user_id) return res.status(401).send('User not found');
 
   bcrypt.compare(password, user.password, (err, result) => {
     if (result) {
-      const token = signToken({ id: user.id });
+      const token = signToken({ id: user.user_id });
 
       sendCookie(res, token);
       return res.status(200).json({ status: 'success', token, ...user });
@@ -94,7 +96,7 @@ exports.logout = catchAsync((req, res) => {
       return res.status(401).send('unauthorized');
     }
 
-    let userId = decoded.id;
+    let userId = decoded.user_id;
     const payload = { id: userId };
     const token = jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: 1 });
     return res.send({ token });
@@ -118,7 +120,10 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   const decoded = await promisify(jwt.verify)(token, process.env.SECRET_OR_KEY);
-  const user = await db.select('*').from('login').where('id', '=', decoded.id);
+  console.log(decoded);
+  const user = await db('login')
+    .join('users', 'login.email', '=', 'users.email')
+    .where('users.user_id', '=', decoded.id);
 
   if (user.length > 0) req.user = user[0];
 

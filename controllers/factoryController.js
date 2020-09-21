@@ -3,7 +3,7 @@ const url = require('url');
 const catchAsync = require('../utils/catchAsync');
 
 exports.addOne = table => async (req, res) => {
-  req.body.user_id = req.user.id;
+  req.body.user_id = req.user.user_id;
   const data = await db.returning('*').insert(req.body).into(table);
   return res.status(200).json(data[0]);
 };
@@ -19,7 +19,7 @@ exports.deleteById = (table, idLabel) =>
 exports.getAll = (table, restrictToUser, joins) =>
   catchAsync(async (req, res) => {
     let whereOptions = {};
-    if (restrictToUser) whereOptions.user_id = req.user.id;
+    if (restrictToUser) whereOptions.user_id = req.user.user_id;
     let query = db.select('*').from(table).where(whereOptions);
 
     if (joins) {
@@ -45,7 +45,7 @@ exports.getById = (table, idLabel, restrictToUser, joins) =>
     const { id } = req.params;
     let whereOptions = {};
     whereOptions[idLabel] = id;
-    if (restrictToUser) whereOptions.user_id = req.user.id;
+    if (restrictToUser) whereOptions.user_id = req.user.user_id;
 
     let query = db.select('*').from(table).where(whereOptions);
 
@@ -107,7 +107,7 @@ exports.updateOne = (table, idLabel) =>
     const { id } = req.params;
     let whereOptions = {};
     whereOptions[idLabel] = id;
-    whereOptions.user_id = req.user.id;
+    whereOptions.user_id = req.user.user_id;
 
     const data = await db
       .returning('*')

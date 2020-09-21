@@ -53,7 +53,5 @@ app.get('/protected', authController.protect, (req, res) => {
 
 app.use(errorController);
 
-// app.options('http://localhost:3000', cors());
-
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`App listening on port ${PORT}...`));
