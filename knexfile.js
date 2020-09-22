@@ -3,15 +3,21 @@
 module.exports = {
   development: {
     client: 'pg',
-    connection: 'postgress://localhost/jwt_test',
+    connection: {
+      host: '127.0.0.1',
+      database: 'workout-tracker-api',
+      user: 'michaelprovenzano',
+      password: '',
+    },
   },
 
   production: {
-    client: 'postgresql',
+    client: 'pg',
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     pool: {
       min: 2,
@@ -22,3 +28,9 @@ module.exports = {
     },
   },
 };
+
+//     client: 'pg',
+//     host: '127.0.0.1',
+//     database: 'workout-tracker-api',
+//     user: 'michaelprovenzano',
+//     password: '',

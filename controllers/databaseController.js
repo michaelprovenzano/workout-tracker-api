@@ -1,16 +1,7 @@
-const db = require('knex')({
-  client: 'pg',
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    user: 'michaelprovenzano',
-    password: '',
-    ssl: {
-      rejectUnauthorized: false,
-    },
-    // host: process.env.DATABASE_URL,
-    // database: 'workout-tracker-api',
-  },
-});
+const environment = process.env.NODE_ENV || 'production';
+const config = require('../knexfile')[environment];
+
+const db = require('knex')(config);
 
 module.exports = db;
 
