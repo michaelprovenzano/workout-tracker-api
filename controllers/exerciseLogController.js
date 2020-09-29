@@ -45,12 +45,12 @@ exports.addLog = catchAsync(async (req, res) => {
     .catch(err => console.log(err));
 });
 
-exports.deleteLog = factory.deleteById('exercise_logs', 'exercise_log_id');
+exports.deleteLog = factory.deleteById('exercise_logs', 'exercise_log_id', true);
 exports.getLogById = factory.getById('exercise_logs', 'exercise_log_id', true);
-exports.getAllLogs = factory.getAll('exercise_logs');
+exports.getAllLogs = factory.getAll('exercise_logs', true);
 exports.updateLog = catchAsync(async (req, res) => {
   req.body.total_weight_lifted = calcTotalWeightLifted(req.body);
-  return factory.updateOne('exercise_logs', 'exercise_log_id')(req, res);
+  return factory.updateOne('exercise_logs', 'exercise_log_id', true)(req, res);
 });
 
 const getWorkoutProgress = catchAsync(async (workoutLogId, workoutId) => {

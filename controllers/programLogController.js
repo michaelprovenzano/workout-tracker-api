@@ -54,9 +54,9 @@ exports.getAllProgramLogs = factory.getAll('program_logs', true, [
   },
 ]);
 
-exports.updateProgramLog = factory.updateOne('program_logs', 'program_log_id');
+exports.updateProgramLog = factory.updateOne('program_logs', 'program_log_id', true);
 
-exports.deleteProgramLog = factory.deleteById('program_logs', 'program_log_id');
+exports.deleteProgramLog = factory.deleteById('program_logs', 'program_log_id', true);
 
 exports.getProgramStats = catchAsync(async (req, res) => {
   db.transaction(async trx => {
