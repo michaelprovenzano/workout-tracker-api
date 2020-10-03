@@ -53,4 +53,4 @@ exports.getAllWorkoutLogs = factory.getAll('workout_logs', true, [
   },
 ]);
 
-exports.updateWorkoutLog = factory.updateOne('workout_logs', 'workout_log_id');
+exports.updateWorkoutLog = factory.updateOne('workout_logs', 'workout_log_id', true);

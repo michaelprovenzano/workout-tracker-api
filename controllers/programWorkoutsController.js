@@ -1,7 +1,7 @@
 const factory = require('./factoryController');
 
 exports.addWorkout = factory.addOne('programs_workouts');
-exports.deleteWorkout = factory.deleteById('programs_workouts');
+exports.deleteWorkout = factory.deleteById('programs_workouts', true);
 exports.getAllProgramWorkouts = factory.getAll('programs_workouts', false, [
   {
     targetTable: 'workouts',

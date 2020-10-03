@@ -8,11 +8,13 @@ exports.addOne = table => async (req, res) => {
   return res.status(200).json(data[0]);
 };
 
-exports.deleteById = (table, idLabel) =>
+exports.deleteById = (table, idLabel, restrictToUser) =>
   catchAsync(async (req, res) => {
     const { id } = req.params;
+    let whereOptions = { idLabel: id };
+    if (restrictToUser) whereOptions.user_id = req.user.user_id;
 
-    await db(table).where(idLabel, '=', id).del();
+    await db(table).where(whereOptions).del();
     res.status(200).json(null);
   });
 
@@ -102,12 +104,12 @@ const parseQuery = (query, queryObject) => {
   return query;
 };
 
-exports.updateOne = (table, idLabel) =>
+exports.updateOne = (table, idLabel, restrictToUser) =>
   catchAsync(async (req, res) => {
     const { id } = req.params;
     let whereOptions = {};
     whereOptions[idLabel] = id;
-    whereOptions.user_id = req.user.user_id;
+    if (restrictToUser) whereOptions.user_id = req.user.user_id;
 
     const data = await db
       .returning('*')
