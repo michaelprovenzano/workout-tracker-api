@@ -174,7 +174,7 @@ const calcStreaks = logs => {
       difference = curDate.diff(startDate, 'days');
     }
 
-    if (i !== 0 && (difference > 2 || logs[i].skipped)) {
+    if (i !== 0 && (difference >= 2 || logs[i].skipped)) {
       allStreaks.push(curStreak);
       curStreak = [];
     }
