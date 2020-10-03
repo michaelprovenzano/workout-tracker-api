@@ -132,7 +132,7 @@ exports.getProgramStats = catchAsync(async (req, res) => {
           let dateDiff = curLogDate.diff(prevLogDate, 'days');
 
           // if less than 2 and is not skipped set streak to true
-          if (dateDiff < 2 && !curLog.skipped) streak = true;
+          if (dateDiff < 2 && !curLog.skipped && !prevLog.skipped) streak = true;
         }
 
         calendarArray.push({ complete: true, date, skipped, streak });
