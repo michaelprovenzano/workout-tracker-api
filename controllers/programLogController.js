@@ -118,8 +118,24 @@ exports.getProgramStats = catchAsync(async (req, res) => {
     for (let i = 0; i < workouts.length; i++) {
       let workout = workouts[i];
       if (workoutLogHash[workout.program_workout_id]) {
-        let { date, skipped } = workoutLogHash[workout.program_workout_id];
-        calendarArray.push({ complete: true, date, skipped });
+        let curLog = workoutLogHash[workout.program_workout_id];
+        let { date, skipped } = curLog;
+
+        // current workout log date - last workout log date
+        let prevLog;
+        let streak = false;
+
+        if (i > 0) {
+          prevLog = workoutLogHash[workouts[i - 1].program_workout_id];
+          let curLogDate = moment(curLog.date).endOf('day');
+          let prevLogDate = moment(prevLog.date).startOf('day');
+          let dateDiff = curLogDate.diff(prevLogDate, 'days');
+
+          // if less than 2 and is not skipped set streak to true
+          if (dateDiff < 2 && !curLog.skipped) streak = true;
+        }
+
+        calendarArray.push({ complete: true, date, skipped, streak });
       } else {
         calendarArray.push({ complete: false });
       }
