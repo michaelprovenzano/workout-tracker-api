@@ -92,9 +92,7 @@ exports.getProgramStats = catchAsync(async (req, res) => {
     const skippedWorkouts = await currentLogQuery.count('skipped').first();
     const totalCompletedWorkouts = await currentLogQuery.count('*').first();
     let totalRemainingWorkouts;
-    if (workouts.length)
-      totalRemainingWorkouts =
-        workouts.length - totalCompletedWorkouts.count - skippedWorkouts.count;
+    if (workouts.length) totalRemainingWorkouts = workouts.length - totalCompletedWorkouts.count;
 
     // Get streaks
     const streaks = calcStreaks(workoutLogs);
@@ -102,7 +100,7 @@ exports.getProgramStats = catchAsync(async (req, res) => {
     streaks.length ? (currentStreak = streaks[streaks.length - 1].length) : (currentStreak = 0);
 
     // Best streak
-    streaks.sort((a, b) => a - b);
+    streaks.sort((a, b) => b.length - a.length);
     let bestStreak;
     streaks[0] ? (bestStreak = streaks[0].length) : (bestStreak = 0);
 
@@ -160,12 +158,12 @@ const calcStreaks = logs => {
       difference = curDate.diff(startDate, 'days');
     }
 
-    if (i !== 0 && difference > 2) {
+    if (i !== 0 && (difference > 2 || logs[i].skipped)) {
       allStreaks.push(curStreak);
       curStreak = [];
     }
     lastLog = logs[i];
-    curStreak.push(logs[i]);
+    if (!logs[i].skipped) curStreak.push(logs[i]);
 
     if (i === logs.length - 1) allStreaks.push(curStreak);
   }
