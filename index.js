@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const app = express();
 const cookieParser = require('cookie-parser');
@@ -32,10 +33,6 @@ app.use(cookieParser());
 // Use the configured version of passport
 app.use(passport.initialize());
 
-app.get('/', (req, res) => {
-  res.send('hello world');
-});
-
 app.use('/api/', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/exercises', exerciseRoutes);
@@ -52,6 +49,13 @@ app.get('/protected', authController.protect, (req, res) => {
 });
 
 app.use(errorController);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(static('client/build'));
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  );
+}
 
 const PORT = process.env.PORT || 8000;
 console.log(process.env.DATABASE_URL);
