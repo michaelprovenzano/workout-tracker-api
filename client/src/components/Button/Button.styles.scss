@@ -1,0 +1,47 @@
+@import '../../styles/variables.scss';
+
+button.btn {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  border: none;
+  border-radius: 3px;
+}
+
+button.btn-primary {
+  color: $white;
+  background-color: $primary;
+  justify-content: center;
+  font-size: 1.6rem;
+  height: 44px;
+  padding: 0 38px;
+}
+
+button.btn-secondary {
+  color: $primary;
+  background-color: transparent;
+  font-size: 1.4rem;
+  height: 40px;
+}
+
+button.btn-danger {
+  color: $white;
+  background-color: $danger;
+  font-size: 1.6rem;
+  height: 44px;
+  padding: 0 38px;
+}
+
+button.btn-right {
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+button.btn-left {
+  justify-content: flex-start;
+  padding-left: 0;
+}
+
+button.btn-center {
+  justify-content: center;
+}

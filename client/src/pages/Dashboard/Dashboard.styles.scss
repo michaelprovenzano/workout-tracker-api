@@ -1,0 +1,25 @@
+.dashboard {
+  padding-bottom: 200px;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+
+  small {
+    font-size: 1.4rem;
+  }
+
+  .progress-text {
+    margin-right: 20px;
+  }
+
+  .stat-row {
+    max-width: 283px;
+  }
+
+  .empty-state {
+    height: calc(90vh - 200px);
+    min-height: 180px;
+  }
+}

@@ -1,0 +1,56 @@
+@import '../../styles/variables.scss';
+
+.exercise-page {
+  font-size: 1.6rem;
+
+  main {
+    padding-bottom: 56px;
+  }
+
+  .progress-bar {
+    margin-bottom: 32px;
+  }
+
+  .workout-program {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .table-header {
+    color: $primary;
+    border-top: 1px solid rgba($primary, 0.5);
+    border-bottom: 1px solid rgba($primary, 0.5);
+    height: 40px;
+    margin-bottom: 29px;
+  }
+
+  .notes-prev {
+    border-left: 4px solid $primary;
+    padding-left: 7px;
+    margin-bottom: 35px;
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  .workout-list {
+    overflow-y: auto;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .text-primary {
+    color: $primary;
+  }
+
+  .text-white {
+    color: $white;
+  }
+
+  @media (max-width: $breakpoint-tablet) {
+    .workout-list {
+      padding-bottom: 0;
+    }
+  }
+}
