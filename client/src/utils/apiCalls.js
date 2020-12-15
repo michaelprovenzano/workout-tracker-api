@@ -1,7 +1,7 @@
 import { store } from '../redux/store';
 
 // Production URL
-let baseUrl = 'https://dry-peak-42594.herokuapp.com/api';
+let baseUrl = 'https://trackbody.herokuapp.com/api';
 
 if (process.env.NODE_ENV === 'development') {
   // Local URL
