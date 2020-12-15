@@ -102,13 +102,13 @@ const DateInput = ({ onInput, initialDate }) => {
           </div>
           <div className='popup-calendar'>
             <ul className='popup-calendar-header'>
+              <li>Sun</li>
               <li>Mon</li>
               <li>Tue</li>
               <li>Wed</li>
               <li>Thu</li>
               <li>Fri</li>
               <li>Sat</li>
-              <li>Sun</li>
             </ul>
             <div className='popup-calendar-body'>
               {calendar &&
