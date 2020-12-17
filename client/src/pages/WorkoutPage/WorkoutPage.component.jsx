@@ -48,28 +48,25 @@ const WorkoutPage = ({
 
   useEffect(() => {
     const workoutLogId = match.params.workoutLogId;
-    if (!currentWorkoutLog) setCurrentWorkoutLog(workoutLogId);
-    if (!currentExerciseLogs) setCurrentExerciseLogs(workoutLogId);
-    if (currentWorkoutLog && !currentWorkout)
+    let isCurrentLog = false;
+    if (currentWorkoutLog)
+      isCurrentLog = currentWorkoutLog.workout_log_id === parseInt(workoutLogId);
+
+    if (!isCurrentLog) {
+      setCurrentWorkoutLog(workoutLogId);
+    } else {
       setCurrentWorkout(currentWorkoutLog.program_workout_id);
-    if (currentWorkoutLog && currentWorkout) {
-      if (currentWorkoutLog.program_workout_id !== currentWorkout.program_workout_id)
-        setCurrentWorkout(currentWorkoutLog.program_workout_id);
+      setCurrentExercises(currentWorkoutLog.workout_id);
+      setCurrentExerciseLogs(workoutLogId);
     }
-    if (currentWorkout && !currentExercises) setCurrentExercises(currentWorkout.workout_id);
+
     if (currentExerciseLog && redirect)
       history.push(
         `/workout-logs/${currentWorkoutLog.workout_log_id}/${currentExerciseLog.exercise_log_id}`
       );
-    console.log(currentWorkoutLog);
+
     // eslint-disable-next-line
-  }, [
-    currentWorkoutLog,
-    currentWorkout,
-    currentExercises,
-    currentExerciseLogs,
-    currentExerciseLog,
-  ]);
+  }, [currentWorkoutLog]);
 
   const goToExerciseLog = async (exerciseLogId, workoutExerciseId) => {
     let workoutLogId;
@@ -200,6 +197,7 @@ const WorkoutPage = ({
               {currentExercises.map((exerciseObj, i) => {
                 let { exercise, is_isometric, has_weight, workout_exercise_id } = exerciseObj;
                 let hasLog = exerciseLogHash[exerciseObj.workout_exercise_id];
+                console.log(exerciseLogHash);
 
                 let logId;
                 if (hasLog) logId = hasLog.exercise_log_id;
