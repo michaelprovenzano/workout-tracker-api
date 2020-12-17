@@ -55,9 +55,9 @@ class Navigation extends React.Component {
         <Link to='/'>
           <img src={logo} alt='trackbody logo' />
         </Link>
-        <div className='nav-toggle-btn' onClick={this.menuClick}>
+        <button className='nav-toggle-btn' onClick={this.menuClick}>
           <MenuIcon active={expanded} />
-        </div>
+        </button>
         <nav className={show}>
           <div className='nav-toggle-header'>
             <h2 className='nav-toggle-text'>Menu</h2>
