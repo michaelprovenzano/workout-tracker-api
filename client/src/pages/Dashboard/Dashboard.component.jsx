@@ -49,7 +49,7 @@ const Dashboard = ({
   return (
     <div className='offset-header'>
       <Header text='Dashboard' />
-      {activeProgramLog ? <WorkoutSticky nextWorkout={nextWorkout} /> : null}
+      <WorkoutSticky nextWorkout={nextWorkout} />
 
       <main className='content dashboard'>
         {activeProgramLog ? (

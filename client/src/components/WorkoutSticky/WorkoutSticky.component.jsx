@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import './WorkoutSticky.styles.scss';
 
@@ -10,18 +10,20 @@ import {
   clearCurrentWorkoutLog,
   clearActiveWorkoutLog,
 } from '../../redux/workoutLogs/workoutLogs.actions';
-import { getNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
+import { getNextWorkout, resetNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
 import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
 import { clearCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
 
 // Components
 import Button from '../Button/Button.component';
+import LoaderSpinner from 'react-loader-spinner';
 
 const WorkoutSticky = ({
   activeProgramLog,
   activeWorkoutLog,
   nextWorkout,
   getNextWorkout,
+  resetNextWorkout,
   skipWorkoutLog,
   addWorkoutLog,
   clearCurrentWorkout,
@@ -55,7 +57,7 @@ const WorkoutSticky = ({
       });
     }
 
-    getNextWorkout(activeProgramLog);
+    resetNextWorkout();
   };
 
   const goToWorkoutLog = () => {
@@ -81,33 +83,39 @@ const WorkoutSticky = ({
     // if (stats.progress === 1)
     //   await api.updateOne('program-logs', activeWorkoutLog, { status: 'completed' });
   };
-
-  if ((!nextWorkout || Object.keys(nextWorkout).length === 0) && !activeWorkoutLog) return null;
+  let loading = false;
+  if ((!nextWorkout || Object.keys(nextWorkout).length === 0) && !activeWorkoutLog) loading = true;
 
   return (
-    (nextWorkout || activeWorkoutLog) && (
-      <div className='workout-sticky row'>
-        <div className='col-md-8 offset-md-2 col-sm-12 d-flex align-items-center flex-column'>
-          <div className='d-flex w-100'>
-            <Button
-              className='skip-button'
-              text='Skip'
-              position='left'
-              type='secondary'
-              onClick={skipWorkout}
-            />
-          </div>
-          {activeWorkoutLog ? <small>Today's Workout</small> : <small>Next Workout</small>}
-          <h2>{activeWorkoutLog ? activeWorkoutLog.name : nextWorkout.name}</h2>
+    <div className='workout-sticky row'>
+      <div className='col-md-8 offset-md-2 col-sm-12 d-flex align-items-center flex-column'>
+        <div className='d-flex w-100'>
           <Button
-            text={activeWorkoutLog ? 'Continue Workout' : 'Start Workout'}
-            position='center'
-            type='primary'
-            onClick={goToWorkoutLog}
+            className='skip-button'
+            text='Skip'
+            position='left'
+            type='secondary'
+            onClick={skipWorkout}
           />
         </div>
+        {!loading ? (
+          <Fragment>
+            {activeWorkoutLog ? <small>Today's Workout</small> : <small>Next Workout</small>}
+            <h2>{activeWorkoutLog ? activeWorkoutLog.name : nextWorkout.name}</h2>
+          </Fragment>
+        ) : (
+          <span style={{ padding: '10px' }}>
+            <LoaderSpinner type='Grid' width={30} height={30} color='#196cff' />
+          </span>
+        )}
+        <Button
+          text={activeWorkoutLog ? 'Continue Workout' : 'Start Workout'}
+          position='center'
+          type='primary'
+          onClick={goToWorkoutLog}
+        />
       </div>
-    )
+    </div>
   );
 };
 
@@ -123,6 +131,7 @@ const mapDispatchToProps = {
   skipWorkoutLog,
   addWorkoutLog,
   getNextWorkout,
+  resetNextWorkout,
   clearActiveWorkoutLog,
   clearCurrentWorkout,
   clearCurrentWorkoutLog,

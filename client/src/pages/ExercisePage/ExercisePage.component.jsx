@@ -21,6 +21,7 @@ import ProgressBar from '../../components/ProgressBar/ProgressBar.component';
 import ExerciseForm from '../../components/ExerciseForm/ExerciseForm.component';
 import PrevNext from '../../components/PrevNext/PrevNext.component';
 import Col from '../../components/Col/Col.component';
+import LoaderSpinner from 'react-loader-spinner';
 
 const ExercisePage = ({
   currentWorkout,
@@ -87,7 +88,14 @@ const ExercisePage = ({
     !currentWorkout ||
     !currentWorkoutLog
   )
-    return <div>Loading...</div>;
+    return (
+      <div
+        className='w-100 d-flex justify-content-center align-items-center'
+        style={{ height: '100vh' }}
+      >
+        <LoaderSpinner type='Grid' color='#196cff' height={40} width={80} />
+      </div>
+    );
 
   let progress = (currentExerciseLogs.length / currentExercises.length) * 100;
   let currentExercise = currentExercises.find(
@@ -158,7 +166,12 @@ const ExercisePage = ({
                 history={history}
               />
             ) : (
-              <div>Loading...</div>
+              <div
+                className='w-100 d-flex justify-content-center align-items-center'
+                style={{ height: '100vh' }}
+              >
+                <LoaderSpinner type='Grid' color='#196cff' height={40} width={80} />
+              </div>
             )}
 
             <PrevNext />
