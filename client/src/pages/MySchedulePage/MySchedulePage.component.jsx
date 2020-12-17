@@ -39,14 +39,21 @@ const MySchedulePage = ({
   useEffect(() => {
     clearCurrentExercises();
     const programLogId = match.params.programLogId;
-    if (!programLog) setCurrentProgramLog(programLogId);
-    if (!currentWorkoutLogs) setWorkoutLogs(programLogId);
-    if (programLog && !workouts) setCurrentWorkouts(programLog.program_id);
+    let isCurrentProgramLog = false;
+    if (programLog) isCurrentProgramLog = programLog.program_log_id === parseInt(programLogId);
+
+    if (!isCurrentProgramLog) {
+      setCurrentProgramLog(programLogId);
+      setWorkoutLogs(programLogId);
+    } else {
+      setCurrentWorkouts(programLog.program_id);
+    }
+
     if (currentWorkoutLog && redirect)
       history.push(`/workout-logs/${currentWorkoutLog.workout_log_id}`);
     if (stats.program_log_id !== programLogId) setStats(programLogId);
     // eslint-disable-next-line
-  }, [programLog, currentWorkoutLogs, workouts, stats, redirect]);
+  }, [programLog, currentWorkoutLogs, stats, redirect]);
 
   const goToWorkoutLog = async (e, log) => {
     let clickedLog;
