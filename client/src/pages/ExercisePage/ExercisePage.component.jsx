@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import './ExercisePage.styles.scss';
 
@@ -39,33 +39,29 @@ const ExercisePage = ({
   setPreviousExerciseLog,
   match,
 }) => {
-  let [redirect, setRedirect] = useState(false);
   let history = useHistory();
 
   useEffect(() => {
     const workoutLogId = match.params.workoutLogId;
     const exerciseLogId = match.params.exerciseLogId;
 
-    if (!currentWorkoutLog) setCurrentWorkoutLog(workoutLogId);
-    if (!currentExerciseLogs) setCurrentExerciseLogs(workoutLogId);
-    if (currentWorkoutLog && !previousExerciseLog) setPreviousExerciseLog(workoutLogId);
-    if (currentWorkoutLog && !currentWorkout)
+    let isCurrentWorkoutLog = false;
+    let isCurrentExerciseLog = false;
+    if (currentWorkoutLog)
+      isCurrentWorkoutLog = currentWorkoutLog.workout_log_id === parseInt(workoutLogId);
+    if (currentExerciseLog)
+      isCurrentExerciseLog = currentExerciseLog.exercise_log_id === parseInt(exerciseLogId);
+
+    if (!isCurrentWorkoutLog) setCurrentWorkoutLog(workoutLogId);
+    if (isCurrentWorkoutLog) {
       setCurrentWorkout(currentWorkoutLog.program_workout_id);
-    if (currentWorkout && !currentExercises) setCurrentExercises(currentWorkout.workout_id);
-    if (!currentExerciseLog) setCurrentExerciseLog(exerciseLogId);
-    if (!previousExerciseLog && currentExerciseLog) setPreviousExerciseLog(currentExerciseLog);
-    if (redirect)
-      history.push(
-        `/workout-logs/${currentWorkoutLog.workout_log_id}/${currentExerciseLog.exercise_log_id}`
-      );
+      setCurrentExercises(currentWorkout.workout_id);
+      setCurrentExerciseLogs(workoutLogId);
+    }
+    if (!isCurrentExerciseLog && isCurrentWorkoutLog) setCurrentExerciseLog(exerciseLogId);
+    if (isCurrentExerciseLog) setPreviousExerciseLog(currentExerciseLog);
     // eslint-disable-next-line
-  }, [
-    currentWorkout,
-    currentWorkoutLog,
-    currentExercises,
-    currentExerciseLog,
-    currentExerciseLogs,
-  ]);
+  }, [currentWorkoutLog, currentExerciseLog]);
 
   const makeActive = workoutExerciseId => {
     let newActiveLog = currentExerciseLogs.find(
@@ -73,12 +69,13 @@ const ExercisePage = ({
     );
 
     if (newActiveLog) {
+      history.push(
+        `/workout-logs/${currentWorkoutLog.workout_log_id}/${newActiveLog.exercise_log_id}`
+      );
       setCurrentExerciseLog(newActiveLog.exercise_log_id);
     } else {
       addExerciseLog(currentWorkoutLog.workout_log_id, workoutExerciseId);
     }
-
-    setRedirect(true);
   };
 
   if (

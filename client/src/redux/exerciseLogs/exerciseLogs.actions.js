@@ -59,6 +59,8 @@ export const setPreviousExerciseLog = currentLog => async dispatch => {
     `workout_exercise_id=${currentLog.workout_exercise_id}&orderBy=[desc]date`
   );
 
+  console.log(pastExerciseLogs);
+
   let exerciseLog;
   if (pastExerciseLogs.length < 2) {
     exerciseLog = null;
