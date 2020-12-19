@@ -46,11 +46,8 @@ const ExercisePage = ({
     const exerciseLogId = match.params.exerciseLogId;
 
     let isCurrentWorkoutLog = false;
-    let isCurrentExerciseLog = false;
     if (currentWorkoutLog)
       isCurrentWorkoutLog = currentWorkoutLog.workout_log_id === parseInt(workoutLogId);
-    if (currentExerciseLog)
-      isCurrentExerciseLog = currentExerciseLog.exercise_log_id === parseInt(exerciseLogId);
 
     if (!isCurrentWorkoutLog) setCurrentWorkoutLog(workoutLogId);
     if (isCurrentWorkoutLog) {
@@ -58,8 +55,14 @@ const ExercisePage = ({
       setCurrentExercises(currentWorkout.workout_id);
       setCurrentExerciseLogs(workoutLogId);
     }
-    if (!isCurrentExerciseLog && isCurrentWorkoutLog) setCurrentExerciseLog(exerciseLogId);
-    if (isCurrentExerciseLog) setPreviousExerciseLog(currentExerciseLog);
+
+    if (currentExerciseLog) {
+      setPreviousExerciseLog(currentExerciseLog);
+      if (parseInt(exerciseLogId) !== currentExerciseLog.exercise_log_id)
+        history.push(
+          `/workout-logs/${currentWorkoutLog.workout_log_id}/${currentExerciseLog.exercise_log_id}`
+        );
+    }
     // eslint-disable-next-line
   }, [currentWorkoutLog, currentExerciseLog]);
 

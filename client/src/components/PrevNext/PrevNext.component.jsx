@@ -51,15 +51,18 @@ const PrevNext = ({
       let index;
       if (direction === 'next') index = currentExerciseIndex + 1;
       if (direction === 'prev') index = currentExerciseIndex - 1;
+      if (!currentExercises[index]) return;
 
       const nextWorkoutExerciseId = currentExercises[index].workout_exercise_id;
       const nextWorkoutLog = currentExerciseLogs.find(
         log => log.workout_exercise_id === nextWorkoutExerciseId
       );
 
-      nextWorkoutLog
-        ? setCurrentExerciseLog(nextWorkoutLog)
-        : addExerciseLog(currentWorkoutLog.workout_log_id, nextWorkoutExerciseId);
+      if (nextWorkoutLog) {
+        setCurrentExerciseLog(nextWorkoutLog);
+      } else {
+        addExerciseLog(currentWorkoutLog.workout_log_id, nextWorkoutExerciseId);
+      }
     }
   };
 
