@@ -67,7 +67,7 @@ const PrevNext = ({
   };
 
   return (
-    <div className={`prev-next w-100 d-flex align-items-center row ${className}`}>
+    <div className={`prev-next w-100 d-flex align-items-center row ${className ? className : ''}`}>
       <div className='col-6 col-lg-4 offset-lg-2 h-100'>
         <button
           className='prev h-100 w-100 m-0 d-flex justify-content-start align-items-center'
