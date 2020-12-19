@@ -4,6 +4,7 @@ import './ExerciseForm.styles.scss';
 import { updateCurrentExerciseLog } from '../../redux/exerciseLogs/exerciseLogs.actions';
 
 import { connect } from 'react-redux';
+import LoaderSpinner from 'react-loader-spinner';
 
 const ExerciseForm = ({
   className,
@@ -41,7 +42,15 @@ const ExerciseForm = ({
     notes,
   } = formData;
 
-  if (!exercise) return <div>Loading...</div>;
+  if (!exercise)
+    return (
+      <div
+        className='w-100 d-flex justify-content-center align-items-center'
+        style={{ height: '100vh' }}
+      >
+        <LoaderSpinner type='Grid' color='#196cff' height={40} width={80} />
+      </div>
+    );
 
   if (exercise.is_isometric)
     return (

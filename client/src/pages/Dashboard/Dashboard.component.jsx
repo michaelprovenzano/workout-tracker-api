@@ -14,6 +14,7 @@ import ProgressRing from '../../components/ProgressRing/ProgressRing.component';
 import ProgressCalendar from '../../components/ProgressCalendar/ProgressCalendar.component';
 import StatRing from '../../components/StatRing/StatRing.component';
 import WorkoutSticky from '../../components/WorkoutSticky/WorkoutSticky.component';
+import LoaderSpinner from 'react-loader-spinner';
 
 import Col from '../../components/Col/Col.component';
 import Button from '../../components/Button/Button.component';
@@ -45,6 +46,16 @@ const Dashboard = ({
   const browsePrograms = async () => {
     history.push('/programs');
   };
+
+  if (!activeProgramLog || !stats)
+    return (
+      <div
+        className='w-100 d-flex justify-content-center align-items-center'
+        style={{ height: '100vh' }}
+      >
+        <LoaderSpinner type='Grid' color='#196cff' height={40} width={80} />
+      </div>
+    );
 
   return (
     <div className='offset-header'>
