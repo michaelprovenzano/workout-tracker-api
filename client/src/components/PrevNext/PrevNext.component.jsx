@@ -30,12 +30,18 @@ const PrevNext = ({
 }) => {
   let history = useHistory();
 
+  const lastExerciseId = currentExercises[currentExercises.length - 1].workout_exercise_id;
+  const currentExerciseLogId = currentExerciseLog.workout_exercise_id;
   let lastExercise =
-    currentExerciseLogs[currentExerciseLogs.length - 1].workout_exercise_id ===
-    currentExercises[currentExercises.length - 1].workout_exercise_id;
+    currentExerciseLogId === lastExerciseId &&
+    currentExerciseLogs.length === currentExercises.length;
+
+  console.log({ lastExerciseId, currentExerciseLogId });
+
+  console.log(lastExercise);
 
   const getNextPrevExercise = direction => {
-    if (lastExercise) {
+    if (lastExercise && direction === 'next') {
       clearCurrentExerciseLog();
       clearCurrentExerciseLogs();
       clearCurrentExercises();
