@@ -17,6 +17,7 @@ import Header from '../../components/Header/Header.component';
 import ProgramItem from '../../components/ProgramItem/ProgramItem.component';
 import ProgressBar from '../../components/ProgressBar/ProgressBar.component';
 import Col from '../../components/Col/Col.component';
+import LoaderSpinner from 'react-loader-spinner';
 
 const MySchedulePage = ({
   programLog,
@@ -69,7 +70,15 @@ const MySchedulePage = ({
     }
   };
 
-  if (!programLog || !currentWorkoutLogs || !workouts) return <div>Loading...</div>;
+  if (!programLog || !currentWorkoutLogs || !workouts)
+    return (
+      <div
+        className='w-100 d-flex justify-content-center align-items-center'
+        style={{ height: '100vh' }}
+      >
+        <LoaderSpinner type='Grid' color='#196cff' height={40} width={80} />
+      </div>
+    );
 
   let currentWorkoutDate;
   if (programLog) currentWorkoutDate = moment(programLog.start_date);

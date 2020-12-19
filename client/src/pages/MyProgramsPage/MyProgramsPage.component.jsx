@@ -14,6 +14,7 @@ import ProgramItem from '../../components/ProgramItem/ProgramItem.component';
 import Button from '../../components/Button/Button.component';
 import ProgressBar from '../../components/ProgressBar/ProgressBar.component';
 import Col from '../../components/Col/Col.component';
+import LoaderSpinner from 'react-loader-spinner';
 
 const MyProgramsPage = ({
   activeProgramLog,
@@ -45,7 +46,15 @@ const MyProgramsPage = ({
     history.push(`/program-logs/${activeProgramLog.program_log_id}`);
   };
 
-  if (!programLogs) return <div>Loading...</div>;
+  if (!programLogs)
+    return (
+      <div
+        className='w-100 d-flex justify-content-center align-items-center'
+        style={{ height: '100vh' }}
+      >
+        <LoaderSpinner type='Grid' color='#196cff' height={40} width={80} />
+      </div>
+    );
 
   return (
     <div className='my-programs-page offset-header'>
