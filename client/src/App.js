@@ -22,13 +22,16 @@ function App({ user }) {
   return (
     <div className='App'>
       <Navigation />
-      <Route exact path='/test' component={TestPage} />
+      {/* <Route exact path='/test' component={TestPage} /> */}
       <Route exact path='/sign-up' component={SignupPage} />
       <Route exact path='/sign-in' component={SigninPage} />
       {!user.token ? (
         <Redirect to='/sign-in' />
       ) : (
         <Fragment>
+          <Route exact path='/'>
+            <Redirect to='/dashboard' />
+          </Route>
           <Route exact path='/my-programs' component={MyProgramsPage} />
           <Route exact path='/dashboard' component={Dashboard} />
           <Route exact path='/programs' component={ProgramsPage} />
