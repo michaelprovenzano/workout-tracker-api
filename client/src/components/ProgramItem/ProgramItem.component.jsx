@@ -67,7 +67,7 @@ class ProgramItem extends React.Component {
                 }`}
               >
                 {completed && program ? `Completed in ${days} days` : ''}
-                {abandoned && program ? `Abandoned after ${abandonedAfter} days` : ''}
+                {abandoned && program ? `Abandoned` : ''}
                 {!completed && !abandoned && program ? 'In progress' : ''}
                 {completed && workout ? `Completed` : ''}
                 {skipped && workout ? `Skipped` : ''}
