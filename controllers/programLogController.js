@@ -82,14 +82,23 @@ exports.getProgramStats = catchAsync(async (req, res) => {
       })
       .orderBy('date');
 
+    // let totalWeightLifted = 10000;
     let totalWeightLifted = await trx('workout_logs')
-      .sum('exercise_logs.total_weight')
+      .sum('exercise_logs.total_weight_lifted')
       .where('program_log_id', '=', programLogId)
       .join('exercise_logs', 'workout_logs.workout_log_id', '=', 'exercise_logs.workout_log_id')
       .groupBy('exercise_logs.total_weight_lifted');
-    totalWeightLifted[0] ? (totalWeightLifted = totalWeightLifted[0].sum) : (totalWeightLifted = 0);
+    totalWeightLifted[0]
+      ? (totalWeightLifted = totalWeightLifted.reduce((total, cur) => ({
+          sum: (parseInt(total.sum) || 0) + parseInt(cur.sum),
+        })).sum)
+      : (totalWeightLifted = 0);
 
-    const skippedWorkouts = await currentLogQuery.count('skipped').first();
+    const skippedWorkouts = await currentLogQuery
+      .count('skipped')
+      .where('skipped', '=', true)
+      .first();
+
     const totalCompletedWorkouts = await currentLogQuery.count('*').first();
     let totalRemainingWorkouts;
     if (workouts.length) totalRemainingWorkouts = workouts.length - totalCompletedWorkouts.count;
@@ -135,7 +144,13 @@ exports.getProgramStats = catchAsync(async (req, res) => {
           if (dateDiff < 2 && !curLog.skipped && !prevLog.skipped) streak = true;
         }
 
-        calendarArray.push({ complete: true, date, skipped, streak });
+        calendarArray.push({
+          complete: true,
+          date,
+          skipped,
+          streak,
+          workout_log_id: curLog.workout_log_id,
+        });
       } else {
         calendarArray.push({ complete: false });
       }
