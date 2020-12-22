@@ -89,8 +89,17 @@ class Navigation extends React.Component {
               </li>
             </ul>
           ) : (
-            <ul>
-              <li className='pin-to-bottom'>
+            <ul className='pin-to-bottom'>
+              <li>
+                <NavLink
+                  to='/sign-up'
+                  className='justify-content-center'
+                  onClick={this.collapseMenu}
+                >
+                  Sign Up
+                </NavLink>
+              </li>
+              <li>
                 <LogOutButton
                   position='center'
                   type='primary'

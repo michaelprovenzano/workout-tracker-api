@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { removeCurrentUser } from '../../redux/user/user.actions';
 import { resetProgramLogs } from '../../redux/programLogs/programLogs.actions';
 import { resetWorkoutLogs } from '../../redux/workoutLogs/workoutLogs.actions';
@@ -29,6 +29,8 @@ const LogOutButton = ({
   resetNextWorkout,
   clearStats,
 }) => {
+  const history = useHistory();
+
   const logOut = () => {
     // Reset all of the state
     removeCurrentUser();
@@ -42,7 +44,7 @@ const LogOutButton = ({
     clearStats();
 
     // Redirect
-    return <Redirect to='/sign-in' />;
+    history.push('/sign-in');
   };
 
   return (
