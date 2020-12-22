@@ -82,7 +82,6 @@ exports.getProgramStats = catchAsync(async (req, res) => {
       })
       .orderBy('date');
 
-    // let totalWeightLifted = 10000;
     let totalWeightLifted = await trx('workout_logs')
       .sum('exercise_logs.total_weight_lifted')
       .where('program_log_id', '=', programLogId)
@@ -94,12 +93,12 @@ exports.getProgramStats = catchAsync(async (req, res) => {
         })).sum)
       : (totalWeightLifted = 0);
 
+    const totalCompletedWorkouts = await currentLogQuery.count('*').first();
     const skippedWorkouts = await currentLogQuery
       .count('skipped')
       .where('skipped', '=', true)
       .first();
 
-    const totalCompletedWorkouts = await currentLogQuery.count('*').first();
     let totalRemainingWorkouts;
     if (workouts.length) totalRemainingWorkouts = workouts.length - totalCompletedWorkouts.count;
 
