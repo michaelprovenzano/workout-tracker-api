@@ -1,8 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './ProgressCalendar.styles.scss';
 
-const ProgressCalendar = props => {
-  let { calendar } = props;
+const ProgressCalendar = ({ calendar }) => {
   if (!calendar) calendar = [];
   return (
     <div className='progress-calendar'>
@@ -23,4 +23,8 @@ const ProgressCalendar = props => {
   );
 };
 
-export default ProgressCalendar;
+const mapStateToProps = state => ({
+  calendar: state.stats.calendar,
+});
+
+export default connect(mapStateToProps, null)(ProgressCalendar);

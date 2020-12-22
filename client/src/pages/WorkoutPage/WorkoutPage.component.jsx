@@ -16,6 +16,7 @@ import {
   clearCurrentExerciseLog,
 } from '../../redux/exerciseLogs/exerciseLogs.actions';
 import { getNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
+import { setStats } from '../../redux/stats/stats.actions';
 
 import Header from '../../components/Header/Header.component';
 import Button from '../../components/Button/Button.component';
@@ -41,6 +42,7 @@ const WorkoutPage = ({
   setCurrentExercises,
   setCurrentExerciseLogs,
   setCurrentExerciseLog,
+  setStats,
   match,
   history,
 }) => {
@@ -58,6 +60,7 @@ const WorkoutPage = ({
       setCurrentWorkout(currentWorkoutLog.program_workout_id);
       setCurrentExercises(currentWorkoutLog.workout_id);
       setCurrentExerciseLogs(workoutLogId);
+      setStats(currentWorkoutLog.program_log_id);
     }
 
     if (currentExerciseLog && redirect)
@@ -239,6 +242,7 @@ const mapDispatchToProps = {
   setCurrentExerciseLog,
   clearCurrentExerciseLog,
   clearCurrentWorkoutLog,
+  setStats,
 };
 
 const mapStateToProps = state => ({

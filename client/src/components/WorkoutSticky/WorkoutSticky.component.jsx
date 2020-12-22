@@ -13,6 +13,7 @@ import {
 import { getNextWorkout, resetNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
 import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
 import { clearCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
+import { setStats } from '../../redux/stats/stats.actions';
 
 // Components
 import Button from '../Button/Button.component';
@@ -30,6 +31,7 @@ const WorkoutSticky = ({
   clearCurrentWorkoutLog,
   clearCurrentExercises,
   clearActiveWorkoutLog,
+  setStats,
 }) => {
   const history = useHistory();
   const [redirect, setRedirect] = useState(false);
@@ -40,6 +42,7 @@ const WorkoutSticky = ({
     }
     if ((!nextWorkout || Object.keys(nextWorkout).length === 0) && activeProgramLog)
       getNextWorkout(activeProgramLog);
+    setStats(activeProgramLog.program_log_id);
     // eslint-disable-next-line
   }, [activeProgramLog, activeWorkoutLog, nextWorkout]);
 
@@ -136,6 +139,7 @@ const mapDispatchToProps = {
   clearCurrentWorkout,
   clearCurrentWorkoutLog,
   clearCurrentExercises,
+  setStats,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkoutSticky);
