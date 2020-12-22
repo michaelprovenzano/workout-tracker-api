@@ -16,7 +16,7 @@ exports.addWorkoutLog = catchAsync(async (req, res) => {
     .first();
 
   if (workoutLog)
-    return res.status(401).json({
+    return res.status(409).json({
       status: 'fail',
       data: 'This workout already exists for this program',
     });
