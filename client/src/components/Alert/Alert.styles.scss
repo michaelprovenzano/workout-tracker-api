@@ -1,0 +1,40 @@
+@import '../../styles/variables.scss';
+
+.alert {
+  width: 100%;
+  color: $white;
+  padding: 1rem;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  box-shadow: $box-shadow;
+
+  &-fail {
+    background: rgba($danger, 0.85);
+  }
+
+  &-success {
+    background: rgba($primary, 0.85);
+  }
+
+  &-enter {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+
+  &-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+    transition: 0.3s cubic-bezier(0.5, 0.47, 0.96, 1.27);
+  }
+
+  &-exit {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  &-exit-active {
+    transform: translateX(120%);
+    opacity: 0;
+    transition: 0.3s cubic-bezier(0.5, 0.47, 0.96, 1.27);
+  }
+}

@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { setCurrentUser } from '../../redux/user/user.actions';
+import { setCurrentUser, removeCurrentUser } from '../../redux/user/user.actions';
+import { setAlert } from '../../redux/alerts/alerts.actions';
 import './SignInButton.styles.scss';
 
 const SignInButton = ({
@@ -12,7 +13,9 @@ const SignInButton = ({
   password,
   className,
   user,
+  setAlert,
   setCurrentUser,
+  removeCurrentUser,
 }) => {
   const signIn = (e, email, password) => {
     e.preventDefault();
@@ -20,6 +23,10 @@ const SignInButton = ({
   };
 
   if (user.token) return <Redirect to={'/dashboard'} />;
+  if (user.status === 'fail') {
+    setAlert('fail', user.message);
+    removeCurrentUser();
+  }
 
   return (
     <button
@@ -37,4 +44,6 @@ const mapStateToProps = state => ({
   ...state,
 });
 
-export default connect(mapStateToProps, { setCurrentUser })(SignInButton);
+export default connect(mapStateToProps, { setCurrentUser, removeCurrentUser, setAlert })(
+  SignInButton
+);

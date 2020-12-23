@@ -35,7 +35,8 @@ exports.forgotPassword = catchAsync(async (req, res) => {
 exports.login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) return res.status(401).json('Some fields are empty');
+  if (!email || !password)
+    return res.status(401).json({ status: 'fail', message: 'Please fill out all fields' });
 
   const data = await db('login')
     .join('users', 'login.email', '=', 'users.email')
