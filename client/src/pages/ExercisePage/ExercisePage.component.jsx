@@ -59,7 +59,7 @@ const ExercisePage = ({
     if (currentExerciseLog) {
       setPreviousExerciseLog(currentExerciseLog);
       if (parseInt(exerciseLogId) !== currentExerciseLog.exercise_log_id)
-        history.push(
+        history.replace(
           `/workout-logs/${currentWorkoutLog.workout_log_id}/${currentExerciseLog.exercise_log_id}`
         );
     }
@@ -72,7 +72,7 @@ const ExercisePage = ({
     );
 
     if (newActiveLog) {
-      history.push(
+      history.replace(
         `/workout-logs/${currentWorkoutLog.workout_log_id}/${newActiveLog.exercise_log_id}`
       );
       setCurrentExerciseLog(newActiveLog.exercise_log_id);
