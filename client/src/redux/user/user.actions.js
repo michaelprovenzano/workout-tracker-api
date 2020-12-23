@@ -6,17 +6,11 @@ export const setCurrentUser = (email, password) => async dispatch => {
       email: email,
       password: password,
     });
-
-    // Set the global user below
-    if (data.status === 'success') {
-      // Add the user to the state
-      return dispatch({
-        type: 'SET_CURRENT_USER',
-        payload: data,
-      });
-    } else {
-      console.log(data);
-    }
+    // Add the user to the state
+    return dispatch({
+      type: 'SET_CURRENT_USER',
+      payload: data,
+    });
   } catch (err) {
     console.log(err.data);
   }

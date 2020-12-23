@@ -11,6 +11,7 @@ import currentWorkoutsReducer from './currentWorkouts/currentWorkouts.reducer';
 import workoutLogsReducer from './workoutLogs/workoutLogs.reducer';
 import exerciseLogsReducer from './exerciseLogs/exerciseLogs.reducer';
 import statsReducer from './stats/stats.reducer';
+import alertsReducer from './alerts/alerts.reducer';
 
 const persistConfig = {
   key: 'root',
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   currentExercises: currentExercisesReducer,
   nextWorkout: nextWorkoutReducer,
   stats: statsReducer,
+  alerts: alertsReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
