@@ -5,6 +5,7 @@ import './styles/bootstrap/bootstrap-grid.css';
 import './App.scss';
 
 import Navigation from './components/Navigation/Navigation.component';
+import Alerts from './components/Alerts/Alerts.component';
 
 // Pages
 import Dashboard from './pages/Dashboard/Dashboard.component';
@@ -22,6 +23,7 @@ function App({ user }) {
   return (
     <div className='App'>
       <Navigation />
+      <Alerts />
       {/* <Route exact path='/test' component={TestPage} /> */}
       <Route exact path='/sign-up' component={SignupPage} />
       <Route exact path='/sign-in' component={SigninPage} />

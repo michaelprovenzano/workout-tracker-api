@@ -7,7 +7,7 @@ const alertsReducer = (state = INITIAL_STATE, action) => {
     case types.SET_ALERT:
       return [...state, action.payload];
     case types.REMOVE_ALERT:
-      return [...state.filter(msg => msg !== action.payload)];
+      return [...state.filter(alert => alert.message !== action.payload)];
     default:
       return state;
   }

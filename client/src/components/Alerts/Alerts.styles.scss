@@ -1,0 +1,14 @@
+@import '../../styles/variables.scss';
+
+.alerts {
+  min-width: 200px;
+  margin: 16px 16px 0 0;
+  position: fixed;
+  right: 0;
+  z-index: 9999;
+}
+@media screen and (min-width: $breakpoint-tablet) {
+  .alerts {
+    margin: 20px 20px 0 0;
+  }
+}
