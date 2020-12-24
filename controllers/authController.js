@@ -1,7 +1,6 @@
 const { promisify } = require('util');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 const db = require('./databaseController');
 const passport = require('./passportController');
 const catchAsync = require('../utils/catchAsync');
@@ -17,19 +16,89 @@ const sendCookie = (res, token) => {
   return res.cookie('jwt', token, cookieOptions);
 };
 
-const signToken = payload => {
-  const token = jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: '90d' });
+const signToken = (payload, expires = '90d') => {
+  const token = jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: expires });
 
   return token;
 };
 
 exports.forgotPassword = catchAsync(async (req, res) => {
-  // Implement forgot password functionality
+  // Generate a 'Forgot Password' token for the email provided
+  const { email } = req.body;
+  if (!email) return res.status(401).json({ status: 'fail', message: 'Please provide your email' });
+
+  const user = await db('login')
+    .join('users', 'login.email', '=', 'users.email')
+    .where('login.email', '=', email)
+    .first();
+
+  const tokenExpiration = 60 * 10; // Expiration and iat is calculated in seconds NOT milliseconds
+  const token = signToken({ id: user.user_id }, tokenExpiration);
+
+  const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${token}`;
+
+  // Send token via email
+  await new Email(user, resetUrl).sendPasswordReset();
 
   res.status(200).json({
     status: 'success',
     data: {},
   });
+});
+
+exports.resetPassword = catchAsync(async (req, res) => {
+  const { password, passwordConfirm } = req.body;
+  const { token } = req.params;
+
+  // Validate passwords
+  if (password !== passwordConfirm)
+    return res.status(401).json({
+      status: 'fail',
+      data: 'Passwords do not match',
+    });
+
+  // Decode token
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.SECRET_OR_KEY);
+  } catch (err) {
+    return res.status(401).json({
+      status: 'fail',
+      data: err,
+    });
+  }
+
+  // Update password
+  try {
+    bcrypt.hash(password, 10, (err, hash) => {
+      db.transaction(async trx => {
+        try {
+          const user = await trx.table('users').where('user_id', '=', decoded.id).first();
+          await trx('login')
+            .update({
+              password: hash,
+            })
+            .where('email', '=', user.email);
+
+          trx.commit;
+
+          const newToken = signToken({ id: user.user_id });
+
+          sendCookie(res, newToken);
+
+          return res.status(200).json({ status: 'success', token: newToken, ...user });
+        } catch (err) {
+          trx.rollback;
+          return res.status(400).json(err);
+        }
+      });
+    });
+  } catch (err) {
+    return res.status(400).json({
+      status: 'fail',
+      data: 'Something went wrong when changing your password',
+    });
+  }
 });
 
 exports.login = catchAsync(async (req, res) => {
@@ -148,80 +217,4 @@ exports.register = (req, res) => {
   });
 };
 
-exports.sendMail = catchAsync(async (req, res) => {
-  // sendmail(
-  //   {
-  //     from: 'welcome@trackbody.io',
-  //     to: 'mikepmusic@mailsac.com',
-  //     subject: 'Message',
-  //     html: 'I hope this message gets delivered!',
-  //   },
-  //   (err, response) => {
-  //     // console.log('sending mail');
-  //     // console.log(err);
-  //     // console.log(response);
-  //   }
-  // );
-
-  // Send email
-  // let transporter = nodemailer.createTransport({
-  //   sendmail: true,
-  //   newline: 'unix',
-  //   path: '/usr/sbin/sendmail',
-  // });
-  // transporter.sendMail(
-  //   {
-  //     from: 'welcome@trackbody.io',
-  //     to: 'mikepmusic@mailsac.com',
-  //     subject: 'Message',
-  //     text: 'I hope this message gets delivered!',
-  //   },
-  //   (err, info) => {
-  //     console.log(info.envelope);
-  //     console.log(info.messageId);
-  //     if (err) console.log(err);
-  //   }
-  // );
-
-  // let transporter = nodemailer.createTransport(
-  //   directTransport({
-  //     name: 'http://127.0.0.1/',
-  //   })
-  // );
-  // transporter.sendMail(
-  //   {
-  //     from: 'welcome@trackbody.io',
-  //     to: 'mikepmusic@mailsac.com',
-  //     subject: 'Message',
-  //     text: 'I hope this message gets delivered!',
-  //   },
-  //   (err, info) => {
-  //     if (err) console.log(err);
-  //   }
-  // );
-
-  // const transporter = nodemailer.createTransport(
-  //   { sendmail: true },
-  //   {
-  //     from: 'no-reply@your-domain.com',
-  //     to: 'mikepmusic@mailsac.com',
-  //     subject: 'test',
-  //   }
-  // );
-  // transporter.sendMail({ text: 'hello' });
-  let newUser = {
-    email: 'mikepmusic@mailsac.com',
-    name: 'Mike',
-  };
-
-  let url = 'trackbody.com';
-
-  await new Email(newUser, url).sendWelcome();
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      message: 'Mail sent?',
-    },
-  });
-});
+exports.sendMail = catchAsync(async (req, res) => {});
