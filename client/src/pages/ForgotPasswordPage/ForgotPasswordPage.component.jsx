@@ -56,6 +56,9 @@ class ForgotPasswordPage extends React.Component {
               <div className='logo d-flex justify-content-center flex-column'>
                 <img src={logo} alt='logo' />
               </div>
+              <p class='mb-5'>
+                Enter your email below and a password reset link will be sent to your email.
+              </p>
               <form className='w-100' onSubmit={this.forgotPassword}>
                 <InputText
                   name='email'

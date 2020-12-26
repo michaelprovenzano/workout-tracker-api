@@ -66,27 +66,19 @@ class ResetPasswordPage extends React.Component {
                 <InputText
                   name='password'
                   type='password'
-                  label='Password'
+                  label='New Password'
                   className='w-100'
                   onInput={e => this.setField(e, 'password')}
                 />
                 <InputText
                   name='password-confirm'
                   type='password'
-                  label='Confirm Password'
+                  label='Confirm New Password'
                   className='w-100'
                   onInput={e => this.setField(e, 'passwordConfirm')}
                 />
-                <Button text='Reset Password' type='primary' className='w-100 sign-in' />
+                <Button text='Update Password' type='primary' className='w-100 sign-in' />
               </form>
-
-              <Link to='/sign-in' className='password-link'>
-                Sign In
-              </Link>
-              <p>Don't have an account?</p>
-              <Link to='/sign-up' className='btn btn-primary btn-center w-100'>
-                Sign Up
-              </Link>
             </div>
           </div>
         </main>
