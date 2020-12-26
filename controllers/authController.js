@@ -25,17 +25,22 @@ const signToken = (payload, expires = '90d') => {
 exports.forgotPassword = catchAsync(async (req, res) => {
   // Generate a 'Forgot Password' token for the email provided
   const { email } = req.body;
-  if (!email) return res.status(401).json({ status: 'fail', message: 'Please provide your email' });
+  if (!email) return res.status(401).json({ status: 'fail', data: 'Please provide your email' });
 
   const user = await db('login')
     .join('users', 'login.email', '=', 'users.email')
     .where('login.email', '=', email)
     .first();
 
+  if (!user)
+    return res.status(404).json({ status: 'fail', data: 'No user with exists with that email.' });
+
   const tokenExpiration = 60 * 10; // Expiration and iat is calculated in seconds NOT milliseconds
   const token = signToken({ id: user.user_id }, tokenExpiration);
 
-  const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${token}`;
+  const resetUrl = `${req.protocol}://${
+    process.env.NODE_ENV === 'development' ? 'localhost:3000' : process.env.URL
+  }/reset-password/${token}`;
 
   // Send token via email
   await new Email(user, resetUrl).sendPasswordReset();
