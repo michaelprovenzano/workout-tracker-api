@@ -5,7 +5,8 @@ const db = require('./databaseController');
 const passport = require('./passportController');
 const catchAsync = require('../utils/catchAsync');
 const Email = require('../utils/email');
-const frontEndUrl = 'http://localhost:3000/';
+
+let frontEndUrl = 'http://localhost:3000/';
 if (process.env.NODE_ENV === 'production') frontEndUrl = 'http://trackbody.heroku.com';
 
 const sendCookie = (res, token) => {
