@@ -7,7 +7,6 @@ const pug = require('pug');
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
-    this.firstName = user.name.split(' ')[0];
     this.url = url;
     this.from = `TrackBody <${process.env.EMAIL_FROM}>`;
   }
@@ -17,8 +16,8 @@ module.exports = class Email {
       return nodemailer.createTransport({
         service: 'SendGrid',
         auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD,
+          user: 'apikey',
+          pass: process.env.SENDGRID_API_KEY,
         },
       });
     }
@@ -37,7 +36,6 @@ module.exports = class Email {
   async send(template, subject) {
     // Render the HTML based on pug tamplate
     const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
-      firstName: this.firstName,
       url: this.url,
       subject,
     });

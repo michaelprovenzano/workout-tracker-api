@@ -16,6 +16,8 @@ import SigninPage from './pages/SigninPage/SigninPage.component';
 import MyProgramsPage from './pages/MyProgramsPage/MyProgramsPage.component';
 import ProgramsPage from './pages/ProgramsPage/ProgramsPage.component';
 import MySchedulePage from './pages/MySchedulePage/MySchedulePage.component';
+import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.component';
+import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.component';
 
 import TestPage from './pages/_TestPage/TestPage.component';
 
@@ -27,8 +29,12 @@ function App({ user }) {
       {/* <Route exact path='/test' component={TestPage} /> */}
       <Route exact path='/sign-up' component={SignupPage} />
       <Route exact path='/sign-in' component={SigninPage} />
+      <Route exact path='/forgot-password' component={ForgotPasswordPage} />
+      <Route exact path='/reset-password/:token' component={ResetPasswordPage} />
       {!user.token ? (
-        <Redirect to='/sign-in' />
+        <Route exact path='/'>
+          <Redirect to='/sign-in' />
+        </Route>
       ) : (
         <Fragment>
           <Route exact path='/'>
