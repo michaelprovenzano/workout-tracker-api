@@ -5,6 +5,8 @@ const db = require('./databaseController');
 const passport = require('./passportController');
 const catchAsync = require('../utils/catchAsync');
 const Email = require('../utils/email');
+const frontEndUrl = 'http://localhost:3000/';
+if (process.env.NODE_ENV === 'production') frontEndUrl = 'http://trackbody.heroku.com';
 
 const sendCookie = (res, token) => {
   const cookieOptions = {
@@ -38,9 +40,7 @@ exports.forgotPassword = catchAsync(async (req, res) => {
   const tokenExpiration = 60 * 10; // Expiration and iat is calculated in seconds NOT milliseconds
   const token = signToken({ id: user.user_id }, tokenExpiration);
 
-  const resetUrl = `${req.protocol}://${
-    process.env.NODE_ENV === 'development' ? 'localhost:3000' : process.env.URL
-  }/reset-password/${token}`;
+  const resetUrl = `${frontEndUrl}/reset-password/${token}`;
 
   // Send token via email
   await new Email(user, resetUrl).sendPasswordReset();
