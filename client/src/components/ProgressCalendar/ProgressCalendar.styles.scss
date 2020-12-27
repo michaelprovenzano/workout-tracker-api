@@ -31,6 +31,10 @@
     width: 100%;
     padding-bottom: 100%;
     position: relative;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
     transition: all 0.3s ease;
 
     &.complete {
