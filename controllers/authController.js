@@ -88,11 +88,7 @@ exports.resetPassword = catchAsync(async (req, res) => {
 
           trx.commit;
 
-          const newToken = signToken({ id: user.user_id });
-
-          sendCookie(res, newToken);
-
-          return res.status(200).json({ status: 'success', token: newToken, ...user });
+          return signIn(req, res, user);
         } catch (err) {
           trx.rollback;
           return res.status(400).json(err);
@@ -122,10 +118,7 @@ exports.login = catchAsync(async (req, res) => {
 
   bcrypt.compare(password, user.password, (err, result) => {
     if (result) {
-      const token = signToken({ id: user.user_id });
-
-      sendCookie(res, token);
-      return res.status(200).json({ status: 'success', token, ...user });
+      return signIn(req, res, user);
     }
 
     return res.status(401).json({
@@ -202,15 +195,7 @@ exports.register = (req, res) => {
             .then(data => {
               let user = data[0];
 
-              const token = signToken({ id: user.user_id });
-
-              sendCookie(res, token);
-
-              const url = `${req.protocol}://${req.get('host')}/dashboard`;
-
-              // new Email(newUser, url).sendWelcome();
-
-              return res.status(200).json({ status: 'success', token, ...user });
+              return signIn(req, res, user);
             })
             .catch(err => res.status(400).json(err));
         })
@@ -224,3 +209,12 @@ exports.register = (req, res) => {
 };
 
 exports.sendMail = catchAsync(async (req, res) => {});
+
+const signIn = (req, res, user) => {
+  const token = signToken({ id: user.user_id });
+
+  sendCookie(res, token);
+
+  delete user.password; // hide password from front end
+  return res.status(200).json({ status: 'success', token, ...user });
+};
