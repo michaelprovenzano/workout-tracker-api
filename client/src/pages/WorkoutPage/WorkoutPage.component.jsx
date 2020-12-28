@@ -125,8 +125,8 @@ const WorkoutPage = ({
     );
 
   let buttonText = 'Mark Complete';
-  if (currentExerciseLogs.length > 0) buttonText = 'Continue';
   if (currentExercises.length > 0) buttonText = 'Start';
+  if (currentExerciseLogs.length > 0) buttonText = 'Continue';
 
   let workoutName = '';
   if (currentWorkout) workoutName = currentWorkout.name;
