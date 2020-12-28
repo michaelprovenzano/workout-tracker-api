@@ -68,7 +68,7 @@ class ProgramsPage extends React.Component {
             <p className='text-16 text-primary bold'>Select a program to start.</p>
           )}
         </StickyBottom>
-        <main className='content'>
+        <main>
           <div className='row'>
             <div className='col-md-8 offset-md-2'>
               {programs
