@@ -5,8 +5,16 @@ export const getActiveProgramLog = () => async dispatch => {
   const data = await api.get('program-logs', `status=active`);
 
   dispatch({
-    type: 'GET_ACTIVE_PROGRAM_LOG',
+    type: types.GET_ACTIVE_PROGRAM_LOG,
     payload: data[0],
+  });
+};
+
+export const abandonProgramLog = id => async dispatch => {
+  await api.updateOne('program-logs', id, { status: 'abandoned' });
+
+  dispatch({
+    type: types.CLEAR_ACTIVE_PROGRAM_LOG,
   });
 };
 

@@ -8,12 +8,17 @@ const INITIAL_STATE = {
 
 const activeProgramLogReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'GET_ACTIVE_PROGRAM_LOG':
+    case types.GET_ACTIVE_PROGRAM_LOG:
       let log = null;
       if (action.payload) log = action.payload;
       return {
         ...state,
         activeProgramLog: log,
+      };
+    case types.CLEAR_ACTIVE_PROGRAM_LOG:
+      return {
+        ...state,
+        activeProgramLog: null,
       };
     case types.SET_CURRENT_PROGRAM_LOG:
       return {

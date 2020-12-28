@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import './MyProgramsPage.styles.scss';
 import moment from 'moment';
-import api from '../../utils/apiCalls';
 
 // Redux
 import { connect } from 'react-redux';
-import { setProgramLogs, getActiveProgramLog } from '../../redux/programLogs/programLogs.actions';
+import {
+  setProgramLogs,
+  getActiveProgramLog,
+  abandonProgramLog,
+} from '../../redux/programLogs/programLogs.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
 // Components
@@ -22,12 +25,14 @@ const MyProgramsPage = ({
   stats,
   setProgramLogs,
   getActiveProgramLog,
+  abandonProgramLog,
   setStats,
   history,
 }) => {
   useEffect(() => {
-    if (!programLogs) setProgramLogs();
-    if (programLogs && !activeProgramLog) getActiveProgramLog();
+    setProgramLogs();
+    getActiveProgramLog();
+
     if (stats && activeProgramLog) {
       if (stats.program_log_id !== activeProgramLog.program_log_id)
         setStats(activeProgramLog.program_log_id);
@@ -35,10 +40,10 @@ const MyProgramsPage = ({
       setStats(activeProgramLog.program_log_id);
     }
     // eslint-disable-next-line
-  }, [activeProgramLog, programLogs]);
+  }, []);
 
   const abandonCurrentProgram = async () => {
-    await api.updateOne('program-logs', activeProgramLog.program_log_id, { status: 'abandoned' });
+    abandonProgramLog(activeProgramLog.program_log_id);
     history.push('/dashboard');
   };
 
@@ -62,34 +67,48 @@ const MyProgramsPage = ({
       <main className=''>
         <div className='row'>
           <Col number='1' bgLarge='true' className='workout-list'>
-            <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
-              <div className='bold'>{activeProgramLog ? activeProgramLog.name : null}</div>
-              <small>Current Program</small>
-            </div>
-            <ProgressBar progress={stats ? stats.progress * 100 : 0} />
-            <div className='row w-100 btn-group'>
-              <div className='col-4 col-md-12'>
+            {activeProgramLog ? (
+              <Fragment>
+                <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
+                  <div className='bold'>{activeProgramLog.name}</div>
+                  <small>Current Program</small>
+                </div>
+                <ProgressBar progress={stats ? stats.progress * 100 : 0} />
+                <div className='row w-100 btn-group'>
+                  <div className='col-4 col-md-12'>
+                    <Button
+                      text='Abandon'
+                      type='danger'
+                      position='center'
+                      className='w-100'
+                      onClick={abandonCurrentProgram}
+                    />
+                  </div>
+                  <div className='col-4 col-md-12'>
+                    <Button text='Stats' type='primary' position='center' className='w-100' />
+                  </div>
+                  <div className='col-4 col-md-12'>
+                    <Button
+                      text='Schedule'
+                      type='primary'
+                      position='center'
+                      className='w-100'
+                      onClick={goToCurrentSchedule}
+                    />
+                  </div>
+                </div>
+              </Fragment>
+            ) : (
+              <div className='workout-program d-flex flex-column align-items-center w-100'>
+                <small className='mb-4'>You currently don't have an active program.</small>
                 <Button
-                  text='Abandon'
-                  type='danger'
-                  position='center'
-                  className='w-100'
-                  onClick={abandonCurrentProgram}
-                />
-              </div>
-              <div className='col-4 col-md-12'>
-                <Button text='Stats' type='primary' position='center' className='w-100' />
-              </div>
-              <div className='col-4 col-md-12'>
-                <Button
-                  text='Schedule'
+                  text='Start a new program'
                   type='primary'
-                  position='center'
                   className='w-100'
-                  onClick={goToCurrentSchedule}
+                  onClick={() => history.push('/programs')}
                 />
               </div>
-            </div>
+            )}
           </Col>
           <Col number='2'>
             <header className='header-secondary d-flex align-items-center text-primary w-100'>
@@ -132,6 +151,9 @@ const mapStateToProps = state => ({
   programLogs: state.programLogs.programLogs,
 });
 
-export default connect(mapStateToProps, { setProgramLogs, getActiveProgramLog, setStats })(
-  MyProgramsPage
-);
+export default connect(mapStateToProps, {
+  setProgramLogs,
+  getActiveProgramLog,
+  abandonProgramLog,
+  setStats,
+})(MyProgramsPage);
