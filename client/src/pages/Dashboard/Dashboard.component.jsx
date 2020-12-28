@@ -19,6 +19,7 @@ import Col from '../../components/Col/Col.component';
 import Button from '../../components/Button/Button.component';
 
 const Dashboard = ({
+  user,
   activeProgramLog,
   nextWorkout,
   stats,
@@ -46,7 +47,7 @@ const Dashboard = ({
     history.push('/programs');
   };
 
-  if (!activeProgramLog || !stats)
+  if (!user)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -59,7 +60,7 @@ const Dashboard = ({
   return (
     <div className='offset-header'>
       <Header text='Dashboard' />
-      <WorkoutSticky nextWorkout={nextWorkout} />
+      {activeProgramLog ? <WorkoutSticky nextWorkout={nextWorkout} /> : null}
 
       <main className='content dashboard'>
         {activeProgramLog ? (
