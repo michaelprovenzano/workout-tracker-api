@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import './ResetPasswordPage.styles.scss';
 import api from '../../utils/apiCalls';
 import { connect } from 'react-redux';

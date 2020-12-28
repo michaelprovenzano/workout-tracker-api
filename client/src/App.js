@@ -19,8 +19,6 @@ import MySchedulePage from './pages/MySchedulePage/MySchedulePage.component';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.component';
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.component';
 
-import TestPage from './pages/_TestPage/TestPage.component';
-
 function App({ user }) {
   return (
     <div className='App'>

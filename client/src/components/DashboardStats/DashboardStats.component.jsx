@@ -13,7 +13,7 @@ const DashboardStats = ({ activeProgramLog, stats }) => {
           <small>Current Program</small>
         </div>
         {stats && (
-          <ProgressRing radius='55' stroke='5' progress={Math.round(stats.progress * 100)} />
+          <ProgressRing radius='55' stroke='5' progress={Math.round(stats.progress * 100) || 0} />
         )}
       </div>
       {stats && (

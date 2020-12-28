@@ -23,7 +23,6 @@ class ProgramItem extends React.Component {
       completed,
       skipped,
       abandoned,
-      abandonedAfter,
       date,
       dateRange,
       program,
