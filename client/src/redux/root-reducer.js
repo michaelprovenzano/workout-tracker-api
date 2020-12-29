@@ -6,6 +6,8 @@ import userReducer from './user/user.reducer';
 import programLogsReducer from './programLogs/programLogs.reducer';
 import currentExercisesReducer from './currentExercises/currentExercises.reducer';
 import nextWorkoutReducer from './nextWorkout/nextWorkout.reducer';
+import currentProgramReducer from './currentProgram/currentProgram.reducer';
+import currentProgramsReducer from './currentPrograms/currentPrograms.reducer';
 import currentWorkoutReducer from './currentWorkout/currentWorkout.reducer';
 import currentWorkoutsReducer from './currentWorkouts/currentWorkouts.reducer';
 import workoutLogsReducer from './workoutLogs/workoutLogs.reducer';
@@ -34,6 +36,8 @@ const rootReducer = combineReducers({
   programLogs: programLogsReducer,
   workoutLogs: workoutLogsReducer,
   exerciseLogs: exerciseLogsReducer,
+  currentProgram: currentProgramReducer,
+  currentPrograms: currentProgramsReducer,
   currentWorkout: currentWorkoutReducer,
   currentWorkouts: currentWorkoutsReducer,
   currentExercises: currentExercisesReducer,
