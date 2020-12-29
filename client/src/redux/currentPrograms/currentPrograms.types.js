@@ -1,0 +1,6 @@
+const types = {
+  SET_CURRENT_PROGRAMS: 'SET_CURRENT_PROGRAMS',
+  CLEAR_CURRENT_PROGRAMS: 'CLEAR_CURRENT_PROGRAMS',
+};
+
+export default types;

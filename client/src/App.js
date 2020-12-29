@@ -18,13 +18,13 @@ import ProgramsPage from './pages/ProgramsPage/ProgramsPage.component';
 import MySchedulePage from './pages/MySchedulePage/MySchedulePage.component';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.component';
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.component';
+import EditProgramsPage from './pages/admin/EditProgramsPage/EditProgramsPage.component';
 
 function App({ user }) {
   return (
     <div className='App'>
       <Navigation />
       <Alerts />
-      {/* <Route exact path='/test' component={TestPage} /> */}
       <Route exact path='/sign-up' component={SignupPage} />
       <Route exact path='/sign-in' component={SigninPage} />
       <Route exact path='/forgot-password' component={ForgotPasswordPage} />
@@ -44,6 +44,7 @@ function App({ user }) {
           <Route exact path='/program-logs/:programLogId' component={MySchedulePage} />
           <Route exact path='/workout-logs/:workoutLogId' component={WorkoutPage} />
           <Route exact path='/workout-logs/:workoutLogId/:exerciseLogId' component={ExercisePage} />
+          <Route exact path='/admin/edit-programs' component={EditProgramsPage} />
         </Fragment>
       )}
     </div>

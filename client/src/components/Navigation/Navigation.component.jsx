@@ -74,6 +74,11 @@ class Navigation extends React.Component {
                   My Programs
                 </NavLink>
               </li>
+              <li>
+                <NavLink to='/admin/edit-programs' onClick={this.collapseMenu}>
+                  Edit Programs
+                </NavLink>
+              </li>
               {/* <li>
                 <NavLink to='/settings' onClick={this.collapseMenu}>
                   Settings
