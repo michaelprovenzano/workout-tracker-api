@@ -1,6 +1,6 @@
-const currentWorkoutTypes = {
-  SET_CURRENT_WORKOUT: 'SET_CURRENT_WORKOUT',
-  CLEAR_CURRENT_WORKOUT: 'CLEAR_CURRENT_WORKOUT',
+const types = {
+  SET_CURRENT_PROGRAM: 'SET_CURRENT_PROGRAM',
+  CLEAR_CURRENT_PROGRAM: 'CLEAR_CURRENT_PROGRAM',
 };
 
-export default currentWorkoutTypes;
+export default types;

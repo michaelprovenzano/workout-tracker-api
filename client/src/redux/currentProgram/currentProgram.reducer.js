@@ -1,18 +1,18 @@
-import types from './currentWorkout.types';
+import types from './currentProgram.types';
 
 const INITIAL_STATE = null;
 
-const currentWorkoutReducer = (state = INITIAL_STATE, action) => {
+const currentProgramReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.SET_CURRENT_WORKOUT:
+    case types.SET_CURRENT_PROGRAM:
       return {
         ...action.payload,
       };
-    case types.CLEAR_CURRENT_WORKOUT:
+    case types.CLEAR_CURRENT_PROGRAM:
       return null;
     default:
       return state;
   }
 };
 
-export default currentWorkoutReducer;
+export default currentProgramReducer;

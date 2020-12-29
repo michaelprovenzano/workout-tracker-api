@@ -1,17 +1,18 @@
-import types from './currentWorkout.types';
+import types from './currentProgram.types';
 import api from '../../utils/apiCalls';
 
-export const setCurrentWorkout = programWorkoutId => async dispatch => {
-  let workout = await api.get('program-workouts', `program_workout_id=${programWorkoutId}`);
+export const setCurrentProgram = programId => async dispatch => {
+  console.log(programId);
+  let program = await api.getOne('programs', programId);
 
   dispatch({
-    type: types.SET_CURRENT_WORKOUT,
-    payload: workout[0],
+    type: types.SET_CURRENT_PROGRAM,
+    payload: program,
   });
 };
 
-export const clearCurrentWorkout = () => async dispatch => {
+export const clearCurrentProgram = () => async dispatch => {
   dispatch({
-    type: types.CLEAR_CURRENT_WORKOUT,
+    type: types.CLEAR_CURRENT_PROGRAM,
   });
 };
