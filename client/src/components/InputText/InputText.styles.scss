@@ -27,7 +27,18 @@
     font-size: 1rem;
     top: -15px;
     left: 0;
-    color: $white;
+  }
+
+  &-light {
+    .active ~ label {
+      color: $white;
+    }
+  }
+
+  &-dark {
+    .active ~ label {
+      color: $primary;
+    }
   }
 }
 
