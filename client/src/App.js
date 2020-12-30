@@ -19,6 +19,7 @@ import MySchedulePage from './pages/MySchedulePage/MySchedulePage.component';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.component';
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.component';
 import EditProgramsPage from './pages/admin/EditProgramsPage/EditProgramsPage.component';
+import EditProgramPage from './pages/admin/EditProgramPage/EditProgramPage.component';
 
 function App({ user }) {
   return (
@@ -45,6 +46,7 @@ function App({ user }) {
           <Route exact path='/workout-logs/:workoutLogId' component={WorkoutPage} />
           <Route exact path='/workout-logs/:workoutLogId/:exerciseLogId' component={ExercisePage} />
           <Route exact path='/admin/edit-programs' component={EditProgramsPage} />
+          <Route exact path='/admin/edit-programs/:programId' component={EditProgramPage} />
         </Fragment>
       )}
     </div>
