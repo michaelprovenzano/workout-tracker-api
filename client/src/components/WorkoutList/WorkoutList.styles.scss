@@ -1,0 +1,15 @@
+.workout-list {
+  ul {
+    list-style-type: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+  }
+
+  &-numbers {
+    width: 30px;
+  }
+}
