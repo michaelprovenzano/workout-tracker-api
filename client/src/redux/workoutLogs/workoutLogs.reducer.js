@@ -9,12 +9,26 @@ const INITIAL_STATE = {
 const workoutLogsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.ADD_WORKOUT_LOG:
-    case types.UPDATE_WORKOUT_LOG:
       return {
         ...state,
         activeWorkoutLog: action.payload.skipped || !action.payload.active ? null : action.payload,
         currentWorkoutLog: action.payload,
         workoutLogs: [...state.workoutLogs, action.payload],
+      };
+    case types.UPDATE_WORKOUT_LOG:
+      let activeWorkoutLog = null;
+      if (state.activeWorkoutLog) {
+        state.activeWorkoutLog.workout_log_id === action.payload.workout_log_id
+          ? (activeWorkoutLog = action.payload)
+          : (activeWorkoutLog = state.activeWorkoutLog);
+      }
+      return {
+        ...state,
+        activeWorkoutLog: activeWorkoutLog,
+        currentWorkoutLog: action.payload,
+        workoutLogs: state.workoutLogs.map(log =>
+          log.workout_log_id === action.payload.workout_log_id ? action.payload : log
+        ),
       };
     case types.SET_WORKOUT_LOGS:
       return {

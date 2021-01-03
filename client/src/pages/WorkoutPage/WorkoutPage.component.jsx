@@ -81,7 +81,7 @@ const WorkoutPage = ({
     setRedirect(true);
   };
 
-  const onClick = () => {
+  const startOrContinue = () => {
     // If workout has no exercises complete current workout
     if (currentExercises.length === 0) {
       updateWorkoutLog(currentWorkoutLog.workout_log_id, { active: false, progress: 1 });
@@ -182,7 +182,7 @@ const WorkoutPage = ({
                 type='primary'
                 position='center'
                 className='w-100 mb-20px'
-                onClick={onClick}
+                onClick={startOrContinue}
               />
             ) : null}
             <div className='workout-program d-flex justify-content-between w-100'>
