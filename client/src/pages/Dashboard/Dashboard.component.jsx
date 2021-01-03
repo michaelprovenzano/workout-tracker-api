@@ -3,7 +3,11 @@ import './Dashboard.styles.scss';
 
 // Redux
 import { connect } from 'react-redux';
-import { setWorkoutLogs, getActiveWorkoutLog } from '../../redux/workoutLogs/workoutLogs.actions';
+import {
+  setWorkoutLogs,
+  getActiveWorkoutLog,
+  clearCurrentWorkoutLog,
+} from '../../redux/workoutLogs/workoutLogs.actions';
 import { getActiveProgramLog } from '../../redux/programLogs/programLogs.actions';
 import { getNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
 import { setStats } from '../../redux/stats/stats.actions';
@@ -26,6 +30,7 @@ const Dashboard = ({
   getActiveProgramLog,
   setWorkoutLogs,
   getActiveWorkoutLog,
+  clearCurrentWorkoutLog,
   getNextWorkout,
   setStats,
   history,
@@ -37,6 +42,7 @@ const Dashboard = ({
       let id = activeProgramLog.program_log_id;
       setWorkoutLogs(id);
       getActiveWorkoutLog(id);
+      clearCurrentWorkoutLog();
       getNextWorkout(activeProgramLog); // Will not update if opened on different device
       setStats(id);
     }
@@ -104,6 +110,7 @@ const mapDispatchToProps = {
   setWorkoutLogs,
   getActiveProgramLog,
   getActiveWorkoutLog,
+  clearCurrentWorkoutLog,
   getNextWorkout,
   setStats,
 };

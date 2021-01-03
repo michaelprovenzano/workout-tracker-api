@@ -36,11 +36,12 @@ export const addWorkoutLog = log => async dispatch => {
 
 export const updateWorkoutLog = (id, log) => async dispatch => {
   let newLog = await api.updateOne('workout-logs', id, log);
-
-  dispatch({
-    type: types.UPDATE_WORKOUT_LOG,
-    payload: newLog,
-  });
+  if (newLog) {
+    dispatch({
+      type: types.UPDATE_WORKOUT_LOG,
+      payload: newLog,
+    });
+  }
 };
 
 export const setCurrentWorkoutLog = logOrId => async dispatch => {

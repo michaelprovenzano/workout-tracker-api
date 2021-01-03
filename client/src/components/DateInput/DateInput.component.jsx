@@ -65,6 +65,8 @@ const DateInput = ({ onInput, initialDate }) => {
   const makeActive = day => {
     if (!day.active) return;
     setDate(moment(month).date(day.day));
+    setExpanded(false);
+    if (onInput) onInput(moment(month).date(day.day));
   };
 
   const handleExpanded = e => {
@@ -75,7 +77,6 @@ const DateInput = ({ onInput, initialDate }) => {
       setExpanded(true);
     } else {
       setExpanded(false);
-      if (onInput) onInput(date);
     }
   };
 
@@ -95,7 +96,10 @@ const DateInput = ({ onInput, initialDate }) => {
             <button className='btn btn-primary' onClick={() => changeMonth('prev')}>
               &laquo;
             </button>
-            <h3>{moment(month).format('MMMM')}</h3>
+            <div className='d-flex flex-column align-items-center'>
+              <h3>{moment(month).format('MMMM')}</h3>
+              <small>{moment(month).format('yyyy')}</small>
+            </div>
             <button className='btn btn-primary' onClick={() => changeMonth('next')}>
               &raquo;
             </button>
