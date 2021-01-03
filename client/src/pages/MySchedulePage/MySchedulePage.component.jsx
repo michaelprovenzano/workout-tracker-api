@@ -102,7 +102,7 @@ const MySchedulePage = ({
           <Col number='1' bgLarge='true' className='workout-list'>
             {programLog ? (
               <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
-                <div className='bold'>{programLog.name}</div>
+                <div className='bold'>{programLog.program_name}</div>
                 {programLog.status === 'active' ? <small>Current Program</small> : null}
               </div>
             ) : null}
@@ -140,7 +140,7 @@ const MySchedulePage = ({
                       <ProgramItem
                         key={i}
                         id={i}
-                        name={workout.name}
+                        name={workout.workout_name}
                         date={currentWorkoutDate}
                         completed={status === 'completed'}
                         skipped={status === 'skipped'}

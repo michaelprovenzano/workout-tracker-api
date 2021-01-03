@@ -129,7 +129,7 @@ const WorkoutPage = ({
   if (currentExerciseLogs.length > 0) buttonText = 'Continue';
 
   let workoutName = '';
-  if (currentWorkout) workoutName = currentWorkout.name;
+  if (currentWorkout) workoutName = currentWorkout.workout_name;
 
   // // Hash workout logs
   let exerciseLogHash = {};
@@ -187,7 +187,9 @@ const WorkoutPage = ({
             ) : null}
             <div className='workout-program d-flex justify-content-between w-100'>
               <div className='pb-2'>{workoutName}</div>
-              <div className='pb-2'>{activeProgramLog ? activeProgramLog.name : 'null'}</div>
+              <div className='pb-2'>
+                {activeProgramLog ? activeProgramLog.program_name : 'null'}
+              </div>
             </div>
             {currentWorkoutLog ? <ProgressBar progress={currentWorkoutLog.progress * 100} /> : null}
             <DateInput
@@ -198,16 +200,15 @@ const WorkoutPage = ({
           {currentExercises.length > 0 ? (
             <Col number='2' bgLarge='true'>
               {currentExercises.map((exerciseObj, i) => {
-                let { exercise, is_isometric, has_weight, workout_exercise_id } = exerciseObj;
+                let { exercise_name, is_isometric, has_weight, workout_exercise_id } = exerciseObj;
                 let hasLog = exerciseLogHash[exerciseObj.workout_exercise_id];
-                console.log(exerciseLogHash);
 
                 let logId;
                 if (hasLog) logId = hasLog.exercise_log_id;
 
                 return (
                   <ExerciseItem
-                    name={`${exercise}`}
+                    name={`${exercise_name}`}
                     weights={`${has_weight}`}
                     isometric={`${is_isometric}`}
                     key={i}

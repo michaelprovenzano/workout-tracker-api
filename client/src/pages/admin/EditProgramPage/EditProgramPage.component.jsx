@@ -6,15 +6,18 @@ import { connect } from 'react-redux';
 import { setCurrentPrograms } from '../../../redux/currentPrograms/currentPrograms.actions';
 import {
   setCurrentProgram,
+  updateCurrentProgram,
   clearCurrentProgram,
 } from '../../../redux/currentProgram/currentProgram.actions';
 import { setCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
+import { setAlert } from '../../../redux/alerts/alerts.actions';
 
 // Components
 import Header from '../../../components/Header/Header.component';
 import InputText from '../../../components/InputText/InputText.component';
 import Button from '../../../components/Button/Button.component';
 import WorkoutList from '../../../components/WorkoutList/WorkoutList.component';
+import Modal from '../../../components/Modal/Modal.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const EditProgramsPage = ({
@@ -23,7 +26,9 @@ const EditProgramsPage = ({
   currentWorkouts,
   setCurrentPrograms,
   setCurrentProgram,
+  updateCurrentProgram,
   setCurrentWorkouts,
+  setAlert,
   match,
 }) => {
   const { programId } = match.params;
@@ -33,23 +38,32 @@ const EditProgramsPage = ({
   const [company, setCompany] = useState('');
 
   useEffect(() => {
-    setCurrentPrograms();
-    if (!currentProgram) setCurrentProgram(programId);
-    setCurrentWorkouts(programId);
-    if (currentProgram) {
-      setName(currentProgram.name);
-      setMode(currentProgram.mode);
-      setCompany(currentProgram.company);
+    if (!currentPrograms) {
+      setCurrentPrograms();
+    } else {
+      let thisProgram = currentPrograms.find(program => program.program_id === parseInt(programId));
+      setCurrentProgram(thisProgram);
+      setName(thisProgram.program_name);
+      setMode(thisProgram.mode);
+      setCompany(thisProgram.company);
     }
-    // eslint-disable-next-line
-  }, [currentProgram]);
 
-  const goToProgram = async (e, program_id) => {
-    setCurrentProgram(program_id);
-    history.push(`/admin/edit-programs/${program_id}`);
+    // eslint-disable-next-line
+  }, [currentPrograms, currentWorkouts]);
+
+  const saveProgram = async () => {
+    updateCurrentProgram({
+      program_id: currentProgram.program_id,
+      program_name: name,
+      mode: mode,
+      company: company,
+    });
+
+    setAlert('success', 'Saved successfully');
+    history.push(`/admin/edit-programs`);
   };
 
-  if (!currentProgram)
+  if (!currentProgram || !currentWorkouts)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -59,15 +73,18 @@ const EditProgramsPage = ({
       </div>
     );
 
-  // TODO: Create or modify workouts endpoint to update multiple workouts with one call
-  // TODO: Update workouts via API
   return (
     <div className='edit-program-page offset-header'>
       <Header text={name} history={history} />
       <main className=''>
         <div className='row'>
           <div className='col-lg-8 offset-lg-2'>
-            <Button text='Save Program' type='primary' className='w-100 mt-4' />
+            <Button
+              text='Save Program'
+              type='primary'
+              className='w-100 mt-4'
+              onClick={saveProgram}
+            />
             <form className='mt-5'>
               <InputText
                 type='text'
@@ -96,7 +113,11 @@ const EditProgramsPage = ({
             </form>
             <div className='d-flex justify-content-between align-items-center w-100'>
               <h3>Workouts</h3>
-              <Button text='Add Workout' type='secondary' />
+              <Button
+                text='Add Workout'
+                type='secondary'
+                onClick={e => history.push(`${currentProgram.program_id}/add-workout`)}
+              />
             </div>
             <WorkoutList />
           </div>
@@ -113,6 +134,8 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setCurrentPrograms,
   setCurrentProgram,
+  updateCurrentProgram,
   setCurrentWorkouts,
   clearCurrentProgram,
+  setAlert,
 })(EditProgramsPage);

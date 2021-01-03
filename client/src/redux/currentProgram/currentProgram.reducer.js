@@ -5,6 +5,7 @@ const INITIAL_STATE = null;
 const currentProgramReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.SET_CURRENT_PROGRAM:
+    case types.UPDATE_CURRENT_PROGRAM:
       return {
         ...action.payload,
       };

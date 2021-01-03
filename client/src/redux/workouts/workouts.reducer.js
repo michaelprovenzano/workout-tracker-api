@@ -1,15 +1,24 @@
-const INITIAL_STATE = {};
+import types from './workouts.types';
 
-const activeWorkoutLogReducer = (state = INITIAL_STATE, action) => {
+const INITIAL_STATE = {
+  allWorkouts: [],
+};
+
+const workoutsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'SET_ACTIVE_WORKOUT_LOG':
+    case types.FETCH_ALL_WORKOUTS:
       return {
         ...state,
-        ...action.payload,
+        allWorkouts: action.payload,
+      };
+    case types.ADD_WORKOUT:
+      return {
+        ...state,
+        allWorkouts: [...state.allWorkouts, action.payload],
       };
     default:
       return state;
   }
 };
 
-export default activeWorkoutLogReducer;
+export default workoutsReducer;

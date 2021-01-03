@@ -3,6 +3,7 @@ import types from './stats.types';
 
 export const setStats = programLogId => async dispatch => {
   const stats = await api.get(`util/program-log-stats/${programLogId}`);
+  console.log(stats);
   if (stats.status === 'success') stats.data.program_log_id = programLogId;
 
   dispatch({

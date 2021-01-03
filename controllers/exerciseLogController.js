@@ -55,8 +55,9 @@ exports.updateLog = catchAsync(async (req, res) => {
 
 const getWorkoutProgress = catchAsync(async (workoutLogId, workoutId) => {
   // Get all exercises for the workout log
-  const workout = await db('workouts').where('workout_id', '=', workoutId).first();
-  const exercises = workout.exercises;
+  const exercises = await db('workouts_exercises')
+    .where('workout_id', '=', workoutId)
+    .orderBy('exercise_order');
 
   // Get all exercise logs for the current workout
   const exerciseLogs = await db('exercise_logs').where('workout_log_id', '=', workoutLogId);

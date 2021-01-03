@@ -75,8 +75,7 @@ class ProgramsPage extends React.Component {
                 ? programs.map((program, i) => (
                     <SelectProgramItem
                       key={i}
-                      program={program.name}
-                      programLength={program.schedule.length}
+                      program={program.program_name}
                       company={program.company}
                       id={i}
                       onClick={this.selectProgram}

@@ -6,6 +6,8 @@ const currentProgramsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.SET_CURRENT_PROGRAMS:
       return action.payload;
+    case types.ADD_CURRENT_PROGRAM:
+      return [...state, action.payload];
     case types.CLEAR_CURRENT_PROGRAMS:
       return INITIAL_STATE;
     default:

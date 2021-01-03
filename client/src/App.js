@@ -20,6 +20,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.compo
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.component';
 import EditProgramsPage from './pages/admin/EditProgramsPage/EditProgramsPage.component';
 import EditProgramPage from './pages/admin/EditProgramPage/EditProgramPage.component';
+import AddWorkoutPage from './pages/admin/AddWorkoutPage/AddWorkoutPage.component';
 
 function App({ user }) {
   return (
@@ -47,6 +48,11 @@ function App({ user }) {
           <Route exact path='/workout-logs/:workoutLogId/:exerciseLogId' component={ExercisePage} />
           <Route exact path='/admin/edit-programs' component={EditProgramsPage} />
           <Route exact path='/admin/edit-programs/:programId' component={EditProgramPage} />
+          <Route
+            exact
+            path='/admin/edit-programs/:programId/add-workout'
+            component={AddWorkoutPage}
+          />
         </Fragment>
       )}
     </div>

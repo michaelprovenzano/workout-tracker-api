@@ -6,10 +6,13 @@
   li {
     display: flex;
     align-items: center;
+    height: 40px;
     padding: 6px;
+    border-bottom: 1px solid #dfdfdf;
   }
 
   &-numbers {
     width: 30px;
+    height: 40px;
   }
 }

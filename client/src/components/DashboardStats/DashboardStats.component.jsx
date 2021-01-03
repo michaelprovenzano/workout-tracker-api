@@ -9,7 +9,7 @@ const DashboardStats = ({ activeProgramLog, stats }) => {
     <Fragment>
       <div className='d-flex justify-content-end align-items-center align-self-end mb-5'>
         <div className='d-flex flex-column align-items-end progress-text'>
-          <h2 className='mt-0'>{activeProgramLog.name}</h2>
+          <h2 className='mt-0'>{activeProgramLog.program_name}</h2>
           <small>Current Program</small>
         </div>
         {stats && (

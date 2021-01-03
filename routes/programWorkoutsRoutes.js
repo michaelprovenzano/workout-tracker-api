@@ -5,6 +5,8 @@ const programWorkoutsController = require('../controllers/programWorkoutsControl
 router
   .route('/')
   .get(programWorkoutsController.getAllProgramWorkouts)
-  .patch(programWorkoutsController.updateMultipleWorkouts);
+  .post(programWorkoutsController.addWorkout)
+  .patch(programWorkoutsController.updateMultipleWorkouts)
+  .delete(programWorkoutsController.deleteWorkout);
 
 module.exports = router;

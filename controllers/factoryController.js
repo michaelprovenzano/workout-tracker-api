@@ -3,7 +3,7 @@ const url = require('url');
 const catchAsync = require('../utils/catchAsync');
 
 exports.addOne = table => async (req, res) => {
-  req.body.user_id = req.user.user_id;
+  if (req.user) req.body.user_id = req.user.user_id;
   const data = await db.returning('*').insert(req.body).into(table);
   return res.status(200).json(data[0]);
 };
@@ -11,7 +11,7 @@ exports.addOne = table => async (req, res) => {
 exports.deleteById = (table, idLabel, restrictToUser) =>
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    let whereOptions = { idLabel: id };
+    let whereOptions = { [idLabel]: id };
     if (restrictToUser) whereOptions.user_id = req.user.user_id;
 
     await db(table).where(whereOptions).del();
