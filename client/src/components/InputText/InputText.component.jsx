@@ -12,14 +12,18 @@ class InputText extends React.Component {
   };
 
   render() {
-    let { name, type, label, className, onInput } = this.props;
+    let { name, type, label, value, color, className, onInput } = this.props;
     if (!className) className = '';
+    if (!color) color = 'light';
+
     return (
-      <div className={`input-group ${className}`}>
+      <div className={`input-group input-group-${color} ${className}`}>
         <input
           type={type}
           name={name}
           id={name}
+          value={value}
+          className={value ? 'active' : null}
           onFocus={this.toggleActive}
           onBlur={this.toggleActive}
           onInput={onInput}

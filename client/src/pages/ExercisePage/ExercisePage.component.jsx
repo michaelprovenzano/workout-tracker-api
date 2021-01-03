@@ -24,6 +24,7 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const ExercisePage = ({
+  activeProgramLog,
   currentWorkout,
   currentWorkoutLog,
   addExerciseLog,
@@ -105,20 +106,20 @@ const ExercisePage = ({
   return (
     <div className='exercise-page offset-header'>
       <Header
-        text={`${currentExercise ? currentExercise.exercise || '' : 'Exercise'}`}
+        text={`${currentExercise ? currentExercise.exercise_name || '' : 'Exercise'}`}
         history={history}
       />
       <main className=''>
         <div className='row'>
           <Col number='1' bgSmall='true' className='workout-list'>
             <div className='workout-program d-flex justify-content-between w-100'>
-              <div className='pb-2'>{currentWorkout.name}</div>
-              <div className='pb-2'>{currentWorkout.program}</div>
+              <div className='pb-2'>{currentWorkout.workout_name}</div>
+              <div className='pb-2'>{activeProgramLog.program_name}</div>
             </div>
             <ProgressBar progress={`${progress}`} />
             <div className='hidden-sm-down'>
               {currentExercises.map((exerciseObj, i) => {
-                let { exercise, is_isometric, has_weight, workout_exercise_id } = exerciseObj;
+                let { exercise_name, is_isometric, has_weight, workout_exercise_id } = exerciseObj;
 
                 let exerciseLogIndex = currentExerciseLogs.findIndex(
                   exerciseLog => exerciseLog.workout_exercise_id === workout_exercise_id
@@ -132,7 +133,7 @@ const ExercisePage = ({
 
                 return (
                   <ExerciseItem
-                    name={`${exercise}`}
+                    name={`${exercise_name}`}
                     weights={`${has_weight}`}
                     isometric={`${is_isometric}`}
                     key={i}
@@ -184,6 +185,7 @@ const ExercisePage = ({
 
 const mapStateToProps = state => ({
   ...state,
+  activeProgramLog: state.programLogs.activeProgramLog,
   currentWorkoutLog: state.workoutLogs.currentWorkoutLog,
   currentExerciseLog: state.exerciseLogs.currentExerciseLog,
   currentExerciseLogs: state.exerciseLogs.currentExerciseLogs,

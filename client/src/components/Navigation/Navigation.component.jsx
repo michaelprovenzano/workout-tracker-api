@@ -74,11 +74,13 @@ class Navigation extends React.Component {
                   My Programs
                 </NavLink>
               </li>
-              {/* <li>
-                <NavLink to='/settings' onClick={this.collapseMenu}>
-                  Settings
-                </NavLink>
-              </li> */}
+              {currentUser.role === 'admin' ? (
+                <li>
+                  <NavLink to='/admin/edit-programs' onClick={this.collapseMenu}>
+                    Edit Programs
+                  </NavLink>
+                </li>
+              ) : null}
               <li className='pin-to-bottom'>
                 <LogOutButton
                   position='center'

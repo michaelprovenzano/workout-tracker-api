@@ -104,7 +104,7 @@ const WorkoutSticky = ({
         {!loading ? (
           <Fragment>
             {activeWorkoutLog ? <small>Today's Workout</small> : <small>Next Workout</small>}
-            <h2>{activeWorkoutLog ? activeWorkoutLog.name : nextWorkout.name}</h2>
+            <h2>{activeWorkoutLog ? activeWorkoutLog.workout_name : nextWorkout.workout_name}</h2>
           </Fragment>
         ) : (
           <span style={{ padding: '10px' }}>

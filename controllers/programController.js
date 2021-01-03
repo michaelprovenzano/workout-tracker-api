@@ -4,13 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.addProgram = factory.addOne('programs', false);
 
-exports.getProgramById = factory.getById('programs', 'program_id', false, [
-  {
-    targetTable: 'programs_workouts',
-    column: 'id',
-    targetColumn: 'program_id',
-  },
-]);
+exports.getProgramById = factory.getById('programs', 'program_id', false);
 
 exports.getAllPrograms = factory.getAll('programs', false);
-exports.updateProgram = factory.updateOne('programs', false);
+exports.updateProgram = factory.updateOne('programs', 'program_id', false);

@@ -10,6 +10,7 @@ import {
   abandonProgramLog,
 } from '../../redux/programLogs/programLogs.actions';
 import { setStats } from '../../redux/stats/stats.actions';
+import { setWorkoutLogs } from '../../redux/workoutLogs/workoutLogs.actions';
 
 // Components
 import Header from '../../components/Header/Header.component';
@@ -24,6 +25,7 @@ const MyProgramsPage = ({
   programLogs,
   stats,
   setProgramLogs,
+  setWorkoutLogs,
   getActiveProgramLog,
   abandonProgramLog,
   setStats,
@@ -51,6 +53,11 @@ const MyProgramsPage = ({
     history.push(`/program-logs/${activeProgramLog.program_log_id}`);
   };
 
+  const goToProgramLog = programLogId => {
+    setWorkoutLogs(programLogId);
+    history.push(`/program-logs/${programLogId}`);
+  };
+
   if (!programLogs)
     return (
       <div
@@ -70,7 +77,7 @@ const MyProgramsPage = ({
             {activeProgramLog ? (
               <Fragment>
                 <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
-                  <div className='bold'>{activeProgramLog.name}</div>
+                  <div className='bold'>{activeProgramLog.program_name}</div>
                   <small>Current Program</small>
                 </div>
                 <ProgressBar progress={stats ? stats.progress * 100 : 0} />
@@ -127,10 +134,10 @@ const MyProgramsPage = ({
                   return (
                     <ProgramItem
                       key={i}
-                      name={`${log.name}`}
+                      name={`${log.program_name}`}
                       dateRange={`${startDate} - ${endDate}`}
                       history={history}
-                      url={`/program-logs/${log.program_log_id}`}
+                      onClick={() => goToProgramLog(log.program_log_id)}
                       abandoned={abandoned}
                       completed={completed}
                       program
@@ -154,6 +161,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setProgramLogs,
   getActiveProgramLog,
+  setWorkoutLogs,
   abandonProgramLog,
   setStats,
 })(MyProgramsPage);
