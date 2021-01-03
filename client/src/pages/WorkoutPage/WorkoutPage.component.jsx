@@ -69,16 +69,21 @@ const WorkoutPage = ({
       );
 
     // eslint-disable-next-line
-  }, [currentWorkoutLog]);
+  }, [currentWorkoutLog, currentExerciseLog]);
 
   const goToExerciseLog = async (exerciseLogId, workoutExerciseId) => {
     let workoutLogId;
     if (currentWorkoutLog) workoutLogId = currentWorkoutLog.workout_log_id;
 
-    if (currentWorkoutLog && !exerciseLogId) addExerciseLog(workoutLogId, workoutExerciseId);
-    if (currentWorkoutLog && exerciseLogId) setCurrentExerciseLog(exerciseLogId);
+    if (currentWorkoutLog && !exerciseLogId) {
+      addExerciseLog(workoutLogId, workoutExerciseId);
+      setRedirect(true);
+    }
 
-    setRedirect(true);
+    if (currentWorkoutLog && exerciseLogId) {
+      setCurrentExerciseLog(exerciseLogId);
+      history.push(`/workout-logs/${currentWorkoutLog.workout_log_id}/${exerciseLogId}`);
+    }
   };
 
   const startOrContinue = () => {
