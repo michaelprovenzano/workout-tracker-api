@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import './EditProgramPage.styles.scss';
+import './EditWorkoutPage.styles.scss';
 
 import { connect } from 'react-redux';
 import { setCurrentPrograms } from '../../../redux/currentPrograms/currentPrograms.actions';
@@ -16,50 +16,47 @@ import { setAlert } from '../../../redux/alerts/alerts.actions';
 import Header from '../../../components/Header/Header.component';
 import InputText from '../../../components/InputText/InputText.component';
 import Button from '../../../components/Button/Button.component';
-import WorkoutList from '../../../components/WorkoutList/WorkoutList.component';
+import ExerciseList from '../../../components/ExerciseList/ExerciseList.component';
 import LoaderSpinner from 'react-loader-spinner';
+import {
+  setCurrentWorkout,
+  updateCurrentWorkout,
+} from '../../../redux/currentWorkout/currentWorkout.actions';
 
-const EditProgramsPage = ({
+const EditWorkoutPage = ({
   currentPrograms,
   currentProgram,
   currentWorkouts,
-  setCurrentPrograms,
-  setCurrentProgram,
-  updateCurrentProgram,
+  currentWorkout,
+  updateCurrentWorkout,
   setCurrentWorkouts,
   setAlert,
   match,
 }) => {
-  const { programId } = match.params;
+  const { workoutId } = match.params;
   const history = useHistory();
   const [name, setName] = useState('');
-  const [mode, setMode] = useState('');
-  const [company, setCompany] = useState('');
 
   useEffect(() => {
-    if (!currentPrograms) {
-      setCurrentPrograms();
+    if (!currentWorkouts) {
+      setCurrentWorkouts();
     } else {
-      let thisProgram = currentPrograms.find(program => program.program_id === parseInt(programId));
-      setCurrentProgram(thisProgram);
-      setName(thisProgram.program_name);
-      setMode(thisProgram.mode);
-      setCompany(thisProgram.company);
+      let thisWorkout = currentWorkouts.find(workout => workout.workout_id === parseInt(workoutId));
+      // setCurrentProgram(thisWorkout);
+      setName(currentWorkout.workout_name);
     }
 
     // eslint-disable-next-line
-  }, [currentPrograms, currentWorkouts]);
+  }, [currentPrograms, currentWorkout]);
 
-  const saveProgram = async () => {
-    updateCurrentProgram({
-      program_id: currentProgram.program_id,
-      program_name: name,
-      mode: mode,
-      company: company,
+  const saveWorkout = async () => {
+    updateCurrentWorkout({
+      ...currentWorkout,
+      workout_name: name,
     });
 
     setAlert('success', 'Saved successfully');
-    history.push(`/admin/edit-programs`);
+    history.push(`/admin/edit-programs/${currentProgram.program_id}`);
   };
 
   if (!currentProgram || !currentWorkouts)
@@ -73,16 +70,16 @@ const EditProgramsPage = ({
     );
 
   return (
-    <div className='edit-program-page offset-header'>
+    <div className='edit-workout-page offset-header'>
       <Header text={name} history={history} />
       <main className=''>
         <div className='row'>
           <div className='col-lg-8 offset-lg-2'>
             <Button
-              text='Save Program'
+              text='Save Workout'
               type='primary'
               className='w-100 mt-4'
-              onClick={saveProgram}
+              onClick={saveWorkout}
             />
             <form className='mt-5'>
               <InputText
@@ -93,32 +90,16 @@ const EditProgramsPage = ({
                 onInput={e => setName(e.target.value)}
                 className='mb-5'
               />
-              <InputText
-                type='text'
-                label='Mode'
-                value={mode}
-                color='dark'
-                onInput={e => setMode(e.target.value)}
-                className='mb-5'
-              />
-              <InputText
-                type='text'
-                label='Company'
-                value={company}
-                color='dark'
-                onInput={e => setCompany(e.target.value)}
-                className='mb-5'
-              />
             </form>
             <div className='d-flex justify-content-between align-items-center w-100'>
-              <h3>Workouts</h3>
+              <h3>Exercises</h3>
               <Button
-                text='Add Workout'
+                text='Add Exercise'
                 type='secondary'
-                onClick={e => history.push(`${currentProgram.program_id}/add-workout`)}
+                onClick={e => history.push(`${currentWorkout.workout_id}/add-exercise`)}
               />
             </div>
-            <WorkoutList />
+            <ExerciseList />
           </div>
         </div>
       </main>
@@ -133,8 +114,8 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setCurrentPrograms,
   setCurrentProgram,
-  updateCurrentProgram,
+  updateCurrentWorkout,
   setCurrentWorkouts,
   clearCurrentProgram,
   setAlert,
-})(EditProgramsPage);
+})(EditWorkoutPage);
