@@ -1,0 +1,60 @@
+@import '../../styles/variables.scss';
+
+.cb-group {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+
+  * {
+    cursor: pointer;
+  }
+
+  .cb-checkbox {
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    border-radius: 100%;
+    border: 1px solid $black;
+    margin-right: 10px;
+  }
+
+  input[type='checkbox'] {
+    display: none;
+
+    &:checked ~ .cb-checkbox {
+      background-color: $primary;
+      border-color: $primary;
+      position: relative;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        bottom: 3px;
+        left: 40%;
+        width: 2px;
+        height: 4px;
+        background-color: $white;
+        transform-origin: bottom center;
+        transform: translateX(-50%) rotate(-45deg);
+      }
+
+      &::after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        bottom: 3px;
+        left: 40%;
+        width: 2px;
+        height: 8px;
+        background-color: $white;
+        transform-origin: bottom center;
+        transform: translateX(-50%) rotate(45deg);
+      }
+    }
+
+    &:checked ~ label {
+      color: $primary;
+    }
+  }
+}

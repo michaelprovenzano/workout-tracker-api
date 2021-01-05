@@ -23,13 +23,13 @@ const ExerciseForm = ({
 
   const selectRow = (e, selected) => {
     setSelected(selected);
+    updateCurrentExerciseLog(formData);
   };
 
   const setInputs = (e, field) => {
     let newFormData = { ...formData };
     newFormData[field] = e.target.value;
     setFormData(newFormData);
-    updateCurrentExerciseLog(newFormData);
   };
 
   let {

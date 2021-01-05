@@ -3,50 +3,42 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-import './WorkoutList.styles.scss';
+import './ExerciseList.styles.scss';
 
-import { updateCurrentWorkouts } from '../../redux/currentWorkouts/currentWorkouts.actions';
+import { updateCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
 
 import Button from '../Button/Button.component';
-import WorkoutItem from '../WorkoutItem/WorkoutItem.component';
-import { setCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
-import { setCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import { setCurrentExercise } from '../../redux/currentExercise/currentExercise.actions';
 
-const WorkoutList = ({
-  currentWorkouts,
-  updateCurrentWorkouts,
-  setCurrentWorkout,
-  setCurrentExercises,
-}) => {
-  const [workouts, setWorkouts] = useState([]);
+const ExerciseList = ({ currentExercises, updateCurrentExercises, setCurrentExercise }) => {
+  const [exercises, setExercises] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
-    setWorkouts(currentWorkouts);
-  }, [currentWorkouts]);
+    setExercises(currentExercises);
+  }, [currentExercises]);
 
   const handleOnDragEnd = async result => {
-    const newWorkoutOrder = [...currentWorkouts];
-    const [reorderedWorkout] = newWorkoutOrder.splice(result.source.index, 1);
-    newWorkoutOrder.splice(result.destination.index, 0, reorderedWorkout);
-    newWorkoutOrder.forEach((workout, i) => (workout.workout_order = i));
+    const newExerciseOrder = [...currentExercises];
+    const [reorderedWorkout] = newExerciseOrder.splice(result.source.index, 1);
+    newExerciseOrder.splice(result.destination.index, 0, reorderedWorkout);
+    newExerciseOrder.forEach((exercise, i) => (exercise.exercise_order = i));
 
-    setWorkouts(newWorkoutOrder);
-    updateCurrentWorkouts(newWorkoutOrder);
+    setExercises(newExerciseOrder);
+    updateCurrentExercises(newExerciseOrder);
   };
 
-  if (!currentWorkouts) return <div>Loading...</div>;
+  if (!currentExercises) return <div>Loading...</div>;
 
-  const editWorkout = workout => {
-    setCurrentWorkout(workout.program_workout_id);
-    setCurrentExercises(workout.workout_id);
-    history.push(`/admin/edit-workouts/${workout.workout_id}`);
+  const editExercise = exercise => {
+    setCurrentExercise(exercise);
+    history.push(`/admin/edit-exercises/${exercise.exercise_id}`);
   };
 
   return (
     <div className='workout-list d-flex'>
       <ul className='workout-list-numbers'>
-        {workouts ? workouts.map((workout, i) => <li>{i + 1}</li>) : null}
+        {exercises ? exercises.map((workout, i) => <li>{i + 1}</li>) : null}
       </ul>
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId='workout'>
@@ -56,9 +48,9 @@ const WorkoutList = ({
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {workouts
-                ? workouts.map((workout, i) => {
-                    const id = `${i}-workout-${workout.workout_id}`;
+              {exercises
+                ? exercises.map((exercise, i) => {
+                    const id = `${i}-exercise-${exercise.exercise_id}`;
                     return (
                       <Draggable key={id} draggableId={id} index={i}>
                         {provided => (
@@ -68,12 +60,12 @@ const WorkoutList = ({
                             {...provided.dragHandleProps}
                             className='d-flex justify-content-between'
                           >
-                            <span>{workout.workout_name}</span>
+                            <span>{exercise.exercise_name}</span>
                             <span className='d-flex'>
                               <Button
                                 type='secondary'
                                 text='Edit'
-                                onClick={() => editWorkout(workout)}
+                                onClick={() => editExercise(exercise)}
                               />
                               <Button type='secondary' text='Remove' className='ml-4' />
                             </span>
@@ -95,8 +87,6 @@ const mapStateToProps = state => ({
   ...state,
 });
 
-export default connect(mapStateToProps, {
-  updateCurrentWorkouts,
-  setCurrentWorkout,
-  setCurrentExercises,
-})(WorkoutList);
+export default connect(mapStateToProps, { updateCurrentExercises, setCurrentExercise })(
+  ExerciseList
+);

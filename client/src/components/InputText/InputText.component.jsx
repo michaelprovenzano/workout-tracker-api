@@ -12,7 +12,7 @@ class InputText extends React.Component {
   };
 
   render() {
-    let { name, type, label, value, color, className, onInput } = this.props;
+    let { name, type, label, value, color, className, onInput, onChange } = this.props;
     if (!className) className = '';
     if (!color) color = 'light';
 
@@ -27,6 +27,7 @@ class InputText extends React.Component {
           onFocus={this.toggleActive}
           onBlur={this.toggleActive}
           onInput={onInput}
+          onChange={onChange}
         />
         <label htmlFor={name}>{label}</label>
       </div>

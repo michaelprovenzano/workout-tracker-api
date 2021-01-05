@@ -9,7 +9,6 @@ import {
   updateCurrentProgram,
   clearCurrentProgram,
 } from '../../../redux/currentProgram/currentProgram.actions';
-import { setCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
 import { setAlert } from '../../../redux/alerts/alerts.actions';
 
 // Components
@@ -17,7 +16,6 @@ import Header from '../../../components/Header/Header.component';
 import InputText from '../../../components/InputText/InputText.component';
 import Button from '../../../components/Button/Button.component';
 import WorkoutList from '../../../components/WorkoutList/WorkoutList.component';
-import Modal from '../../../components/Modal/Modal.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const EditProgramsPage = ({
@@ -27,7 +25,6 @@ const EditProgramsPage = ({
   setCurrentPrograms,
   setCurrentProgram,
   updateCurrentProgram,
-  setCurrentWorkouts,
   setAlert,
   match,
 }) => {
@@ -135,7 +132,6 @@ export default connect(mapStateToProps, {
   setCurrentPrograms,
   setCurrentProgram,
   updateCurrentProgram,
-  setCurrentWorkouts,
   clearCurrentProgram,
   setAlert,
 })(EditProgramsPage);
