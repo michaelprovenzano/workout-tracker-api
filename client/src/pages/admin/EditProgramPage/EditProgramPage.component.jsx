@@ -9,7 +9,6 @@ import {
   updateCurrentProgram,
   clearCurrentProgram,
 } from '../../../redux/currentProgram/currentProgram.actions';
-import { setCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
 import { setAlert } from '../../../redux/alerts/alerts.actions';
 
 // Components
@@ -26,7 +25,6 @@ const EditProgramsPage = ({
   setCurrentPrograms,
   setCurrentProgram,
   updateCurrentProgram,
-  setCurrentWorkouts,
   setAlert,
   match,
 }) => {
@@ -134,7 +132,6 @@ export default connect(mapStateToProps, {
   setCurrentPrograms,
   setCurrentProgram,
   updateCurrentProgram,
-  setCurrentWorkouts,
   clearCurrentProgram,
   setAlert,
 })(EditProgramsPage);

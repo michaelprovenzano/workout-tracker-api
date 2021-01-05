@@ -3,12 +3,6 @@ import { useHistory } from 'react-router-dom';
 import './EditWorkoutPage.styles.scss';
 
 import { connect } from 'react-redux';
-import { setCurrentPrograms } from '../../../redux/currentPrograms/currentPrograms.actions';
-import {
-  setCurrentProgram,
-  updateCurrentProgram,
-  clearCurrentProgram,
-} from '../../../redux/currentProgram/currentProgram.actions';
 import { setCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
 import { setAlert } from '../../../redux/alerts/alerts.actions';
 
@@ -18,10 +12,7 @@ import InputText from '../../../components/InputText/InputText.component';
 import Button from '../../../components/Button/Button.component';
 import ExerciseList from '../../../components/ExerciseList/ExerciseList.component';
 import LoaderSpinner from 'react-loader-spinner';
-import {
-  setCurrentWorkout,
-  updateCurrentWorkout,
-} from '../../../redux/currentWorkout/currentWorkout.actions';
+import { updateCurrentWorkout } from '../../../redux/currentWorkout/currentWorkout.actions';
 
 const EditWorkoutPage = ({
   currentPrograms,
@@ -42,7 +33,6 @@ const EditWorkoutPage = ({
       setCurrentWorkouts();
     } else {
       let thisWorkout = currentWorkouts.find(workout => workout.workout_id === parseInt(workoutId));
-      // setCurrentProgram(thisWorkout);
       setName(currentWorkout.workout_name);
     }
 
@@ -112,10 +102,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  setCurrentPrograms,
-  setCurrentProgram,
   updateCurrentWorkout,
   setCurrentWorkouts,
-  clearCurrentProgram,
   setAlert,
 })(EditWorkoutPage);
