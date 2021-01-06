@@ -48,7 +48,7 @@ const EditProgramsPage = ({
   const addProgram = e => {
     // Add a new program
     addCurrentProgram({
-      name: 'New Program',
+      program_name: 'New Program',
       mode: 'Classic',
       company: 'Company',
     });
