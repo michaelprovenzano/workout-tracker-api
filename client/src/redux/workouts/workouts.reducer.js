@@ -1,6 +1,8 @@
 import types from './workouts.types';
 
 const INITIAL_STATE = {
+  currentWorkout: null,
+  nextWorkout: null,
   allWorkouts: [],
 };
 

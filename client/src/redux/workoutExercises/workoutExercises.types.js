@@ -1,0 +1,3 @@
+export default {
+  ADD_WORKOUT_EXERCISE: 'ADD_WORKOUT_EXERCISE',
+};
