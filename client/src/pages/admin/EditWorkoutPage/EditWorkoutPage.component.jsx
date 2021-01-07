@@ -15,8 +15,7 @@ import LoaderSpinner from 'react-loader-spinner';
 import { updateCurrentWorkout } from '../../../redux/currentWorkout/currentWorkout.actions';
 
 const EditWorkoutPage = ({
-  currentPrograms,
-  currentProgram,
+  programs: { currentProgram, allPrograms },
   currentWorkouts,
   currentWorkout,
   updateCurrentWorkout,
@@ -37,7 +36,7 @@ const EditWorkoutPage = ({
     }
 
     // eslint-disable-next-line
-  }, [currentPrograms, currentWorkout]);
+  }, [allPrograms, currentWorkout]);
 
   const saveWorkout = async () => {
     updateCurrentWorkout({

@@ -5,8 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import userReducer from './user/user.reducer';
 import programLogsReducer from './programLogs/programLogs.reducer';
 import nextWorkoutReducer from './nextWorkout/nextWorkout.reducer';
-import currentProgramReducer from './currentProgram/currentProgram.reducer';
-import currentProgramsReducer from './currentPrograms/currentPrograms.reducer';
+import programsReducer from './programs/programs.reducer';
 import currentWorkoutReducer from './currentWorkout/currentWorkout.reducer';
 import currentWorkoutsReducer from './currentWorkouts/currentWorkouts.reducer';
 import currentExercisesReducer from './currentExercises/currentExercises.reducer';
@@ -25,8 +24,7 @@ const persistConfig = {
     'programLogs',
     'workoutLogs',
     'exerciseLogs',
-    'currentProgram',
-    'currentPrograms',
+    'programs',
     'currentWorkout',
     'currentWorkouts',
     'currentExercise',
@@ -42,8 +40,7 @@ const rootReducer = combineReducers({
   programLogs: programLogsReducer,
   workoutLogs: workoutLogsReducer,
   exerciseLogs: exerciseLogsReducer,
-  currentProgram: currentProgramReducer,
-  currentPrograms: currentProgramsReducer,
+  programs: programsReducer,
   currentWorkout: currentWorkoutReducer,
   currentWorkouts: currentWorkoutsReducer,
   currentExercise: currentExerciseReducer,

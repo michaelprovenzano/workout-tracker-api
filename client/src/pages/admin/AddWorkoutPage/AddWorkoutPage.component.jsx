@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './AddWorkoutPage.styles.scss';
-import api from '../../../utils/apiCalls';
 
 import { connect } from 'react-redux';
-import { setCurrentPrograms } from '../../../redux/currentPrograms/currentPrograms.actions';
 import {
+  fetchPrograms,
   setCurrentProgram,
   clearCurrentProgram,
-} from '../../../redux/currentProgram/currentProgram.actions';
+} from '../../../redux/programs/programs.actions';
 import { fetchAllWorkouts, addWorkout } from '../../../redux/workouts/workouts.actions';
 
 // Components
@@ -21,10 +20,9 @@ import LoaderSpinner from 'react-loader-spinner';
 
 const AddWorkoutPage = ({
   allWorkouts,
+  programs: { allPrograms, currentProgram },
   addWorkout,
-  currentPrograms,
-  currentProgram,
-  setCurrentPrograms,
+  fetchPrograms,
   setCurrentProgram,
   fetchAllWorkouts,
   match,
@@ -36,16 +34,16 @@ const AddWorkoutPage = ({
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    if (!currentPrograms) {
-      setCurrentPrograms();
+    if (!allPrograms) {
+      fetchPrograms();
     } else {
-      let thisProgram = currentPrograms.find(program => program.program_id === parseInt(programId));
+      let thisProgram = allPrograms.find(program => program.program_id === parseInt(programId));
       setCurrentProgram(thisProgram);
     }
 
     fetchAllWorkouts();
     // eslint-disable-next-line
-  }, [currentPrograms]);
+  }, [allPrograms]);
 
   if (!currentProgram || !allWorkouts)
     return (
@@ -149,7 +147,7 @@ const getUniqueWorkouts = workouts => {
 
 export default connect(mapStateToProps, {
   addWorkout,
-  setCurrentPrograms,
+  fetchPrograms,
   setCurrentProgram,
   clearCurrentProgram,
   fetchAllWorkouts,

@@ -3,12 +3,12 @@ import { useHistory } from 'react-router-dom';
 import './EditProgramPage.styles.scss';
 
 import { connect } from 'react-redux';
-import { setCurrentPrograms } from '../../../redux/currentPrograms/currentPrograms.actions';
 import {
+  fetchPrograms,
   setCurrentProgram,
   updateCurrentProgram,
   clearCurrentProgram,
-} from '../../../redux/currentProgram/currentProgram.actions';
+} from '../../../redux/programs/programs.actions';
 import { setAlert } from '../../../redux/alerts/alerts.actions';
 
 // Components
@@ -19,10 +19,9 @@ import WorkoutList from '../../../components/WorkoutList/WorkoutList.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const EditProgramsPage = ({
-  currentPrograms,
-  currentProgram,
+  programs: { allPrograms, currentProgram },
   currentWorkouts,
-  setCurrentPrograms,
+  fetchPrograms,
   setCurrentProgram,
   updateCurrentProgram,
   setAlert,
@@ -35,10 +34,10 @@ const EditProgramsPage = ({
   const [company, setCompany] = useState('');
 
   useEffect(() => {
-    if (!currentPrograms) {
-      setCurrentPrograms();
+    if (!allPrograms) {
+      fetchPrograms();
     } else {
-      let thisProgram = currentPrograms.find(program => program.program_id === parseInt(programId));
+      let thisProgram = allPrograms.find(program => program.program_id === parseInt(programId));
       setCurrentProgram(thisProgram);
       setName(thisProgram.program_name);
       setMode(thisProgram.mode);
@@ -46,7 +45,7 @@ const EditProgramsPage = ({
     }
 
     // eslint-disable-next-line
-  }, [currentPrograms, currentWorkouts]);
+  }, [allPrograms, currentWorkouts]);
 
   const saveProgram = async () => {
     updateCurrentProgram({
@@ -129,7 +128,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  setCurrentPrograms,
+  fetchPrograms,
   setCurrentProgram,
   updateCurrentProgram,
   clearCurrentProgram,

@@ -4,13 +4,11 @@ import './EditProgramsPage.styles.scss';
 
 import { connect } from 'react-redux';
 import {
-  setCurrentPrograms,
-  addCurrentProgram,
-} from '../../../redux/currentPrograms/currentPrograms.actions';
-import {
+  fetchPrograms,
+  addProgram,
   setCurrentProgram,
   clearCurrentProgram,
-} from '../../../redux/currentProgram/currentProgram.actions';
+} from '../../../redux/programs/programs.actions';
 import {
   setCurrentWorkouts,
   clearCurrentWorkouts,
@@ -23,10 +21,10 @@ import Button from '../../../components/Button/Button.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const EditProgramsPage = ({
-  currentPrograms,
-  setCurrentPrograms,
+  programs: { allPrograms },
+  fetchPrograms,
+  addProgram,
   setCurrentProgram,
-  addCurrentProgram,
   setCurrentWorkouts,
   clearCurrentWorkouts,
 }) => {
@@ -35,26 +33,27 @@ const EditProgramsPage = ({
   useEffect(() => {
     clearCurrentProgram();
     clearCurrentWorkouts();
-    setCurrentPrograms();
+    fetchPrograms();
     // eslint-disable-next-line
   }, []);
 
-  const goToProgram = async (e, program_id) => {
-    setCurrentProgram(program_id);
+  const goToProgram = async (e, program) => {
+    const { program_id } = program;
+    setCurrentProgram(program);
     setCurrentWorkouts(program_id);
     history.push(`/admin/edit-programs/${program_id}`);
   };
 
-  const addProgram = e => {
+  const addNewProgram = e => {
     // Add a new program
-    addCurrentProgram({
+    addProgram({
       program_name: 'New Program',
       mode: 'Classic',
       company: 'Company',
     });
   };
 
-  if (!currentPrograms)
+  if (!allPrograms)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -74,10 +73,10 @@ const EditProgramsPage = ({
               type='primary'
               text='Add Program'
               className='w-100 mt-5 mb-5'
-              onClick={addProgram}
+              onClick={addNewProgram}
             />
-            {currentPrograms
-              ? currentPrograms.map((program, i) => {
+            {allPrograms
+              ? allPrograms.map((program, i) => {
                   let { program_id, program_name } = program;
                   return (
                     <div className='w-100 d-flex flex-column align-items-center' key={i}>
@@ -86,7 +85,7 @@ const EditProgramsPage = ({
                         id={i}
                         name={program_name}
                         history={history}
-                        onClick={e => goToProgram(e, program_id)}
+                        onClick={e => goToProgram(e, program)}
                         program
                       />
                     </div>
@@ -105,10 +104,10 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  setCurrentPrograms,
+  fetchPrograms,
   setCurrentProgram,
   clearCurrentProgram,
-  addCurrentProgram,
+  addProgram,
   setCurrentWorkouts,
   clearCurrentWorkouts,
 })(EditProgramsPage);

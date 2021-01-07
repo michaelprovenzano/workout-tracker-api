@@ -13,10 +13,8 @@ import InputText from '../../../components/InputText/InputText.component';
 import InputCheckbox from '../../../components/InputCheckbox/InputCheckbox.component';
 import Button from '../../../components/Button/Button.component';
 import LoaderSpinner from 'react-loader-spinner';
-import { updateCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
 
 const EditExercisePage = ({
-  currentPrograms,
   currentExercise,
   updateOneCurrentExercises,
   setCurrentExercise,

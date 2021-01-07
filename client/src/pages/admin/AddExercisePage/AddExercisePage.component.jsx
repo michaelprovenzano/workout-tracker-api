@@ -5,10 +5,7 @@ import api from '../../../utils/apiCalls';
 
 import { connect } from 'react-redux';
 import { setCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
-import {
-  setCurrentProgram,
-  clearCurrentProgram,
-} from '../../../redux/currentProgram/currentProgram.actions';
+import { setCurrentProgram, clearCurrentProgram } from '../../../redux/programs/programs.actions';
 import { fetchAllWorkouts, addWorkout } from '../../../redux/workouts/workouts.actions';
 
 // Components
@@ -22,7 +19,7 @@ import LoaderSpinner from 'react-loader-spinner';
 const AddExercisePage = ({
   allWorkouts,
   addWorkout,
-  currentPrograms,
+  programs: { allPrograms },
   currentWorkout,
   setCurrentWorkouts,
   setCurrentProgram,
@@ -36,16 +33,16 @@ const AddExercisePage = ({
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    if (!currentPrograms) {
+    if (!allPrograms) {
       setCurrentWorkouts();
     } else {
-      let thisProgram = currentPrograms.find(program => program.program_id === parseInt(workoutId));
+      let thisProgram = allPrograms.find(program => program.program_id === parseInt(workoutId));
       setCurrentProgram(thisProgram);
     }
 
     fetchAllWorkouts();
     // eslint-disable-next-line
-  }, [currentPrograms]);
+  }, [allPrograms]);
 
   if (!currentWorkout || !allWorkouts)
     return (
