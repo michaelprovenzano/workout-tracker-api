@@ -9,10 +9,11 @@ import {
   setCurrentProgram,
   clearCurrentProgram,
 } from '../../../redux/programs/programs.actions';
+
 import {
-  setCurrentWorkouts,
-  clearCurrentWorkouts,
-} from '../../../redux/currentWorkouts/currentWorkouts.actions';
+  fetchProgramWorkouts,
+  clearProgramWorkouts,
+} from '../../../redux/programWorkouts/programWorkouts.actions';
 
 // Components
 import Header from '../../../components/Header/Header.component';
@@ -25,14 +26,14 @@ const EditProgramsPage = ({
   fetchPrograms,
   addProgram,
   setCurrentProgram,
-  setCurrentWorkouts,
-  clearCurrentWorkouts,
+  fetchProgramWorkouts,
+  clearProgramWorkouts,
 }) => {
   const history = useHistory();
 
   useEffect(() => {
     clearCurrentProgram();
-    clearCurrentWorkouts();
+    clearProgramWorkouts();
     fetchPrograms();
     // eslint-disable-next-line
   }, []);
@@ -40,7 +41,7 @@ const EditProgramsPage = ({
   const goToProgram = async (e, program) => {
     const { program_id } = program;
     setCurrentProgram(program);
-    setCurrentWorkouts(program_id);
+    fetchProgramWorkouts(program_id);
     history.push(`/admin/edit-programs/${program_id}`);
   };
 
@@ -108,6 +109,6 @@ export default connect(mapStateToProps, {
   setCurrentProgram,
   clearCurrentProgram,
   addProgram,
-  setCurrentWorkouts,
-  clearCurrentWorkouts,
+  fetchProgramWorkouts,
+  clearProgramWorkouts,
 })(EditProgramsPage);

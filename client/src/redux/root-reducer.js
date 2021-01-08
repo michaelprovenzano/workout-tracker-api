@@ -8,6 +8,7 @@ import nextWorkoutReducer from './nextWorkout/nextWorkout.reducer';
 import programsReducer from './programs/programs.reducer';
 import currentWorkoutReducer from './currentWorkout/currentWorkout.reducer';
 import currentWorkoutsReducer from './currentWorkouts/currentWorkouts.reducer';
+import programWorkouts from './programWorkouts/programWorkouts.reducer';
 import currentExercisesReducer from './currentExercises/currentExercises.reducer';
 import currentExerciseReducer from './currentExercise/currentExercise.reducer';
 import workoutLogsReducer from './workoutLogs/workoutLogs.reducer';
@@ -27,6 +28,7 @@ const persistConfig = {
     'programs',
     'currentWorkout',
     'currentWorkouts',
+    'programWorkouts',
     'currentExercise',
     'currentExercises',
     'workouts',
@@ -43,6 +45,7 @@ const rootReducer = combineReducers({
   programs: programsReducer,
   currentWorkout: currentWorkoutReducer,
   currentWorkouts: currentWorkoutsReducer,
+  programWorkouts: programWorkouts,
   currentExercise: currentExerciseReducer,
   currentExercises: currentExercisesReducer,
   workouts: workoutsReducer,

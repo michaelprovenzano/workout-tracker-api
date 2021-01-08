@@ -5,40 +5,42 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import './WorkoutList.styles.scss';
 
-import { updateCurrentWorkouts } from '../../redux/currentWorkouts/currentWorkouts.actions';
-
 import Button from '../Button/Button.component';
 import WorkoutItem from '../WorkoutItem/WorkoutItem.component';
-import { setCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
 import { setCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
 
+import {
+  setCurrentProgramWorkout,
+  updateProgramWorkouts,
+} from '../../redux/programWorkouts/programWorkouts.actions';
+
 const WorkoutList = ({
-  currentWorkouts,
-  updateCurrentWorkouts,
-  setCurrentWorkout,
+  programWorkouts: { currentProgramWorkouts },
+  updateProgramWorkouts,
+  setCurrentProgramWorkout,
   setCurrentExercises,
 }) => {
   const [workouts, setWorkouts] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
-    setWorkouts(currentWorkouts);
-  }, [currentWorkouts]);
+    setWorkouts(currentProgramWorkouts);
+  }, [currentProgramWorkouts]);
 
   const handleOnDragEnd = async result => {
-    const newWorkoutOrder = [...currentWorkouts];
+    const newWorkoutOrder = [...currentProgramWorkouts];
     const [reorderedWorkout] = newWorkoutOrder.splice(result.source.index, 1);
     newWorkoutOrder.splice(result.destination.index, 0, reorderedWorkout);
     newWorkoutOrder.forEach((workout, i) => (workout.workout_order = i));
 
     setWorkouts(newWorkoutOrder);
-    updateCurrentWorkouts(newWorkoutOrder);
+    updateProgramWorkouts(newWorkoutOrder);
   };
 
-  if (!currentWorkouts) return <div>Loading...</div>;
+  if (!currentProgramWorkouts) return <div>Loading...</div>;
 
   const editWorkout = workout => {
-    setCurrentWorkout(workout.program_workout_id);
+    setCurrentProgramWorkout(workout);
     setCurrentExercises(workout.workout_id);
     history.push(`/admin/edit-workouts/${workout.workout_id}`);
   };
@@ -96,7 +98,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  updateCurrentWorkouts,
-  setCurrentWorkout,
+  updateProgramWorkouts,
+  setCurrentProgramWorkout,
   setCurrentExercises,
 })(WorkoutList);
