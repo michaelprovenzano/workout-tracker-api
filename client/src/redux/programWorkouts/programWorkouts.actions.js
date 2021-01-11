@@ -95,20 +95,6 @@ export const updateProgramWorkout = workout => async dispatch => {
   }
 };
 
-// export const updateProgramWorkout = workout => async dispatch => {
-//   const { workout_name } = workout;
-//   if (!workout_name) return;
-
-//   let result = await api.updateOne('workouts', workout.workout_id, { workout_name });
-
-//   if (result) {
-//     dispatch({
-//       type: types.UPDATE_PROGRAM_WORKOUT,
-//       payload: workout,
-//     });
-//   }
-// };
-
 export const clearCurrentProgramWorkout = () => async dispatch => {
   dispatch({
     type: types.CLEAR_CURRENT_PROGRAM_WORKOUT,
