@@ -13,12 +13,12 @@ import { clearCurrentWorkoutLog } from '../../redux/workoutLogs/workoutLogs.acti
 
 import Arrow from '../Arrow/Arrow.component';
 import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
-import { clearCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
+import { clearCurrentProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 
 const PrevNext = ({
   className,
   addExerciseLog,
-  clearCurrentWorkout,
+  clearCurrentProgramWorkout,
   clearCurrentWorkoutLog,
   clearCurrentExerciseLog,
   clearCurrentExerciseLogs,
@@ -46,7 +46,7 @@ const PrevNext = ({
       clearCurrentExerciseLogs();
       clearCurrentExercises();
       clearCurrentWorkoutLog();
-      clearCurrentWorkout();
+      clearCurrentProgramWorkout();
 
       history.push('/dashboard');
     } else {
@@ -109,6 +109,6 @@ export default connect(mapStateToProps, {
   clearCurrentExerciseLog,
   clearCurrentExerciseLogs,
   clearCurrentWorkoutLog,
-  clearCurrentWorkout,
+  clearCurrentProgramWorkout,
   setCurrentExerciseLog,
 })(PrevNext);

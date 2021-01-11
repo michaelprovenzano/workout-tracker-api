@@ -4,7 +4,6 @@ import './AddExercisePage.styles.scss';
 import api from '../../../utils/apiCalls';
 
 import { connect } from 'react-redux';
-import { setCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
 import { setCurrentProgram, clearCurrentProgram } from '../../../redux/programs/programs.actions';
 import { fetchAllWorkouts, addWorkout } from '../../../redux/workouts/workouts.actions';
 
@@ -17,11 +16,9 @@ import Modal from '../../../components/Modal/Modal.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const AddExercisePage = ({
-  allWorkouts,
-  addWorkout,
   programs: { allPrograms },
-  currentWorkout,
-  setCurrentWorkouts,
+  workouts: { currentWorkout, allWorkouts },
+  addWorkout,
   setCurrentProgram,
   fetchAllWorkouts,
   match,
@@ -34,7 +31,7 @@ const AddExercisePage = ({
 
   useEffect(() => {
     if (!allPrograms) {
-      setCurrentWorkouts();
+      fetchAllWorkouts();
     } else {
       let thisProgram = allPrograms.find(program => program.program_id === parseInt(workoutId));
       setCurrentProgram(thisProgram);
@@ -128,7 +125,6 @@ const AddExercisePage = ({
 
 const mapStateToProps = state => ({
   ...state,
-  allWorkouts: state.workouts.allWorkouts,
 });
 
 const getUniqueWorkouts = workouts => {
@@ -146,7 +142,6 @@ const getUniqueWorkouts = workouts => {
 
 export default connect(mapStateToProps, {
   addWorkout,
-  setCurrentWorkouts,
   setCurrentProgram,
   clearCurrentProgram,
   fetchAllWorkouts,

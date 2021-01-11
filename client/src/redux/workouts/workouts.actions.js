@@ -22,46 +22,74 @@ export const addWorkout = workout => async dispatch => {
   }
 };
 
-export const fetchNextWorkout = programLog => async dispatch => {
-  let nextWorkout;
-
-  // let workouts = await api.get('program-workouts', `program_id=1654`);
-  let workouts = await api.get(
-    'program-workouts',
-    `program_id=${programLog.program_id}&orderBy=workout_order`
-  );
-
-  let workoutLogs = await api.get(
-    'workout-logs',
-    `program_log_id=${programLog.program_log_id}&orderBy=workout_order`
-  );
-
-  // If starting a new program, set the first workout
-  if (workoutLogs.length === 0) {
-    nextWorkout = workouts[0];
-  } else {
-    // Else get the next workout to be done
-    for (let i = workouts.length - 1; i >= 0; i--) {
-      let thisWorkout = workouts[i];
-      if (thisWorkout.workout_order === workoutLogs[workoutLogs.length - 1].workout_order) {
-        nextWorkout = workouts[i + 1];
-      }
-    }
-  }
-
+export const setCurrentWorkout = workout => async dispatch => {
   dispatch({
-    type: types.FETCH_NEXT_WORKOUT,
-    payload: nextWorkout,
+    type: types.SET_CURRENT_WORKOUT,
+    payload: workout,
   });
 };
 
-export const setNextWorkout = nextWorkout => dispatch =>
-  dispatch({
-    type: types.SET_NEXT_WORKOUT,
-    payload: nextWorkout,
-  });
+export const updateCurrentWorkout = programWorkout => async dispatch => {
+  let updatedWorkout = await api.updateOne(
+    'program-workouts',
+    programWorkout.program_workout_id,
+    programWorkout
+  );
 
-export const clearNextWorkout = () => dispatch =>
+  if (updatedWorkout) {
+    dispatch({
+      type: types.UPDATE_CURRENT_WORKOUT,
+      payload: updatedWorkout,
+    });
+  }
+};
+
+export const addCurrentWorkout = programWorkout => async dispatch => {
+  const { workout_name } = programWorkout;
+  delete programWorkout.workout_name;
+
+  let workout = await api.addOne('program-workouts', programWorkout);
+  workout.workout_name = workout_name;
+
+  if (workout) {
+    dispatch({
+      type: types.ADD_CURRENT_WORKOUT,
+      payload: workout,
+    });
+  }
+};
+
+export const deleteCurrentWorkout = workoutId => async dispatch => {
+  // let newWorkouts = await api.delete('program-workouts', workouts);
+  // if (newWorkouts.status === 'success') {
+  //   dispatch({
+  //     type: types.DELETE_CURRENT_WORKOUT,
+  //     payload: workouts,
+  //   });
+  // }
+};
+
+export const setCurrentWorkouts = programId => async dispatch => {
+  let workouts = await api.get('program-workouts', `program_id=${programId}&orderBy=workout_order`);
+
   dispatch({
-    type: types.CLEAR_NEXT_WORKOUT,
+    type: types.SET_ALL_WORKOUTS,
+    payload: workouts,
   });
+};
+
+export const updateCurrentWorkouts = workouts => async dispatch => {
+  let newWorkouts = await api.patchReq('program-workouts', workouts);
+  if (newWorkouts.status === 'success') {
+    dispatch({
+      type: types.UPDATE_ALL_WORKOUTS,
+      payload: workouts,
+    });
+  }
+};
+
+export const clearCurrentWorkouts = () => async dispatch => {
+  dispatch({
+    type: types.CLEAR_ALL_WORKOUTS,
+  });
+};

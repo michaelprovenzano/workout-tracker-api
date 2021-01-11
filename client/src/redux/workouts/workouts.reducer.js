@@ -22,6 +22,12 @@ const workoutsReducer = (state = INITIAL_STATE, { type, payload }) => {
         allWorkouts: [...state.allWorkouts, payload],
         loading: false,
       };
+    case types.SET_CURRENT_WORKOUT:
+      return {
+        ...state,
+        currentWorkout: payload,
+        loading: false,
+      };
     case types.FETCH_NEXT_WORKOUT:
     case types.SET_NEXT_WORKOUT:
       return {

@@ -4,9 +4,11 @@ import './MySchedulePage.styles.scss';
 
 import { connect } from 'react-redux';
 import { setCurrentProgramLog } from '../../redux/programLogs/programLogs.actions';
-import { setCurrentWorkouts } from '../../redux/currentWorkouts/currentWorkouts.actions';
 import { setWorkoutLogs, setCurrentWorkoutLog } from '../../redux/workoutLogs/workoutLogs.actions';
-import { setCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
+import {
+  fetchProgramWorkouts,
+  setCurrentProgramWorkout,
+} from '../../redux/programWorkouts/programWorkouts.actions';
 import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
@@ -21,16 +23,16 @@ import LoaderSpinner from 'react-loader-spinner';
 
 const MySchedulePage = ({
   programLog,
-  workouts,
   stats,
   match,
   setCurrentProgramLog,
   setWorkoutLogs,
   currentWorkoutLog,
   currentWorkoutLogs,
+  programWorkouts: { currentProgramWorkouts },
   setCurrentWorkoutLog,
-  setCurrentWorkouts,
-  setCurrentWorkout,
+  fetchProgramWorkouts,
+  setCurrentProgramWorkout,
   clearCurrentExercises,
   setStats,
 }) => {
@@ -47,7 +49,7 @@ const MySchedulePage = ({
       setCurrentProgramLog(programLogId);
       setWorkoutLogs(programLogId);
     } else {
-      setCurrentWorkouts(programLog.program_id);
+      fetchProgramWorkouts(programLog.program_id);
     }
 
     if (currentWorkoutLog && redirect)
@@ -64,13 +66,17 @@ const MySchedulePage = ({
       );
 
     if (clickedLog) {
+      const programWorkout = currentProgramWorkouts.find(
+        workout => workout.program_workout_id === log.program_workout_id
+      );
+      console.log(programWorkout);
       setCurrentWorkoutLog(log);
-      setCurrentWorkout(log.program_workout_id);
+      setCurrentProgramWorkout(programWorkout);
       setRedirect(true);
     }
   };
 
-  if (!programLog || !currentWorkoutLogs || !workouts)
+  if (!programLog || !currentWorkoutLogs || !currentProgramWorkouts)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -109,8 +115,8 @@ const MySchedulePage = ({
             <ProgressBar progress={stats ? stats.progress * 100 : 0} />
           </Col>
           <Col number='2'>
-            {workouts
-              ? workouts.map((workout, i) => {
+            {currentProgramWorkouts
+              ? currentProgramWorkouts.map((workout, i) => {
                   let status, workout_log_id;
 
                   let increment = 1;
@@ -163,16 +169,15 @@ const MySchedulePage = ({
 const mapStateToProps = state => ({
   ...state,
   programLog: state.programLogs.currentProgramLog,
-  currentWorkoutLogs: state.workoutLogs.workoutLogs,
-  workouts: state.currentWorkouts,
   currentWorkoutLog: state.workoutLogs.currentWorkoutLog,
+  currentWorkoutLogs: state.workoutLogs.workoutLogs,
 });
 
 export default connect(mapStateToProps, {
   setCurrentProgramLog,
-  setCurrentWorkouts,
+  fetchProgramWorkouts,
   clearCurrentExercises,
-  setCurrentWorkout,
+  setCurrentProgramWorkout,
   setWorkoutLogs,
   setCurrentWorkoutLog,
   setStats,

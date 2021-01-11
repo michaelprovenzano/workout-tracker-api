@@ -9,7 +9,7 @@ import {
   clearCurrentWorkoutLog,
 } from '../../redux/workoutLogs/workoutLogs.actions';
 import { getActiveProgramLog } from '../../redux/programLogs/programLogs.actions';
-import { getNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
+import { fetchNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
 // Components
@@ -25,13 +25,13 @@ import Button from '../../components/Button/Button.component';
 const Dashboard = ({
   user,
   activeProgramLog,
-  nextWorkout,
+  programWorkouts: { nextProgramWorkout },
   stats,
   getActiveProgramLog,
   setWorkoutLogs,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
-  getNextWorkout,
+  fetchNextProgramWorkout,
   setStats,
   history,
 }) => {
@@ -43,7 +43,7 @@ const Dashboard = ({
       setWorkoutLogs(id);
       getActiveWorkoutLog(id);
       clearCurrentWorkoutLog();
-      getNextWorkout(activeProgramLog); // Will not update if opened on different device
+      fetchNextProgramWorkout(activeProgramLog); // Will not update if opened on different device
       setStats(id);
     }
     // eslint-disable-next-line
@@ -66,7 +66,7 @@ const Dashboard = ({
   return (
     <div className='offset-header'>
       <Header text='Dashboard' />
-      {activeProgramLog ? <WorkoutSticky nextWorkout={nextWorkout} /> : null}
+      {activeProgramLog ? <WorkoutSticky nextWorkout={nextProgramWorkout} /> : null}
 
       <main className='content dashboard'>
         {activeProgramLog ? (
@@ -111,7 +111,7 @@ const mapDispatchToProps = {
   getActiveProgramLog,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
-  getNextWorkout,
+  fetchNextProgramWorkout,
   setStats,
 };
 

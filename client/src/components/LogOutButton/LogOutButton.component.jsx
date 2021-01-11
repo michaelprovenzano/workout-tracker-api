@@ -5,10 +5,12 @@ import { removeCurrentUser } from '../../redux/user/user.actions';
 import { resetProgramLogs } from '../../redux/programLogs/programLogs.actions';
 import { resetWorkoutLogs } from '../../redux/workoutLogs/workoutLogs.actions';
 import { resetExerciseLogs } from '../../redux/exerciseLogs/exerciseLogs.actions';
-import { clearCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
-import { clearCurrentWorkouts } from '../../redux/currentWorkouts/currentWorkouts.actions';
+import {
+  clearCurrentProgramWorkout,
+  clearCurrentProgramWorkouts,
+} from '../../redux/programWorkouts/programWorkouts.actions';
 import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
-import { resetNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
+import { clearNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 import { clearStats } from '../../redux/stats/stats.actions';
 
 import './LogOutButton.styles.scss';
@@ -23,10 +25,10 @@ const LogOutButton = ({
   resetProgramLogs,
   resetWorkoutLogs,
   resetExerciseLogs,
-  clearCurrentWorkout,
-  clearCurrentWorkouts,
+  clearCurrentProgramWorkout,
+  clearCurrentProgramWorkouts,
   clearCurrentExercises,
-  resetNextWorkout,
+  clearNextProgramWorkout,
   clearStats,
 }) => {
   const history = useHistory();
@@ -37,10 +39,10 @@ const LogOutButton = ({
     resetProgramLogs();
     resetWorkoutLogs();
     resetExerciseLogs();
-    clearCurrentWorkout();
-    clearCurrentWorkouts();
+    clearCurrentProgramWorkout();
+    clearCurrentProgramWorkouts();
     clearCurrentExercises();
-    resetNextWorkout();
+    clearNextProgramWorkout();
     clearStats();
 
     // Redirect
@@ -69,10 +71,10 @@ const mapDispatchToProps = {
   resetProgramLogs,
   resetWorkoutLogs,
   resetExerciseLogs,
-  clearCurrentWorkout,
-  clearCurrentWorkouts,
+  clearCurrentProgramWorkout,
+  clearCurrentProgramWorkouts,
   clearCurrentExercises,
-  resetNextWorkout,
+  clearNextProgramWorkout,
   clearStats,
 };
 

@@ -3,7 +3,10 @@ import './WorkoutPage.styles.scss';
 
 import { connect } from 'react-redux';
 import { setCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
-import { setCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
+import {
+  fetchProgramWorkouts,
+  setCurrentProgramWorkout,
+} from '../../redux/programWorkouts/programWorkouts.actions';
 import {
   setCurrentWorkoutLog,
   clearCurrentWorkoutLog,
@@ -15,7 +18,7 @@ import {
   setCurrentExerciseLog,
   clearCurrentExerciseLog,
 } from '../../redux/exerciseLogs/exerciseLogs.actions';
-import { getNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
+import { fetchNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
 import Header from '../../components/Header/Header.component';
@@ -28,16 +31,17 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const WorkoutPage = ({
-  activeProgramLog,
-  updateWorkoutLog,
   currentWorkoutLog,
-  currentWorkout,
+  programLogs: { activeProgramLog },
+  programWorkouts: { currentProgramWorkout, currentProgramWorkouts },
   currentExercises,
   currentExerciseLogs,
   currentExerciseLog,
   addExerciseLog,
-  getNextWorkout,
-  setCurrentWorkout,
+  fetchProgramWorkouts,
+  fetchNextProgramWorkout,
+  setCurrentProgramWorkout,
+  updateWorkoutLog,
   setCurrentWorkoutLog,
   setCurrentExercises,
   setCurrentExerciseLogs,
@@ -53,15 +57,23 @@ const WorkoutPage = ({
     let isCurrentLog = false;
     if (currentWorkoutLog)
       isCurrentLog = currentWorkoutLog.workout_log_id === parseInt(workoutLogId);
-
     if (!isCurrentLog) {
       setCurrentWorkoutLog(workoutLogId);
-    } else {
-      setCurrentWorkout(currentWorkoutLog.program_workout_id);
-      setCurrentExercises(currentWorkoutLog.workout_id);
-      setCurrentExerciseLogs(workoutLogId);
-      setStats(currentWorkoutLog.program_log_id);
+      return;
     }
+
+    if (currentProgramWorkouts.length === 0) {
+      fetchProgramWorkouts(activeProgramLog.program_id);
+      return;
+    }
+
+    const programWorkout = currentProgramWorkouts.find(
+      workout => workout.program_workout_id === currentWorkoutLog.program_workout_id
+    );
+    setCurrentProgramWorkout(programWorkout);
+    setCurrentExercises(currentWorkoutLog.workout_id);
+    setCurrentExerciseLogs(workoutLogId);
+    setStats(currentWorkoutLog.program_log_id);
 
     if (currentExerciseLog && redirect)
       history.push(
@@ -69,7 +81,7 @@ const WorkoutPage = ({
       );
 
     // eslint-disable-next-line
-  }, [currentWorkoutLog, currentExerciseLog]);
+  }, [currentWorkoutLog, currentExerciseLog, currentProgramWorkouts]);
 
   const goToExerciseLog = async (exerciseLogId, workoutExerciseId) => {
     let workoutLogId;
@@ -90,7 +102,7 @@ const WorkoutPage = ({
     // If workout has no exercises complete current workout
     if (currentExercises.length === 0) {
       updateWorkoutLog(currentWorkoutLog.workout_log_id, { active: false, progress: 1 });
-      getNextWorkout(activeProgramLog);
+      fetchNextProgramWorkout(activeProgramLog);
       history.push(`/dashboard`);
     } else if (currentExerciseLogs.length === 0) {
       // If workout has no exercise logs, create one and go to it
@@ -116,7 +128,7 @@ const WorkoutPage = ({
   if (
     !activeProgramLog ||
     !currentWorkoutLog ||
-    !currentWorkout ||
+    !currentProgramWorkout ||
     !currentExercises ||
     !currentExerciseLogs
   )
@@ -134,7 +146,7 @@ const WorkoutPage = ({
   if (currentExerciseLogs.length > 0) buttonText = 'Continue';
 
   let workoutName = '';
-  if (currentWorkout) workoutName = currentWorkout.workout_name;
+  if (currentProgramWorkout) workoutName = currentProgramWorkout.workout_name;
 
   // // Hash workout logs
   let exerciseLogHash = {};
@@ -240,9 +252,10 @@ const WorkoutPage = ({
 const mapDispatchToProps = {
   addExerciseLog,
   updateWorkoutLog,
-  getNextWorkout,
+  fetchProgramWorkouts,
+  fetchNextProgramWorkout,
   setCurrentExercises,
-  setCurrentWorkout,
+  setCurrentProgramWorkout,
   setCurrentWorkoutLog,
   setCurrentExerciseLogs,
   setCurrentExerciseLog,
@@ -252,12 +265,12 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = state => ({
+  ...state,
   activeProgramLog: state.programLogs.activeProgramLog,
-  currentExercises: state.currentExercises,
-  currentExerciseLogs: state.exerciseLogs.currentExerciseLogs,
-  currentExerciseLog: state.exerciseLogs.currentExerciseLog,
-  currentWorkout: state.currentWorkout,
   currentWorkoutLog: state.workoutLogs.currentWorkoutLog,
+  currentExercises: state.currentExercises,
+  currentExerciseLog: state.exerciseLogs.currentExerciseLog,
+  currentExerciseLogs: state.exerciseLogs.currentExerciseLogs,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkoutPage);

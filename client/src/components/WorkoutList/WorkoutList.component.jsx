@@ -12,12 +12,14 @@ import { setCurrentExercises } from '../../redux/currentExercises/currentExercis
 import {
   setCurrentProgramWorkout,
   updateProgramWorkouts,
+  deleteProgramWorkout,
 } from '../../redux/programWorkouts/programWorkouts.actions';
 
 const WorkoutList = ({
   programWorkouts: { currentProgramWorkouts },
   updateProgramWorkouts,
   setCurrentProgramWorkout,
+  deleteProgramWorkout,
   setCurrentExercises,
 }) => {
   const [workouts, setWorkouts] = useState([]);
@@ -43,6 +45,10 @@ const WorkoutList = ({
     setCurrentProgramWorkout(workout);
     setCurrentExercises(workout.workout_id);
     history.push(`/admin/edit-workouts/${workout.workout_id}`);
+  };
+
+  const deleteWorkout = workout => {
+    deleteProgramWorkout(workout);
   };
 
   return (
@@ -77,7 +83,12 @@ const WorkoutList = ({
                                 text='Edit'
                                 onClick={() => editWorkout(workout)}
                               />
-                              <Button type='secondary' text='Remove' className='ml-4' />
+                              <Button
+                                type='secondary'
+                                text='Remove'
+                                className='ml-4'
+                                onClick={() => deleteWorkout(workout)}
+                              />
                             </span>
                           </li>
                         )}
@@ -100,5 +111,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   updateProgramWorkouts,
   setCurrentProgramWorkout,
+  deleteProgramWorkout,
   setCurrentExercises,
 })(WorkoutList);

@@ -8,7 +8,8 @@ import {
   setCurrentProgram,
   clearCurrentProgram,
 } from '../../../redux/programs/programs.actions';
-import { fetchAllWorkouts, addWorkout } from '../../../redux/workouts/workouts.actions';
+import { fetchAllWorkouts } from '../../../redux/workouts/workouts.actions';
+import { addProgramWorkout } from '../../../redux/programWorkouts/programWorkouts.actions';
 
 // Components
 import Header from '../../../components/Header/Header.component';
@@ -21,7 +22,7 @@ import LoaderSpinner from 'react-loader-spinner';
 const AddWorkoutPage = ({
   allWorkouts,
   programs: { allPrograms, currentProgram },
-  addWorkout,
+  addProgramWorkout,
   fetchPrograms,
   setCurrentProgram,
   fetchAllWorkouts,
@@ -34,7 +35,7 @@ const AddWorkoutPage = ({
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    if (!allPrograms) {
+    if (allPrograms.length === 0) {
       fetchPrograms();
     } else {
       let thisProgram = allPrograms.find(program => program.program_id === parseInt(programId));
@@ -56,7 +57,7 @@ const AddWorkoutPage = ({
     );
 
   const createWorkout = async () => {
-    addWorkout({
+    addProgramWorkout({
       workout_name: name,
     });
 
@@ -146,7 +147,7 @@ const getUniqueWorkouts = workouts => {
 };
 
 export default connect(mapStateToProps, {
-  addWorkout,
+  addProgramWorkout,
   fetchPrograms,
   setCurrentProgram,
   clearCurrentProgram,

@@ -20,7 +20,7 @@ import LoaderSpinner from 'react-loader-spinner';
 
 const EditProgramsPage = ({
   programs: { allPrograms, currentProgram },
-  currentWorkouts,
+  programWorkouts: { currentProgramWorkouts },
   fetchPrograms,
   setCurrentProgram,
   updateCurrentProgram,
@@ -45,7 +45,7 @@ const EditProgramsPage = ({
     }
 
     // eslint-disable-next-line
-  }, [allPrograms, currentWorkouts]);
+  }, [allPrograms, currentProgramWorkouts]);
 
   const saveProgram = async () => {
     updateCurrentProgram({
@@ -59,7 +59,7 @@ const EditProgramsPage = ({
     history.push(`/admin/edit-programs`);
   };
 
-  if (!currentProgram || !currentWorkouts)
+  if (!currentProgram || !currentProgramWorkouts)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'

@@ -5,7 +5,10 @@ import './ExercisePage.styles.scss';
 // Redux
 import { connect } from 'react-redux';
 import { setCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
-import { setCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
+import {
+  setCurrentProgramWorkout,
+  fetchProgramWorkouts,
+} from '../../redux/programWorkouts/programWorkouts.actions';
 import { setCurrentWorkoutLog } from '../../redux/workoutLogs/workoutLogs.actions';
 import {
   addExerciseLog,
@@ -25,14 +28,14 @@ import LoaderSpinner from 'react-loader-spinner';
 
 const ExercisePage = ({
   activeProgramLog,
-  currentWorkout,
+  programWorkouts: { currentProgramWorkout, currentProgramWorkouts },
   currentWorkoutLog,
   addExerciseLog,
   currentExerciseLog,
   currentExerciseLogs,
   previousExerciseLog,
   currentExercises,
-  setCurrentWorkout,
+  setCurrentProgramWorkout,
   setCurrentWorkoutLog,
   setCurrentExercises,
   setCurrentExerciseLog,
@@ -50,12 +53,37 @@ const ExercisePage = ({
     if (currentWorkoutLog)
       isCurrentWorkoutLog = currentWorkoutLog.workout_log_id === parseInt(workoutLogId);
 
-    if (!isCurrentWorkoutLog) setCurrentWorkoutLog(workoutLogId);
-    if (isCurrentWorkoutLog) {
-      setCurrentWorkout(currentWorkoutLog.program_workout_id);
-      setCurrentExercises(currentWorkout.workout_id);
-      setCurrentExerciseLogs(workoutLogId);
+    if (!isCurrentWorkoutLog) {
+      setCurrentWorkoutLog(workoutLogId);
+      return;
     }
+
+    if (currentProgramWorkouts.length === 0) {
+      fetchProgramWorkouts(currentWorkoutLog.program_id);
+      return;
+    }
+
+    if (currentProgramWorkouts[0].program_workout_id !== currentWorkoutLog.program_workout_id) {
+      fetchProgramWorkouts(currentWorkoutLog.program_id);
+      return;
+    }
+
+    let current = currentProgramWorkouts.find(
+      workout => currentWorkoutLog.program_workout_id === workout.program_workout_id
+    );
+
+    if (!currentProgramWorkout) {
+      setCurrentProgramWorkout(current);
+      return;
+    }
+
+    if (currentProgramWorkout.program_workout_id !== currentWorkoutLog.program_workout_id) {
+      setCurrentProgramWorkout(current);
+      return;
+    }
+
+    setCurrentExercises(currentProgramWorkout.workout_id);
+    setCurrentExerciseLogs(workoutLogId);
 
     if (currentExerciseLog) {
       setPreviousExerciseLog(currentExerciseLog);
@@ -86,7 +114,8 @@ const ExercisePage = ({
     !currentExercises ||
     !currentExerciseLogs ||
     !currentExerciseLog ||
-    !currentWorkout ||
+    !currentProgramWorkout ||
+    !currentProgramWorkouts ||
     !currentWorkoutLog
   )
     return (
@@ -113,7 +142,7 @@ const ExercisePage = ({
         <div className='row'>
           <Col number='1' bgSmall='true' className='workout-list'>
             <div className='workout-program d-flex justify-content-between w-100'>
-              <div className='pb-2'>{currentWorkout.workout_name}</div>
+              <div className='pb-2'>{currentProgramWorkout.workout_name}</div>
               <div className='pb-2'>{activeProgramLog.program_name}</div>
             </div>
             <ProgressBar progress={`${progress}`} />
@@ -194,7 +223,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   setCurrentWorkoutLog,
-  setCurrentWorkout,
+  setCurrentProgramWorkout,
   addExerciseLog,
   setCurrentExercises,
   setCurrentExerciseLog,
