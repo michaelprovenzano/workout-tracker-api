@@ -10,6 +10,8 @@ import currentExercisesReducer from './currentExercises/currentExercises.reducer
 import currentExerciseReducer from './currentExercise/currentExercise.reducer';
 import workoutLogsReducer from './workoutLogs/workoutLogs.reducer';
 import workoutsReducer from './workouts/workouts.reducer';
+import workoutExercisesReducer from './workoutExercises/workoutExercises.reducer';
+import exercisesReducer from './exercises/exercises.reducer';
 import exerciseLogsReducer from './exerciseLogs/exerciseLogs.reducer';
 import statsReducer from './stats/stats.reducer';
 import alertsReducer from './alerts/alerts.reducer';
@@ -24,9 +26,11 @@ const persistConfig = {
     'exerciseLogs',
     'programs',
     'programWorkouts',
+    'workoutExercises',
     'currentExercise',
     'currentExercises',
     'workouts',
+    'exercises',
     'stats',
   ],
 };
@@ -41,6 +45,8 @@ const rootReducer = combineReducers({
   currentExercise: currentExerciseReducer,
   currentExercises: currentExercisesReducer,
   workouts: workoutsReducer,
+  workoutExercises: workoutExercisesReducer,
+  exercises: exercisesReducer,
   stats: statsReducer,
   alerts: alertsReducer,
 });

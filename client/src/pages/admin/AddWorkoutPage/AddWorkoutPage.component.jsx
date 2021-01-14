@@ -95,7 +95,7 @@ const AddWorkoutPage = ({
                 <form className='mt-5 w-100'>
                   <InputText
                     type='text'
-                    label='Workout Name'
+                    label='Exercise Name'
                     value={name}
                     color='dark'
                     onInput={e => setName(e.target.value)}
@@ -115,7 +115,9 @@ const AddWorkoutPage = ({
             <div className='row'>
               <ul className='w-100'>
                 {allWorkouts
-                  .filter(workout => workout.workout_name.includes(search))
+                  .filter(workout =>
+                    workout.workout_name.toLowerCase().includes(search.toLowerCase())
+                  )
                   .map((workout, i) => {
                     return <WorkoutItem workout={workout} add edit />;
                   })}

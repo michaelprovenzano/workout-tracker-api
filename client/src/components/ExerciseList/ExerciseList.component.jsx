@@ -5,34 +5,47 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import './ExerciseList.styles.scss';
 
-import { updateCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import {
+  updateCurrentWorkoutExercises,
+  setCurrentWorkoutExercise,
+  deleteWorkoutExercise,
+} from '../../redux/workoutExercises/workoutExercises.actions';
 
 import Button from '../Button/Button.component';
-import { setCurrentExercise } from '../../redux/currentExercise/currentExercise.actions';
 
-const ExerciseList = ({ currentExercises, updateCurrentExercises, setCurrentExercise }) => {
+const ExerciseList = ({
+  workoutExercises: { currentWorkoutExercises },
+  updateCurrentWorkoutExercises,
+  setCurrentWorkoutExercise,
+  deleteWorkoutExercise,
+}) => {
   const [exercises, setExercises] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
-    setExercises(currentExercises);
-  }, [currentExercises]);
+    setExercises(currentWorkoutExercises);
+  }, [currentWorkoutExercises]);
 
   const handleOnDragEnd = async result => {
-    const newExerciseOrder = [...currentExercises];
-    const [reorderedWorkout] = newExerciseOrder.splice(result.source.index, 1);
-    newExerciseOrder.splice(result.destination.index, 0, reorderedWorkout);
+    const newExerciseOrder = [...currentWorkoutExercises];
+    const [reorderedExercise] = newExerciseOrder.splice(result.source.index, 1);
+    newExerciseOrder.splice(result.destination.index, 0, reorderedExercise);
     newExerciseOrder.forEach((exercise, i) => (exercise.exercise_order = i));
 
     setExercises(newExerciseOrder);
-    updateCurrentExercises(newExerciseOrder);
+    updateCurrentWorkoutExercises(newExerciseOrder);
   };
 
-  if (!currentExercises) return <div>Loading...</div>;
+  if (!currentWorkoutExercises) return <div>Loading...</div>;
 
   const editExercise = exercise => {
-    setCurrentExercise(exercise);
+    setCurrentWorkoutExercise(exercise);
     history.push(`/admin/edit-exercises/${exercise.exercise_id}`);
+  };
+
+  const removeExercise = exercise => {
+    console.log('removing');
+    deleteWorkoutExercise(exercise);
   };
 
   return (
@@ -67,7 +80,12 @@ const ExerciseList = ({ currentExercises, updateCurrentExercises, setCurrentExer
                                 text='Edit'
                                 onClick={() => editExercise(exercise)}
                               />
-                              <Button type='secondary' text='Remove' className='ml-4' />
+                              <Button
+                                type='secondary'
+                                text='Remove'
+                                className='ml-4'
+                                onClick={() => removeExercise(exercise)}
+                              />
                             </span>
                           </li>
                         )}
@@ -87,6 +105,8 @@ const mapStateToProps = state => ({
   ...state,
 });
 
-export default connect(mapStateToProps, { updateCurrentExercises, setCurrentExercise })(
-  ExerciseList
-);
+export default connect(mapStateToProps, {
+  updateCurrentWorkoutExercises,
+  setCurrentWorkoutExercise,
+  deleteWorkoutExercise,
+})(ExerciseList);

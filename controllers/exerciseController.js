@@ -1,4 +1,5 @@
 const factory = require('./factoryController');
+const catchAsync = require('../utils/catchAsync');
 
 // Currently modifying exercises is reserved for admin privelages
 exports.addExercise = factory.addOne('exercises');

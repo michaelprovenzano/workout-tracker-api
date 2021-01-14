@@ -15,12 +15,15 @@ import {
   fetchProgramWorkouts,
   updateProgramWorkout,
 } from '../../../redux/programWorkouts/programWorkouts.actions';
+import { fetchWorkoutExercises } from '../../../redux/workoutExercises/workoutExercises.actions';
 
 const EditWorkoutPage = ({
   programs: { currentProgram, allPrograms },
   programWorkouts: { currentProgramWorkouts, currentProgramWorkout },
+  workoutExercises: { currentWorkoutExercises },
   updateProgramWorkout,
   fetchProgramWorkouts,
+  fetchWorkoutExercises,
   setAlert,
   match,
 }) => {
@@ -32,10 +35,8 @@ const EditWorkoutPage = ({
     if (!currentProgramWorkouts) {
       fetchProgramWorkouts();
     } else {
-      let thisWorkout = currentProgramWorkouts.find(
-        workout => workout.workout_id === parseInt(workoutId)
-      );
       setName(currentProgramWorkout.workout_name);
+      fetchWorkoutExercises(currentProgramWorkout.workout_id);
     }
 
     // eslint-disable-next-line
@@ -106,5 +107,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   updateProgramWorkout,
   fetchProgramWorkouts,
+  fetchWorkoutExercises,
   setAlert,
 })(EditWorkoutPage);

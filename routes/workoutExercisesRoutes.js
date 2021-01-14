@@ -5,11 +5,12 @@ const workoutExercisesController = require('../controllers/workoutExercisesContr
 router
   .route('/')
   .get(workoutExercisesController.getAllWorkoutExercises)
+  .post(workoutExercisesController.addWorkout)
   .patch(workoutExercisesController.updateMultipleExercises);
 
 router
   .route('/:id')
-  .post(workoutExercisesController.addWorkout)
+  .get(workoutExercisesController.getWorkout)
   .patch(workoutExercisesController.updateWorkout)
   .delete(workoutExercisesController.deleteWorkout);
 

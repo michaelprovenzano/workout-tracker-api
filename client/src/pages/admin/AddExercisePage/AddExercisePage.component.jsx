@@ -1,47 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './AddExercisePage.styles.scss';
-import api from '../../../utils/apiCalls';
 
 import { connect } from 'react-redux';
-import { setCurrentProgram, clearCurrentProgram } from '../../../redux/programs/programs.actions';
-import { fetchAllWorkouts, addWorkout } from '../../../redux/workouts/workouts.actions';
+import {
+  addExercise,
+  updateExercise,
+  fetchAllExercises,
+} from '../../../redux/exercises/exercises.actions';
+import { fetchAllWorkouts, setCurrentWorkout } from '../../../redux/workouts/workouts.actions';
 
 // Components
 import Header from '../../../components/Header/Header.component';
 import InputText from '../../../components/InputText/InputText.component';
 import Button from '../../../components/Button/Button.component';
-import WorkoutItem from '../../../components/WorkoutItem/WorkoutItem.component';
-import Modal from '../../../components/Modal/Modal.component';
+import AdminExerciseItem from '../../../components/AdminExerciseItem/AdminExerciseItem.component';
+import ExerciseModal from '../../../components/ExerciseModal/ExerciseModal.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const AddExercisePage = ({
-  programs: { allPrograms },
-  workouts: { currentWorkout, allWorkouts },
-  addWorkout,
-  setCurrentProgram,
-  fetchAllWorkouts,
+  workouts: { allWorkouts, currentWorkout },
+  exercises: { allExercises },
+  addExercise,
+  updateExercise,
+  setCurrentWorkout,
+  fetchAllExercises,
   match,
 }) => {
   const { workoutId } = match.params;
   const history = useHistory();
-  const [name, setName] = useState('');
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [activeExercise, setActiveExercise] = useState(null);
 
   useEffect(() => {
-    if (!allPrograms) {
+    if (!allWorkouts) {
       fetchAllWorkouts();
     } else {
-      let thisProgram = allPrograms.find(program => program.program_id === parseInt(workoutId));
-      setCurrentProgram(thisProgram);
+      let thisWorkout = allWorkouts.find(workout => workout.workout_id === parseInt(workoutId));
+      setCurrentWorkout(thisWorkout);
     }
 
-    fetchAllWorkouts();
+    fetchAllExercises();
     // eslint-disable-next-line
-  }, [allPrograms]);
+  }, [allWorkouts]);
 
-  if (!currentWorkout || !allWorkouts)
+  if (!currentWorkout || !allExercises)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -51,31 +56,42 @@ const AddExercisePage = ({
       </div>
     );
 
-  const createWorkout = async () => {
-    addWorkout({
-      workout_name: name,
-    });
-
-    setName('');
+  const createExercise = async exercise => {
+    addExercise(exercise);
     setSearch('');
     setModal(false);
   };
 
-  const filterWorkouts = e => {
+  const updateThisExercise = async exercise => {
+    console.log('submitting');
+    updateExercise(exercise);
+    setActiveExercise(null);
+    setModal(false);
+  };
+
+  const editExercise = exercise => {
+    setModal(true);
+    setModalEdit(true);
+    setActiveExercise(exercise);
+  };
+
+  const filterExercises = e => {
     setSearch(e.target.value);
   };
 
   return (
     <div className='edit-program-page offset-header'>
-      <Header text={`Add a workout to ${currentWorkout.workout_name}`} history={history} />
+      <Header text={`Add an exercise to ${currentWorkout.workout_name}`} history={history} />
       <main className=''>
         <div className='row'>
           <div className='col-lg-8 offset-lg-2'>
             <Button
-              text={`Create New Workout`}
+              text={`Create New Exercise`}
               type='primary'
               className='w-100 mt-4'
-              onClick={e => setModal(!modal)}
+              onClick={e => {
+                setModal(true);
+              }}
             />
             <InputText
               type='text'
@@ -83,36 +99,27 @@ const AddExercisePage = ({
               color='dark'
               label='Search'
               className='mt-5 mb-5'
-              onInput={e => filterWorkouts(e)}
+              onInput={e => filterExercises(e)}
             />
-            <Modal expanded={modal}>
-              <div className='row mt-5'>
-                <form className='mt-5 w-100'>
-                  <InputText
-                    type='text'
-                    label='Workout Name'
-                    value={name}
-                    color='dark'
-                    onInput={e => setName(e.target.value)}
-                    className='mb-5'
-                  />
-                </form>
-              </div>
-              <Button
-                text='&times;'
-                type='secondary'
-                onClick={e => setModal(false)}
-                className='modal-close'
-              />
-              <Button text='Create Workout' type='primary' onClick={createWorkout} />
-            </Modal>
+            <ExerciseModal
+              buttonText={modalEdit ? 'Update Exercise' : 'Create Exercise'}
+              exercise={activeExercise}
+              expanded={modal}
+              onClose={() => {
+                setModal(false);
+                setModalEdit(false);
+              }}
+              onSubmit={modalEdit ? updateThisExercise : createExercise}
+            />
 
             <div className='row'>
               <ul className='w-100'>
-                {allWorkouts
-                  .filter(workout => workout.workout_name.includes(search))
-                  .map((workout, i) => {
-                    return <WorkoutItem workout={workout} add edit />;
+                {allExercises
+                  .filter(exercise =>
+                    exercise.exercise_name.toLowerCase().includes(search.toLowerCase())
+                  )
+                  .map((exercise, i) => {
+                    return <AdminExerciseItem exercise={exercise} add edit={editExercise} />;
                   })}
               </ul>
             </div>
@@ -141,8 +148,8 @@ const getUniqueWorkouts = workouts => {
 };
 
 export default connect(mapStateToProps, {
-  addWorkout,
-  setCurrentProgram,
-  clearCurrentProgram,
-  fetchAllWorkouts,
+  addExercise,
+  updateExercise,
+  setCurrentWorkout,
+  fetchAllExercises,
 })(AddExercisePage);
