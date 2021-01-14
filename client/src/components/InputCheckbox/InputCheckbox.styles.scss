@@ -9,6 +9,12 @@
     cursor: pointer;
   }
 
+  label {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+  }
+
   .cb-checkbox {
     display: inline-block;
     height: 14px;
