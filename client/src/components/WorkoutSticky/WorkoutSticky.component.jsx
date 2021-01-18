@@ -38,6 +38,7 @@ const WorkoutSticky = ({
 }) => {
   const history = useHistory();
   const [redirect, setRedirect] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     if (activeWorkoutLog && redirect) {
@@ -67,6 +68,7 @@ const WorkoutSticky = ({
   };
 
   const goToWorkoutLog = () => {
+    setDisabled(true);
     clearCurrentWorkoutLog();
     clearCurrentWorkoutExercises();
     clearCurrentProgramWorkout();
@@ -93,6 +95,15 @@ const WorkoutSticky = ({
   if ((!nextProgramWorkout || Object.keys(nextProgramWorkout).length === 0) && !activeWorkoutLog)
     loading = true;
 
+  let btnText;
+  if (disabled) {
+    btnText = <LoaderSpinner type='Grid' color='#ffffff' width='20px' height='20px' />;
+  } else if (activeWorkoutLog) {
+    btnText = 'Continue Workout';
+  } else {
+    btnText = 'Start Workout';
+  }
+
   return (
     <div className='workout-sticky row'>
       <div className='col-md-8 offset-md-2 col-sm-12 d-flex align-items-center flex-column'>
@@ -118,10 +129,11 @@ const WorkoutSticky = ({
           </span>
         )}
         <Button
-          text={activeWorkoutLog ? 'Continue Workout' : 'Start Workout'}
+          text={btnText}
           position='center'
           type='primary'
           onClick={goToWorkoutLog}
+          disabled={disabled}
         />
       </div>
     </div>

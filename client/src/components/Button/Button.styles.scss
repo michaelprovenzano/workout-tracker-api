@@ -45,3 +45,7 @@ button.btn-left {
 button.btn-center {
   justify-content: center;
 }
+
+button:disabled {
+  opacity: 0.7;
+}
