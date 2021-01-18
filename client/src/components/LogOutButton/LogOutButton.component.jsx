@@ -9,8 +9,9 @@ import {
   clearCurrentProgramWorkout,
   clearCurrentProgramWorkouts,
 } from '../../redux/programWorkouts/programWorkouts.actions';
-import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
 import { clearNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
+import { clearPrograms } from '../../redux/programs/programs.actions';
 import { clearStats } from '../../redux/stats/stats.actions';
 
 import './LogOutButton.styles.scss';
@@ -25,9 +26,10 @@ const LogOutButton = ({
   resetProgramLogs,
   resetWorkoutLogs,
   resetExerciseLogs,
+  clearPrograms,
   clearCurrentProgramWorkout,
   clearCurrentProgramWorkouts,
-  clearCurrentExercises,
+  clearCurrentWorkoutExercises,
   clearNextProgramWorkout,
   clearStats,
 }) => {
@@ -41,9 +43,10 @@ const LogOutButton = ({
     resetExerciseLogs();
     clearCurrentProgramWorkout();
     clearCurrentProgramWorkouts();
-    clearCurrentExercises();
+    clearCurrentWorkoutExercises();
     clearNextProgramWorkout();
     clearStats();
+    clearPrograms();
 
     // Redirect
     history.push('/sign-in');
@@ -71,9 +74,10 @@ const mapDispatchToProps = {
   resetProgramLogs,
   resetWorkoutLogs,
   resetExerciseLogs,
+  clearPrograms,
   clearCurrentProgramWorkout,
   clearCurrentProgramWorkouts,
-  clearCurrentExercises,
+  clearCurrentWorkoutExercises,
   clearNextProgramWorkout,
   clearStats,
 };

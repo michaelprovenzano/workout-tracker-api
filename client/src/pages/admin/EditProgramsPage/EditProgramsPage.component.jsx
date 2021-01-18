@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import {
   fetchPrograms,
   addProgram,
+  clearPrograms,
   setCurrentProgram,
   clearCurrentProgram,
 } from '../../../redux/programs/programs.actions';
@@ -17,7 +18,7 @@ import {
 
 // Components
 import Header from '../../../components/Header/Header.component';
-import ProgramItem from '../../../components/ProgramItem/ProgramItem.component';
+import AdminProgramItem from '../../../components/AdminProgramItem/AdminProgramItem.component';
 import Button from '../../../components/Button/Button.component';
 import LoaderSpinner from 'react-loader-spinner';
 
@@ -26,6 +27,7 @@ const EditProgramsPage = ({
   fetchPrograms,
   addProgram,
   setCurrentProgram,
+  clearPrograms,
   fetchProgramWorkouts,
   clearProgramWorkouts,
 }) => {
@@ -78,16 +80,15 @@ const EditProgramsPage = ({
             />
             {allPrograms
               ? allPrograms.map((program, i) => {
-                  let { program_id, program_name } = program;
+                  let { program_id, program_name, mode, company } = program;
                   return (
                     <div className='w-100 d-flex flex-column align-items-center' key={i}>
-                      <ProgramItem
+                      <AdminProgramItem
                         key={i}
                         id={i}
-                        name={program_name}
-                        history={history}
+                        name={`${program_name} | ${mode}`}
+                        company={company}
                         onClick={e => goToProgram(e, program)}
-                        program
                       />
                     </div>
                   );
@@ -106,6 +107,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   fetchPrograms,
+  clearPrograms,
   setCurrentProgram,
   clearCurrentProgram,
   addProgram,

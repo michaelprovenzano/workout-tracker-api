@@ -3,8 +3,11 @@ import { useHistory } from 'react-router-dom';
 import './EditExercisePage.styles.scss';
 
 import { connect } from 'react-redux';
-import { setCurrentExercise } from '../../../redux/currentExercise/currentExercise.actions';
-import { updateOneCurrentExercises } from '../../../redux/currentExercises/currentExercises.actions';
+import {
+  setCurrentExercise,
+  updateCurrentExercise,
+  fetchAllExercises,
+} from '../../../redux/exercises/exercises.actions';
 import { setAlert } from '../../../redux/alerts/alerts.actions';
 
 // Components
@@ -15,9 +18,10 @@ import Button from '../../../components/Button/Button.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const EditExercisePage = ({
-  currentExercise,
-  updateOneCurrentExercises,
+  exercises: { currentExercise, allExercises },
+  updateCurrentExercise,
   setCurrentExercise,
+  fetchAllExercises,
   setAlert,
   match,
 }) => {
@@ -29,10 +33,18 @@ const EditExercisePage = ({
   const [hasReps, setHasReps] = useState(false);
 
   useEffect(() => {
-    if (currentExercise) {
-      const { exercise_name, exercise_id, has_weight, is_isometric, has_reps } = currentExercise;
-      //    Set current exercise
-      // if (exercise_id !== parseInt(exerciseId))
+    let exerciseId_int = parseInt(exerciseId);
+    if (allExercises.length === 0) {
+      fetchAllExercises();
+    } else if (!currentExercise) {
+      setCurrentExercise(
+        allExercises.find(exercise => exercise.exercise_id === parseInt(exerciseId_int))
+      );
+    } else if (currentExercise.exercise_id !== parseInt(exerciseId)) {
+      setCurrentExercise(allExercises.find(exercise => exercise.exercise_id === exerciseId_int));
+    } else {
+      const { exercise_name, has_weight, is_isometric, has_reps } = currentExercise;
+
       setName(exercise_name);
       setHasReps(has_reps);
       setHasWeight(has_weight);
@@ -51,7 +63,7 @@ const EditExercisePage = ({
       is_isometric: isIsometric,
     };
 
-    updateOneCurrentExercises(newExercise);
+    updateCurrentExercise(newExercise);
     setCurrentExercise(newExercise);
 
     setAlert('success', 'Saved successfully');
@@ -126,5 +138,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setAlert,
   setCurrentExercise,
-  updateOneCurrentExercises,
+  updateCurrentExercise,
+  fetchAllExercises,
 })(EditExercisePage);

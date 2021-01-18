@@ -1,0 +1,121 @@
+@import '../../styles/variables.scss';
+
+.admin-program-item {
+  width: 100%;
+  height: 82px;
+  color: $black;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(#196cff, 0.1);
+  border-radius: 0;
+  font-size: 1.4rem;
+
+  .name {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  .status-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid $black;
+  }
+
+  .status {
+    opacity: 0.75;
+  }
+
+  &.completed {
+    .status {
+      opacity: 1;
+    }
+
+    .arrow {
+      display: inline-block;
+    }
+
+    .status-icon {
+      background-color: $primary;
+      border: 1px solid $primary;
+
+      .checkmark {
+        display: inline-block;
+        position: relative;
+        width: 4px;
+        height: 4px;
+        transform: rotate(45deg);
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: calc(90% - 1px);
+          right: 25%;
+          width: 60%;
+          height: 1px;
+          background-color: $white;
+          border-radius: 5000px;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: -10%;
+          right: 25%;
+          width: 1px;
+          height: 100%;
+          background-color: $white;
+          border-radius: 5000px;
+        }
+      }
+    }
+  }
+
+  &.abandoned,
+  &.skipped {
+    .arrow {
+      display: inline-block;
+
+      & > * {
+        background-color: $danger;
+      }
+    }
+
+    .status-icon {
+      border: none;
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 8px;
+        border-radius: 2px;
+        background-color: $danger;
+        transform: rotate(-45deg);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 8px;
+        border-radius: 2px;
+        background-color: $danger;
+        transform: rotate(45deg);
+      }
+    }
+
+    .status {
+      color: $danger;
+      opacity: 1;
+    }
+
+    svg {
+      color: $white;
+      fill: $white;
+    }
+  }
+}

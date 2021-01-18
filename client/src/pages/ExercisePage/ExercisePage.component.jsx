@@ -4,7 +4,10 @@ import './ExercisePage.styles.scss';
 
 // Redux
 import { connect } from 'react-redux';
-import { setCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import {
+  fetchWorkoutExercises,
+  setCurrentWorkoutExercise,
+} from '../../redux/workoutExercises/workoutExercises.actions';
 import {
   setCurrentProgramWorkout,
   fetchProgramWorkouts,
@@ -27,17 +30,17 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const ExercisePage = ({
-  activeProgramLog,
+  programLogs: { activeProgramLog },
   programWorkouts: { currentProgramWorkout, currentProgramWorkouts },
-  currentWorkoutLog,
+  workoutLogs: { currentWorkoutLog },
+  workoutExercises: { currentWorkoutExercise, currentWorkoutExercises },
+  exerciseLogs: { currentExerciseLog, currentExerciseLogs, previousExerciseLog },
+  exercises: { currentExercise, currentExercises },
   addExerciseLog,
-  currentExerciseLog,
-  currentExerciseLogs,
-  previousExerciseLog,
-  currentExercises,
   setCurrentProgramWorkout,
   setCurrentWorkoutLog,
-  setCurrentExercises,
+  fetchWorkoutExercises,
+  setCurrentWorkoutExercise,
   setCurrentExerciseLog,
   setCurrentExerciseLogs,
   setPreviousExerciseLog,
@@ -82,11 +85,16 @@ const ExercisePage = ({
       return;
     }
 
-    setCurrentExercises(currentProgramWorkout.workout_id);
+    fetchWorkoutExercises(currentProgramWorkout.workout_id);
     setCurrentExerciseLogs(workoutLogId);
 
     if (currentExerciseLog) {
       setPreviousExerciseLog(currentExerciseLog);
+      setCurrentWorkoutExercise(
+        currentWorkoutExercises.find(
+          log => log.workout_exercise_id === currentExerciseLog.workout_exercise_id
+        )
+      );
       if (parseInt(exerciseLogId) !== currentExerciseLog.exercise_log_id)
         history.replace(
           `/workout-logs/${currentWorkoutLog.workout_log_id}/${currentExerciseLog.exercise_log_id}`
@@ -111,7 +119,7 @@ const ExercisePage = ({
   };
 
   if (
-    !currentExercises ||
+    !currentWorkoutExercises ||
     !currentExerciseLogs ||
     !currentExerciseLog ||
     !currentProgramWorkout ||
@@ -127,15 +135,12 @@ const ExercisePage = ({
       </div>
     );
 
-  let progress = (currentExerciseLogs.length / currentExercises.length) * 100;
-  let currentExercise = currentExercises.find(
-    log => log.workout_exercise_id === currentExerciseLog.workout_exercise_id
-  );
+  let progress = (currentExerciseLogs.length / currentWorkoutExercises.length) * 100;
 
   return (
     <div className='exercise-page offset-header'>
       <Header
-        text={`${currentExercise ? currentExercise.exercise_name || '' : 'Exercise'}`}
+        text={`${currentWorkoutExercise ? currentWorkoutExercise.exercise_name || '' : 'Exercise'}`}
         history={history}
       />
       <main className=''>
@@ -147,7 +152,7 @@ const ExercisePage = ({
             </div>
             <ProgressBar progress={`${progress}`} />
             <div className='hidden-sm-down'>
-              {currentExercises.map((exerciseObj, i) => {
+              {currentWorkoutExercises.map((exerciseObj, i) => {
                 let { exercise_name, is_isometric, has_weight, workout_exercise_id } = exerciseObj;
 
                 let exerciseLogIndex = currentExerciseLogs.findIndex(
@@ -190,7 +195,7 @@ const ExercisePage = ({
             {currentExerciseLog ? (
               <ExerciseForm
                 className='w-100'
-                exercise={currentExercise || {}}
+                exercise={currentWorkoutExercise || {}}
                 currentLog={currentExerciseLog || {}}
                 previousLog={previousExerciseLog || {}}
                 history={history}
@@ -214,18 +219,14 @@ const ExercisePage = ({
 
 const mapStateToProps = state => ({
   ...state,
-  activeProgramLog: state.programLogs.activeProgramLog,
-  currentWorkoutLog: state.workoutLogs.currentWorkoutLog,
-  currentExerciseLog: state.exerciseLogs.currentExerciseLog,
-  currentExerciseLogs: state.exerciseLogs.currentExerciseLogs,
-  previousExerciseLog: state.exerciseLogs.previousExerciseLog,
 });
 
 const mapDispatchToProps = {
   setCurrentWorkoutLog,
   setCurrentProgramWorkout,
   addExerciseLog,
-  setCurrentExercises,
+  fetchWorkoutExercises,
+  setCurrentWorkoutExercise,
   setCurrentExerciseLog,
   setCurrentExerciseLogs,
   setPreviousExerciseLog,

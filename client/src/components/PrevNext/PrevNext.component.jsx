@@ -12,54 +12,50 @@ import {
 import { clearCurrentWorkoutLog } from '../../redux/workoutLogs/workoutLogs.actions';
 
 import Arrow from '../Arrow/Arrow.component';
-import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
 import { clearCurrentProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 
 const PrevNext = ({
   className,
+  workoutLogs: { currentWorkoutLog },
+  exerciseLogs: { currentExerciseLog, currentExerciseLogs },
+  workoutExercises: { currentWorkoutExercises },
   addExerciseLog,
   clearCurrentProgramWorkout,
   clearCurrentWorkoutLog,
   clearCurrentExerciseLog,
   clearCurrentExerciseLogs,
-  currentWorkoutLog,
-  currentExercises,
-  currentExerciseLog,
-  currentExerciseLogs,
   setCurrentExerciseLog,
 }) => {
   let history = useHistory();
 
-  const lastExerciseId = currentExercises[currentExercises.length - 1].workout_exercise_id;
+  const lastExerciseId =
+    currentWorkoutExercises[currentWorkoutExercises.length - 1].workout_exercise_id;
   const currentExerciseLogId = currentExerciseLog.workout_exercise_id;
   let lastExercise =
     currentExerciseLogId === lastExerciseId &&
-    currentExerciseLogs.length === currentExercises.length;
-
-  console.log({ lastExerciseId, currentExerciseLogId });
-
-  console.log(lastExercise);
+    currentExerciseLogs.length === currentWorkoutExercises.length;
 
   const getNextPrevExercise = direction => {
     if (lastExercise && direction === 'next') {
       clearCurrentExerciseLog();
       clearCurrentExerciseLogs();
-      clearCurrentExercises();
+      clearCurrentWorkoutExercises();
       clearCurrentWorkoutLog();
       clearCurrentProgramWorkout();
 
       history.push('/dashboard');
     } else {
-      const currentExerciseIndex = currentExercises.findIndex(
+      const currentExerciseIndex = currentWorkoutExercises.findIndex(
         exercise => exercise.workout_exercise_id === currentExerciseLog.workout_exercise_id
       );
 
       let index;
       if (direction === 'next') index = currentExerciseIndex + 1;
       if (direction === 'prev') index = currentExerciseIndex - 1;
-      if (!currentExercises[index]) return;
+      if (!currentWorkoutExercises[index]) return;
 
-      const nextWorkoutExerciseId = currentExercises[index].workout_exercise_id;
+      const nextWorkoutExerciseId = currentWorkoutExercises[index].workout_exercise_id;
       const nextWorkoutLog = currentExerciseLogs.find(
         log => log.workout_exercise_id === nextWorkoutExerciseId
       );
@@ -98,10 +94,6 @@ const PrevNext = ({
 
 const mapStateToProps = state => ({
   ...state,
-  currentWorkoutLog: state.workoutLogs.currentWorkoutLog,
-  currentExercises: state.currentExercises,
-  currentExerciseLog: state.exerciseLogs.currentExerciseLog,
-  currentExerciseLogs: state.exerciseLogs.currentExerciseLogs,
 });
 
 export default connect(mapStateToProps, {

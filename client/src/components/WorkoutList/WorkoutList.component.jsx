@@ -7,7 +7,7 @@ import './WorkoutList.styles.scss';
 
 import Button from '../Button/Button.component';
 import WorkoutItem from '../WorkoutItem/WorkoutItem.component';
-import { setCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import { fetchAllExercises } from '../../redux/exercises/exercises.actions';
 
 import {
   setCurrentProgramWorkout,
@@ -20,7 +20,7 @@ const WorkoutList = ({
   updateProgramWorkouts,
   setCurrentProgramWorkout,
   deleteProgramWorkout,
-  setCurrentExercises,
+  fetchAllExercises,
 }) => {
   const [workouts, setWorkouts] = useState([]);
   const history = useHistory();
@@ -43,7 +43,7 @@ const WorkoutList = ({
 
   const editWorkout = workout => {
     setCurrentProgramWorkout(workout);
-    setCurrentExercises(workout.workout_id);
+    fetchAllExercises(workout.workout_id);
     history.push(`/admin/edit-workouts/${workout.workout_id}`);
   };
 
@@ -112,5 +112,5 @@ export default connect(mapStateToProps, {
   updateProgramWorkouts,
   setCurrentProgramWorkout,
   deleteProgramWorkout,
-  setCurrentExercises,
+  fetchAllExercises,
 })(WorkoutList);

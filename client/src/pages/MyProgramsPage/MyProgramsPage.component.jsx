@@ -77,7 +77,7 @@ const MyProgramsPage = ({
             {activeProgramLog ? (
               <Fragment>
                 <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
-                  <div className='bold'>{activeProgramLog.program_name}</div>
+                  <div className='bold'>{`${activeProgramLog.program_name} | ${activeProgramLog.mode}`}</div>
                   <small>Current Program</small>
                 </div>
                 <ProgressBar progress={stats ? stats.progress * 100 : 0} />
@@ -134,7 +134,7 @@ const MyProgramsPage = ({
                   return (
                     <ProgramItem
                       key={i}
-                      name={`${log.program_name}`}
+                      name={`${log.program_name} | ${log.mode}`}
                       dateRange={`${startDate} - ${endDate}`}
                       history={history}
                       onClick={() => goToProgramLog(log.program_log_id)}

@@ -9,7 +9,7 @@ import {
   fetchProgramWorkouts,
   setCurrentProgramWorkout,
 } from '../../redux/programWorkouts/programWorkouts.actions';
-import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
 import moment from 'moment';
@@ -22,25 +22,25 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const MySchedulePage = ({
-  programLog,
   stats,
   match,
-  setCurrentProgramLog,
-  setWorkoutLogs,
+  programLog,
   currentWorkoutLog,
   currentWorkoutLogs,
   programWorkouts: { currentProgramWorkouts },
+  setWorkoutLogs,
+  setCurrentProgramLog,
   setCurrentWorkoutLog,
   fetchProgramWorkouts,
   setCurrentProgramWorkout,
-  clearCurrentExercises,
+  clearCurrentWorkoutExercises,
   setStats,
 }) => {
   const history = useHistory();
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    clearCurrentExercises();
+    clearCurrentWorkoutExercises();
     const programLogId = match.params.programLogId;
     let isCurrentProgramLog = false;
     if (programLog) isCurrentProgramLog = programLog.program_log_id === parseInt(programLogId);
@@ -176,7 +176,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   setCurrentProgramLog,
   fetchProgramWorkouts,
-  clearCurrentExercises,
+  clearCurrentWorkoutExercises,
   setCurrentProgramWorkout,
   setWorkoutLogs,
   setCurrentWorkoutLog,

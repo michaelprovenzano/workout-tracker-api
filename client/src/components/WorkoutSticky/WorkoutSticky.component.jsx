@@ -15,7 +15,7 @@ import {
   clearNextProgramWorkout,
   clearCurrentProgramWorkout,
 } from '../../redux/programWorkouts/programWorkouts.actions';
-import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
 // Components
@@ -32,7 +32,7 @@ const WorkoutSticky = ({
   addWorkoutLog,
   clearCurrentProgramWorkout,
   clearCurrentWorkoutLog,
-  clearCurrentExercises,
+  clearCurrentWorkoutExercises,
   clearActiveWorkoutLog,
   setStats,
 }) => {
@@ -68,7 +68,7 @@ const WorkoutSticky = ({
 
   const goToWorkoutLog = () => {
     clearCurrentWorkoutLog();
-    clearCurrentExercises();
+    clearCurrentWorkoutExercises();
     clearCurrentProgramWorkout();
 
     if (!activeWorkoutLog) {
@@ -140,7 +140,7 @@ const mapDispatchToProps = {
   clearActiveWorkoutLog,
   clearCurrentProgramWorkout,
   clearCurrentWorkoutLog,
-  clearCurrentExercises,
+  clearCurrentWorkoutExercises,
   setStats,
 };
 

@@ -14,7 +14,7 @@ export default (state = initialState, { type, payload }) => {
     case types.FETCH_PROGRAMS:
       return { ...state, allPrograms: payload, loading: false };
     case types.CLEAR_PROGRAMS:
-      return { ...state, allPrograms: initialState };
+      return { ...state, allPrograms: [] };
     case types.SET_CURRENT_PROGRAM:
     case types.UPDATE_CURRENT_PROGRAM:
       return { ...state, currentProgram: payload, loading: false };
