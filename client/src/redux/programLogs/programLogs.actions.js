@@ -55,6 +55,7 @@ export const updateProgramLog = programLog => async dispatch => {
   delete newLog.company;
 
   const result = await api.updateOne('program-logs', programLog.program_log_id, newLog);
+  errorCheck(dispatch, result);
 
   dispatch({
     type: types.UPDATE_PROGRAM_LOG,
@@ -75,3 +76,12 @@ export const resetProgramLogs = () => dispatch =>
   dispatch({
     type: types.RESET_PROGRAM_LOGS,
   });
+
+const errorCheck = (dispatch, result) => {
+  if (result.status === 'fail') {
+    dispatch({
+      type: types.SET_PROGRAM_LOGS_ERROR,
+      payload: result,
+    });
+  }
+};

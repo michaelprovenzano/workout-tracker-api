@@ -4,6 +4,8 @@ const INITIAL_STATE = {
   activeProgramLog: null,
   currentProgramLog: null,
   currentProgramLogs: [],
+  loading: false,
+  error: null,
 };
 
 const activeProgramLogReducer = (state = INITIAL_STATE, { type, payload }) => {
@@ -32,6 +34,13 @@ const activeProgramLogReducer = (state = INITIAL_STATE, { type, payload }) => {
           log.program_log_id === payload.program_log_id ? payload : log
         ),
       };
+    case types.UPDATE_PROGRAM_LOG:
+      return {
+        ...state,
+        currentProgramLogs: state.currentProgramLogs.map(log =>
+          log.program_log_id === payload.program_log_id ? payload : log
+        ),
+      };
     case types.FETCH_PROGRAM_LOGS:
       return { ...state, currentProgramLogs: payload };
     case types.RESET_PROGRAM_LOGS:
@@ -39,6 +48,11 @@ const activeProgramLogReducer = (state = INITIAL_STATE, { type, payload }) => {
         activeProgramLog: null,
         currentProgramLog: null,
         currentProgramLogs: [],
+      };
+    case types.SET_PROGRAM_LOGS_ERROR:
+      return {
+        ...state,
+        error: payload,
       };
     default:
       return state;
