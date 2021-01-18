@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ProgressRing from '../ProgressRing/ProgressRing.component';
 import StatRing from '../StatRing/StatRing.component';
 
-const DashboardStats = ({ activeProgramLog, stats }) => {
+const DashboardStats = ({ programLogs: { activeProgramLog }, stats }) => {
   return (
     <Fragment>
       <div className='d-flex justify-content-end align-items-center align-self-end mb-5'>
@@ -36,7 +36,6 @@ const DashboardStats = ({ activeProgramLog, stats }) => {
 
 const mapStateToProps = state => ({
   ...state,
-  activeProgramLog: state.programLogs.activeProgramLog,
 });
 
 export default connect(mapStateToProps, null)(DashboardStats);

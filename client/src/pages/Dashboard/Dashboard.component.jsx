@@ -24,7 +24,7 @@ import Button from '../../components/Button/Button.component';
 
 const Dashboard = ({
   user,
-  activeProgramLog,
+  programLogs: { activeProgramLog },
   programWorkouts: { nextProgramWorkout },
   stats,
   getActiveProgramLog,
@@ -100,10 +100,6 @@ const Dashboard = ({
 
 const mapStateToProps = state => ({
   ...state,
-  activeProgramLog: state.programLogs.activeProgramLog,
-  activeWorkoutLog: state.workoutLogs.activeWorkoutLog,
-  workoutLogs: state.workoutLogs,
-  stats: state.stats,
 });
 
 const mapDispatchToProps = {

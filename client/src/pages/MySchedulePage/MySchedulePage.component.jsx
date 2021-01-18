@@ -24,9 +24,8 @@ import LoaderSpinner from 'react-loader-spinner';
 const MySchedulePage = ({
   stats,
   match,
-  programLog,
-  currentWorkoutLog,
-  currentWorkoutLogs,
+  programLogs: { currentProgramLog },
+  workoutLogs: { currentWorkoutLog, currentWorkoutLogs },
   programWorkouts: { currentProgramWorkouts },
   setWorkoutLogs,
   setCurrentProgramLog,
@@ -43,20 +42,21 @@ const MySchedulePage = ({
     clearCurrentWorkoutExercises();
     const programLogId = match.params.programLogId;
     let isCurrentProgramLog = false;
-    if (programLog) isCurrentProgramLog = programLog.program_log_id === parseInt(programLogId);
+    if (currentProgramLog)
+      isCurrentProgramLog = currentProgramLog.program_log_id === parseInt(programLogId);
 
     if (!isCurrentProgramLog) {
       setCurrentProgramLog(programLogId);
       setWorkoutLogs(programLogId);
     } else {
-      fetchProgramWorkouts(programLog.program_id);
+      fetchProgramWorkouts(currentProgramLog.program_id);
     }
 
     if (currentWorkoutLog && redirect)
       history.push(`/workout-logs/${currentWorkoutLog.workout_log_id}`);
     if (stats.program_log_id !== programLogId) setStats(programLogId);
     // eslint-disable-next-line
-  }, [programLog, currentWorkoutLogs, stats, redirect]);
+  }, [currentProgramLog, currentWorkoutLogs, stats, redirect]);
 
   const goToWorkoutLog = async (e, log) => {
     let clickedLog;
@@ -75,7 +75,7 @@ const MySchedulePage = ({
     }
   };
 
-  if (!programLog || !currentWorkoutLogs || !currentProgramWorkouts)
+  if (!currentProgramLog || !currentWorkoutLogs || !currentProgramWorkouts)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -86,7 +86,7 @@ const MySchedulePage = ({
     );
 
   let currentWorkoutDate;
-  if (programLog) currentWorkoutDate = moment(programLog.start_date);
+  if (currentProgramLog) currentWorkoutDate = moment(currentProgramLog.start_date);
 
   // Hash workout logs
   let workoutLogHash = {};
@@ -105,10 +105,10 @@ const MySchedulePage = ({
       <main className=''>
         <div className='row'>
           <Col number='1' bgLarge='true' className='workout-list'>
-            {programLog ? (
+            {currentProgramLog ? (
               <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
-                <div className='bold'>{programLog.program_name}</div>
-                {programLog.status === 'active' ? <small>Current Program</small> : null}
+                <div className='bold'>{currentProgramLog.program_name}</div>
+                {currentProgramLog.status === 'active' ? <small>Current Program</small> : null}
               </div>
             ) : null}
             <ProgressBar progress={stats ? stats.progress * 100 : 0} />
@@ -167,9 +167,6 @@ const MySchedulePage = ({
 
 const mapStateToProps = state => ({
   ...state,
-  programLog: state.programLogs.currentProgramLog,
-  currentWorkoutLog: state.workoutLogs.currentWorkoutLog,
-  currentWorkoutLogs: state.workoutLogs.workoutLogs,
 });
 
 export default connect(mapStateToProps, {

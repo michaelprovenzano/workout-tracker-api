@@ -3,7 +3,7 @@ import types from './programLogs.types';
 const INITIAL_STATE = {
   activeProgramLog: null,
   currentProgramLog: null,
-  programLogs: null,
+  currentProgramLogs: null,
 };
 
 const activeProgramLogReducer = (state = INITIAL_STATE, action) => {
@@ -26,7 +26,7 @@ const activeProgramLogReducer = (state = INITIAL_STATE, action) => {
         currentProgramLog: action.payload,
       };
     case types.SET_PROGRAM_LOGS:
-      return { ...state, programLogs: action.payload };
+      return { ...state, currentProgramLogs: action.payload };
     case types.RESET_PROGRAM_LOGS:
       return INITIAL_STATE;
     default:

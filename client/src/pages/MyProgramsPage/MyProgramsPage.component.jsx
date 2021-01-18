@@ -21,8 +21,7 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const MyProgramsPage = ({
-  activeProgramLog,
-  programLogs,
+  programLogs: { activeProgramLog, currentProgramLogs },
   stats,
   setProgramLogs,
   setWorkoutLogs,
@@ -58,7 +57,7 @@ const MyProgramsPage = ({
     history.push(`/program-logs/${programLogId}`);
   };
 
-  if (!programLogs)
+  if (!currentProgramLogs)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -121,8 +120,8 @@ const MyProgramsPage = ({
             <header className='header-secondary d-flex align-items-center text-primary w-100'>
               Past Programs
             </header>
-            {programLogs
-              ? programLogs.map((log, i) => {
+            {currentProgramLogs
+              ? currentProgramLogs.map((log, i) => {
                   let startDate = moment(log.workout_schedule[0]).format('MM/DD/YYYY');
                   let endDate = moment(
                     log.workout_schedule[log.workout_schedule.length - 1]
@@ -154,8 +153,6 @@ const MyProgramsPage = ({
 
 const mapStateToProps = state => ({
   ...state,
-  activeProgramLog: state.programLogs.activeProgramLog,
-  programLogs: state.programLogs.programLogs,
 });
 
 export default connect(mapStateToProps, {
