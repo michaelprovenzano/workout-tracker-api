@@ -38,7 +38,7 @@ const activeProgramLogReducer = (state = INITIAL_STATE, { type, payload }) => {
       return {
         ...state,
         currentProgramLogs: state.currentProgramLogs.map(log =>
-          log.program_log_id === payload.program_log_id ? payload : log
+          log.program_log_id === payload.program_log_id ? { ...log, ...payload } : log
         ),
       };
     case types.FETCH_PROGRAM_LOGS:

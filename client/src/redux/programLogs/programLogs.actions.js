@@ -49,12 +49,7 @@ export const updateCurrentProgramLog = programLog => async dispatch => {
 };
 
 export const updateProgramLog = programLog => async dispatch => {
-  let newLog = { ...programLog };
-  delete newLog.program_name;
-  delete newLog.mode;
-  delete newLog.company;
-
-  const result = await api.updateOne('program-logs', programLog.program_log_id, newLog);
+  const result = await api.updateOne('program-logs', programLog.program_log_id, programLog);
   errorCheck(dispatch, result);
 
   dispatch({
