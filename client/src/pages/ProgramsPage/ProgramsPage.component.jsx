@@ -77,6 +77,7 @@ class ProgramsPage extends React.Component {
                       key={i}
                       program={program.program_name}
                       company={program.company}
+                      mode={program.mode}
                       id={i}
                       onClick={this.selectProgram}
                       className={selected === i ? 'active' : ''}

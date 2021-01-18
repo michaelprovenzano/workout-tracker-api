@@ -16,6 +16,10 @@ import {
   clearCurrentProgramWorkout,
 } from '../../redux/programWorkouts/programWorkouts.actions';
 import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
+import {
+  updateProgramLog,
+  clearActiveProgramLog,
+} from '../../redux/programLogs/programLogs.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
 // Components
@@ -26,6 +30,9 @@ const WorkoutSticky = ({
   programLogs: { activeProgramLog },
   workoutLogs: { activeWorkoutLog },
   programWorkouts: { nextProgramWorkout },
+  stats,
+  updateProgramLog,
+  clearActiveProgramLog,
   fetchNextProgramWorkout,
   clearNextProgramWorkout,
   skipWorkoutLog,
@@ -86,10 +93,6 @@ const WorkoutSticky = ({
     } else {
       history.push(`/workout-logs/${activeWorkoutLog.workout_log_id}`);
     }
-
-    // Get the stats to check and update program progress
-    // if (stats.progress === 1)
-    //   await api.updateOne('program-logs', activeWorkoutLog, { status: 'completed' });
   };
   let loading = false;
   if ((!nextProgramWorkout || Object.keys(nextProgramWorkout).length === 0) && !activeWorkoutLog)
@@ -145,6 +148,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  updateProgramLog,
+  clearActiveProgramLog,
   skipWorkoutLog,
   addWorkoutLog,
   fetchNextProgramWorkout,

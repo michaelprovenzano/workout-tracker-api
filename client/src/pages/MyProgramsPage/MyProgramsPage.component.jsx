@@ -5,7 +5,7 @@ import moment from 'moment';
 // Redux
 import { connect } from 'react-redux';
 import {
-  setProgramLogs,
+  fetchProgramLogs,
   getActiveProgramLog,
   abandonProgramLog,
 } from '../../redux/programLogs/programLogs.actions';
@@ -23,7 +23,7 @@ import LoaderSpinner from 'react-loader-spinner';
 const MyProgramsPage = ({
   programLogs: { activeProgramLog, currentProgramLogs },
   stats,
-  setProgramLogs,
+  fetchProgramLogs,
   setWorkoutLogs,
   getActiveProgramLog,
   abandonProgramLog,
@@ -31,7 +31,7 @@ const MyProgramsPage = ({
   history,
 }) => {
   useEffect(() => {
-    setProgramLogs();
+    fetchProgramLogs();
     getActiveProgramLog();
 
     if (stats && activeProgramLog) {
@@ -156,7 +156,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  setProgramLogs,
+  fetchProgramLogs,
   getActiveProgramLog,
   setWorkoutLogs,
   abandonProgramLog,

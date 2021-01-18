@@ -10,6 +10,12 @@ export const getActiveProgramLog = () => async dispatch => {
   });
 };
 
+export const clearActiveProgramLog = () => async dispatch => {
+  dispatch({
+    type: types.CLEAR_ACTIVE_PROGRAM_LOG,
+  });
+};
+
 export const abandonProgramLog = id => async dispatch => {
   await api.updateOne('program-logs', id, { status: 'abandoned' });
 
@@ -32,12 +38,35 @@ export const setCurrentProgramLog = logOrId => async dispatch => {
   });
 };
 
-export const setProgramLogs = () => async dispatch => {
-  console.log('getting logs');
+export const updateCurrentProgramLog = programLog => async dispatch => {
+  // await api.updateOne('program-logs', activeWorkoutLog, { status: 'completed' });
+  const result = await api.updateOne('program-logs', programLog.program_log_id, programLog);
+
+  dispatchEvent({
+    type: types.UPDATE_CURRENT_PROGRAM_LOG,
+    payload: programLog,
+  });
+};
+
+export const updateProgramLog = programLog => async dispatch => {
+  let newLog = { ...programLog };
+  delete newLog.program_name;
+  delete newLog.mode;
+  delete newLog.company;
+
+  const result = await api.updateOne('program-logs', programLog.program_log_id, newLog);
+
+  dispatch({
+    type: types.UPDATE_PROGRAM_LOG,
+    payload: programLog,
+  });
+};
+
+export const fetchProgramLogs = () => async dispatch => {
   const logs = await api.get('program-logs', 'orderBy=[desc]start_date');
 
   dispatch({
-    type: types.SET_PROGRAM_LOGS,
+    type: types.FETCH_PROGRAM_LOGS,
     payload: logs,
   });
 };

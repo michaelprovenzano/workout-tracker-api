@@ -8,9 +8,13 @@ import {
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
 } from '../../redux/workoutLogs/workoutLogs.actions';
-import { getActiveProgramLog } from '../../redux/programLogs/programLogs.actions';
+import {
+  getActiveProgramLog,
+  updateProgramLog,
+  clearActiveProgramLog,
+} from '../../redux/programLogs/programLogs.actions';
 import { fetchNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
-import { setStats } from '../../redux/stats/stats.actions';
+import { clearStats, setStats } from '../../redux/stats/stats.actions';
 
 // Components
 import Header from '../../components/Header/Header.component';
@@ -27,27 +31,32 @@ const Dashboard = ({
   programLogs: { activeProgramLog },
   programWorkouts: { nextProgramWorkout },
   stats,
+  updateProgramLog,
   getActiveProgramLog,
+  clearActiveProgramLog,
   setWorkoutLogs,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
   fetchNextProgramWorkout,
   setStats,
+  clearStats,
   history,
 }) => {
   useEffect(() => {
-    if (!activeProgramLog) {
-      getActiveProgramLog();
-    } else {
+    getActiveProgramLog();
+
+    if (activeProgramLog) {
       let id = activeProgramLog.program_log_id;
       setWorkoutLogs(id);
       getActiveWorkoutLog(id);
       clearCurrentWorkoutLog();
       fetchNextProgramWorkout(activeProgramLog); // Will not update if opened on different device
       setStats(id);
+    } else {
+      clearStats();
     }
     // eslint-disable-next-line
-  }, [activeProgramLog]);
+  }, []);
 
   const browsePrograms = async () => {
     history.push('/programs');
@@ -62,6 +71,13 @@ const Dashboard = ({
         <LoaderSpinner type='Grid' color='#196cff' height={40} width={80} />
       </div>
     );
+
+  // Get the stats to check and update program progress
+  if (stats.progress === 1 && activeProgramLog) {
+    updateProgramLog({ ...activeProgramLog, status: 'completed' });
+    clearActiveProgramLog();
+    clearStats();
+  }
 
   return (
     <div className='offset-header'>
@@ -104,11 +120,14 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   setWorkoutLogs,
+  updateProgramLog,
   getActiveProgramLog,
+  clearActiveProgramLog,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
   fetchNextProgramWorkout,
   setStats,
+  clearStats,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
