@@ -63,7 +63,6 @@ const AddExercisePage = ({
   };
 
   const updateThisExercise = async exercise => {
-    console.log('submitting');
     updateExercise(exercise);
     setActiveExercise(null);
     setModal(false);

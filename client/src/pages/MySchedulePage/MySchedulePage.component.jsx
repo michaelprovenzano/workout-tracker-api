@@ -69,7 +69,6 @@ const MySchedulePage = ({
       const programWorkout = currentProgramWorkouts.find(
         workout => workout.program_workout_id === log.program_workout_id
       );
-      console.log(programWorkout);
       setCurrentWorkoutLog(log);
       setCurrentProgramWorkout(programWorkout);
       setRedirect(true);

@@ -47,7 +47,7 @@ class ProgramsPage extends React.Component {
 
   setData = async () => {
     let programs = await api.get('programs');
-    this.setState({ programs }, () => console.log(this.state));
+    this.setState({ programs });
   };
 
   render() {

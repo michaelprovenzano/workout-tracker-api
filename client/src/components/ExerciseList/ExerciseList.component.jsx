@@ -44,7 +44,6 @@ const ExerciseList = ({
   };
 
   const removeExercise = exercise => {
-    console.log('removing');
     deleteWorkoutExercise(exercise);
   };
 

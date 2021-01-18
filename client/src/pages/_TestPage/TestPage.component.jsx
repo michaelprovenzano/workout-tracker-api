@@ -17,7 +17,7 @@ class TestPage extends React.Component {
       method: 'GET',
     });
     let character = await response.json();
-    this.setState({ character }, () => console.log(this.state));
+    this.setState({ character });
   }
 
   changeCharacter = () => {
