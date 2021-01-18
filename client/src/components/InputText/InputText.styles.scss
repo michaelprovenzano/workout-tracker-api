@@ -21,6 +21,7 @@
     left: 10px;
     transform: translateY(-50%);
     transition: all 0.15s ease;
+    pointer-events: none;
   }
 
   .active ~ label {

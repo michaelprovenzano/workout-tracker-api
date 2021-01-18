@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './AddWorkoutPage.styles.scss';
-import api from '../../../utils/apiCalls';
 
 import { connect } from 'react-redux';
-import { setCurrentPrograms } from '../../../redux/currentPrograms/currentPrograms.actions';
 import {
+  fetchPrograms,
   setCurrentProgram,
   clearCurrentProgram,
-} from '../../../redux/currentProgram/currentProgram.actions';
-import { fetchAllWorkouts, addWorkout } from '../../../redux/workouts/workouts.actions';
+} from '../../../redux/programs/programs.actions';
+import { fetchAllWorkouts } from '../../../redux/workouts/workouts.actions';
+import { addProgramWorkout } from '../../../redux/programWorkouts/programWorkouts.actions';
 
 // Components
 import Header from '../../../components/Header/Header.component';
@@ -21,10 +21,9 @@ import LoaderSpinner from 'react-loader-spinner';
 
 const AddWorkoutPage = ({
   allWorkouts,
-  addWorkout,
-  currentPrograms,
-  currentProgram,
-  setCurrentPrograms,
+  programs: { allPrograms, currentProgram },
+  addProgramWorkout,
+  fetchPrograms,
   setCurrentProgram,
   fetchAllWorkouts,
   match,
@@ -36,16 +35,16 @@ const AddWorkoutPage = ({
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    if (!currentPrograms) {
-      setCurrentPrograms();
+    if (allPrograms.length === 0) {
+      fetchPrograms();
     } else {
-      let thisProgram = currentPrograms.find(program => program.program_id === parseInt(programId));
+      let thisProgram = allPrograms.find(program => program.program_id === parseInt(programId));
       setCurrentProgram(thisProgram);
     }
 
     fetchAllWorkouts();
     // eslint-disable-next-line
-  }, [currentPrograms]);
+  }, [allPrograms]);
 
   if (!currentProgram || !allWorkouts)
     return (
@@ -58,7 +57,7 @@ const AddWorkoutPage = ({
     );
 
   const createWorkout = async () => {
-    addWorkout({
+    addProgramWorkout({
       workout_name: name,
     });
 
@@ -96,7 +95,7 @@ const AddWorkoutPage = ({
                 <form className='mt-5 w-100'>
                   <InputText
                     type='text'
-                    label='Workout Name'
+                    label='Exercise Name'
                     value={name}
                     color='dark'
                     onInput={e => setName(e.target.value)}
@@ -116,7 +115,9 @@ const AddWorkoutPage = ({
             <div className='row'>
               <ul className='w-100'>
                 {allWorkouts
-                  .filter(workout => workout.workout_name.includes(search))
+                  .filter(workout =>
+                    workout.workout_name.toLowerCase().includes(search.toLowerCase())
+                  )
                   .map((workout, i) => {
                     return <WorkoutItem workout={workout} add edit />;
                   })}
@@ -148,8 +149,8 @@ const getUniqueWorkouts = workouts => {
 };
 
 export default connect(mapStateToProps, {
-  addWorkout,
-  setCurrentPrograms,
+  addProgramWorkout,
+  fetchPrograms,
   setCurrentProgram,
   clearCurrentProgram,
   fetchAllWorkouts,

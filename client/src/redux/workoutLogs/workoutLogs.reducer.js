@@ -3,7 +3,7 @@ import types from './workoutLogs.types';
 const INITIAL_STATE = {
   activeWorkoutLog: null,
   currentWorkoutLog: null,
-  workoutLogs: null,
+  currentWorkoutLogs: null,
 };
 
 const workoutLogsReducer = (state = INITIAL_STATE, action) => {
@@ -13,7 +13,7 @@ const workoutLogsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         activeWorkoutLog: action.payload.skipped || !action.payload.active ? null : action.payload,
         currentWorkoutLog: action.payload,
-        workoutLogs: [...state.workoutLogs, action.payload],
+        currentWorkoutLogs: [...state.currentWorkoutLogs, action.payload],
       };
     case types.UPDATE_WORKOUT_LOG:
       let activeWorkoutLog = null;
@@ -26,14 +26,14 @@ const workoutLogsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         activeWorkoutLog: activeWorkoutLog,
         currentWorkoutLog: action.payload,
-        workoutLogs: state.workoutLogs.map(log =>
+        currentWorkoutLogs: state.currentWorkoutLogs.map(log =>
           log.workout_log_id === action.payload.workout_log_id ? action.payload : log
         ),
       };
     case types.SET_WORKOUT_LOGS:
       return {
         ...state,
-        workoutLogs: action.payload,
+        currentWorkoutLogs: action.payload,
       };
     case types.GET_ACTIVE_WORKOUT_LOG:
       return {
@@ -46,12 +46,12 @@ const workoutLogsReducer = (state = INITIAL_STATE, action) => {
         activeWorkoutLog: null,
       };
     case types.SKIP_WORKOUT_LOG:
-      if (state.workoutLogs)
+      if (state.currentWorkoutLogs)
         return {
           ...state,
-          workoutLogs: {
+          currentWorkoutLogs: {
             activeWorkoutLog: null,
-            workoutLogs: state.workoutLogs.map(log =>
+            currentWorkoutLogs: state.currentWorkoutLogs.map(log =>
               log.workout_log_id !== action.payload ? log : action.payload
             ),
           },

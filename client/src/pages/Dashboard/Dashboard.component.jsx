@@ -8,9 +8,13 @@ import {
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
 } from '../../redux/workoutLogs/workoutLogs.actions';
-import { getActiveProgramLog } from '../../redux/programLogs/programLogs.actions';
-import { getNextWorkout } from '../../redux/nextWorkout/nextWorkout.actions';
-import { setStats } from '../../redux/stats/stats.actions';
+import {
+  getActiveProgramLog,
+  updateProgramLog,
+  clearActiveProgramLog,
+} from '../../redux/programLogs/programLogs.actions';
+import { fetchNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
+import { clearStats, setStats } from '../../redux/stats/stats.actions';
 
 // Components
 import Header from '../../components/Header/Header.component';
@@ -24,30 +28,35 @@ import Button from '../../components/Button/Button.component';
 
 const Dashboard = ({
   user,
-  activeProgramLog,
-  nextWorkout,
+  programLogs: { activeProgramLog },
+  programWorkouts: { nextProgramWorkout },
   stats,
+  updateProgramLog,
   getActiveProgramLog,
+  clearActiveProgramLog,
   setWorkoutLogs,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
-  getNextWorkout,
+  fetchNextProgramWorkout,
   setStats,
+  clearStats,
   history,
 }) => {
   useEffect(() => {
-    if (!activeProgramLog) {
-      getActiveProgramLog();
-    } else {
+    getActiveProgramLog();
+
+    if (activeProgramLog) {
       let id = activeProgramLog.program_log_id;
       setWorkoutLogs(id);
       getActiveWorkoutLog(id);
       clearCurrentWorkoutLog();
-      getNextWorkout(activeProgramLog); // Will not update if opened on different device
+      fetchNextProgramWorkout(activeProgramLog); // Will not update if opened on different device
       setStats(id);
+    } else {
+      clearStats();
     }
     // eslint-disable-next-line
-  }, [activeProgramLog]);
+  }, []);
 
   const browsePrograms = async () => {
     history.push('/programs');
@@ -63,10 +72,17 @@ const Dashboard = ({
       </div>
     );
 
+  // Get the stats to check and update program progress
+  if (stats.progress === 1 && activeProgramLog) {
+    updateProgramLog({ ...activeProgramLog, status: 'completed' });
+    clearActiveProgramLog();
+    clearStats();
+  }
+
   return (
     <div className='offset-header'>
       <Header text='Dashboard' />
-      {activeProgramLog ? <WorkoutSticky nextWorkout={nextWorkout} /> : null}
+      {activeProgramLog ? <WorkoutSticky nextWorkout={nextProgramWorkout} /> : null}
 
       <main className='content dashboard'>
         {activeProgramLog ? (
@@ -100,19 +116,18 @@ const Dashboard = ({
 
 const mapStateToProps = state => ({
   ...state,
-  activeProgramLog: state.programLogs.activeProgramLog,
-  activeWorkoutLog: state.workoutLogs.activeWorkoutLog,
-  workoutLogs: state.workoutLogs,
-  stats: state.stats,
 });
 
 const mapDispatchToProps = {
   setWorkoutLogs,
+  updateProgramLog,
   getActiveProgramLog,
+  clearActiveProgramLog,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
-  getNextWorkout,
+  fetchNextProgramWorkout,
   setStats,
+  clearStats,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

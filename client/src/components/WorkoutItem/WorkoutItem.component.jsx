@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Button from '../Button/Button.component';
 
-import { addCurrentWorkout } from '../../redux/currentWorkouts/currentWorkouts.actions';
+import { addProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 import { setAlert } from '../../redux/alerts/alerts.actions';
 
 const WorkoutItem = ({
@@ -10,18 +10,19 @@ const WorkoutItem = ({
   add,
   edit,
   del,
-  currentProgram,
-  currentWorkouts,
-  addCurrentWorkout,
+  programs: { currentProgram },
+  workouts: { allWorkouts },
+  addProgramWorkout,
   setAlert,
 }) => {
   const { workout_id, workout_name } = workout;
   const { program_id, program_name } = currentProgram;
-  let workout_order = 0;
-  if (currentWorkouts) workout_order = currentWorkouts.length;
 
   const addAWorkout = () => {
-    addCurrentWorkout({ workout_id, program_id, workout_order, workout_name });
+    let workout_order = 0;
+    if (allWorkouts) workout_order = allWorkouts.length;
+
+    addProgramWorkout({ workout_id, program_id, workout_order, workout_name });
     setAlert('success', `Workout "${workout_name}" added to "${program_name}"`);
   };
 
@@ -44,4 +45,4 @@ const mapStateToProps = state => ({
   ...state,
 });
 
-export default connect(mapStateToProps, { addCurrentWorkout, setAlert })(WorkoutItem);
+export default connect(mapStateToProps, { addProgramWorkout, setAlert })(WorkoutItem);

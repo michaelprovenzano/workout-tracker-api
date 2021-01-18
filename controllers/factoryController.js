@@ -15,7 +15,9 @@ exports.deleteById = (table, idLabel, restrictToUser) =>
     if (restrictToUser) whereOptions.user_id = req.user.user_id;
 
     await db(table).where(whereOptions).del();
-    res.status(200).json(null);
+    res.status(200).json({
+      status: 'success',
+    });
   });
 
 exports.getAll = (table, restrictToUser, joins) =>

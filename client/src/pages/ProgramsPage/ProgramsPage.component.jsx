@@ -47,7 +47,7 @@ class ProgramsPage extends React.Component {
 
   setData = async () => {
     let programs = await api.get('programs');
-    this.setState({ programs }, () => console.log(this.state));
+    this.setState({ programs });
   };
 
   render() {
@@ -77,6 +77,7 @@ class ProgramsPage extends React.Component {
                       key={i}
                       program={program.program_name}
                       company={program.company}
+                      mode={program.mode}
                       id={i}
                       onClick={this.selectProgram}
                       className={selected === i ? 'active' : ''}

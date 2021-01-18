@@ -4,10 +4,12 @@ import './MySchedulePage.styles.scss';
 
 import { connect } from 'react-redux';
 import { setCurrentProgramLog } from '../../redux/programLogs/programLogs.actions';
-import { setCurrentWorkouts } from '../../redux/currentWorkouts/currentWorkouts.actions';
 import { setWorkoutLogs, setCurrentWorkoutLog } from '../../redux/workoutLogs/workoutLogs.actions';
-import { setCurrentWorkout } from '../../redux/currentWorkout/currentWorkout.actions';
-import { clearCurrentExercises } from '../../redux/currentExercises/currentExercises.actions';
+import {
+  fetchProgramWorkouts,
+  setCurrentProgramWorkout,
+} from '../../redux/programWorkouts/programWorkouts.actions';
+import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 
 import moment from 'moment';
@@ -20,41 +22,41 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const MySchedulePage = ({
-  programLog,
-  workouts,
   stats,
   match,
-  setCurrentProgramLog,
+  programLogs: { currentProgramLog },
+  workoutLogs: { currentWorkoutLog, currentWorkoutLogs },
+  programWorkouts: { currentProgramWorkouts },
   setWorkoutLogs,
-  currentWorkoutLog,
-  currentWorkoutLogs,
+  setCurrentProgramLog,
   setCurrentWorkoutLog,
-  setCurrentWorkouts,
-  setCurrentWorkout,
-  clearCurrentExercises,
+  fetchProgramWorkouts,
+  setCurrentProgramWorkout,
+  clearCurrentWorkoutExercises,
   setStats,
 }) => {
   const history = useHistory();
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    clearCurrentExercises();
+    clearCurrentWorkoutExercises();
     const programLogId = match.params.programLogId;
     let isCurrentProgramLog = false;
-    if (programLog) isCurrentProgramLog = programLog.program_log_id === parseInt(programLogId);
+    if (currentProgramLog)
+      isCurrentProgramLog = currentProgramLog.program_log_id === parseInt(programLogId);
 
     if (!isCurrentProgramLog) {
       setCurrentProgramLog(programLogId);
       setWorkoutLogs(programLogId);
     } else {
-      setCurrentWorkouts(programLog.program_id);
+      fetchProgramWorkouts(currentProgramLog.program_id);
     }
 
     if (currentWorkoutLog && redirect)
       history.push(`/workout-logs/${currentWorkoutLog.workout_log_id}`);
     if (stats.program_log_id !== programLogId) setStats(programLogId);
     // eslint-disable-next-line
-  }, [programLog, currentWorkoutLogs, stats, redirect]);
+  }, [currentProgramLog, currentWorkoutLogs, stats, redirect]);
 
   const goToWorkoutLog = async (e, log) => {
     let clickedLog;
@@ -64,13 +66,16 @@ const MySchedulePage = ({
       );
 
     if (clickedLog) {
+      const programWorkout = currentProgramWorkouts.find(
+        workout => workout.program_workout_id === log.program_workout_id
+      );
       setCurrentWorkoutLog(log);
-      setCurrentWorkout(log.program_workout_id);
+      setCurrentProgramWorkout(programWorkout);
       setRedirect(true);
     }
   };
 
-  if (!programLog || !currentWorkoutLogs || !workouts)
+  if (!currentProgramLog || !currentWorkoutLogs || !currentProgramWorkouts)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -81,7 +86,7 @@ const MySchedulePage = ({
     );
 
   let currentWorkoutDate;
-  if (programLog) currentWorkoutDate = moment(programLog.start_date);
+  if (currentProgramLog) currentWorkoutDate = moment(currentProgramLog.start_date);
 
   // Hash workout logs
   let workoutLogHash = {};
@@ -100,17 +105,17 @@ const MySchedulePage = ({
       <main className=''>
         <div className='row'>
           <Col number='1' bgLarge='true' className='workout-list'>
-            {programLog ? (
+            {currentProgramLog ? (
               <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
-                <div className='bold'>{programLog.program_name}</div>
-                {programLog.status === 'active' ? <small>Current Program</small> : null}
+                <div className='bold'>{currentProgramLog.program_name}</div>
+                {currentProgramLog.status === 'active' ? <small>Current Program</small> : null}
               </div>
             ) : null}
             <ProgressBar progress={stats ? stats.progress * 100 : 0} />
           </Col>
           <Col number='2'>
-            {workouts
-              ? workouts.map((workout, i) => {
+            {currentProgramWorkouts
+              ? currentProgramWorkouts.map((workout, i) => {
                   let status, workout_log_id;
 
                   let increment = 1;
@@ -162,17 +167,13 @@ const MySchedulePage = ({
 
 const mapStateToProps = state => ({
   ...state,
-  programLog: state.programLogs.currentProgramLog,
-  currentWorkoutLogs: state.workoutLogs.workoutLogs,
-  workouts: state.currentWorkouts,
-  currentWorkoutLog: state.workoutLogs.currentWorkoutLog,
 });
 
 export default connect(mapStateToProps, {
   setCurrentProgramLog,
-  setCurrentWorkouts,
-  clearCurrentExercises,
-  setCurrentWorkout,
+  fetchProgramWorkouts,
+  clearCurrentWorkoutExercises,
+  setCurrentProgramWorkout,
   setWorkoutLogs,
   setCurrentWorkoutLog,
   setStats,

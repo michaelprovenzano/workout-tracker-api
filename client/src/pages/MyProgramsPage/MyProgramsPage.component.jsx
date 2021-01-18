@@ -5,7 +5,7 @@ import moment from 'moment';
 // Redux
 import { connect } from 'react-redux';
 import {
-  setProgramLogs,
+  fetchProgramLogs,
   getActiveProgramLog,
   abandonProgramLog,
 } from '../../redux/programLogs/programLogs.actions';
@@ -21,10 +21,9 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const MyProgramsPage = ({
-  activeProgramLog,
-  programLogs,
+  programLogs: { activeProgramLog, currentProgramLogs },
   stats,
-  setProgramLogs,
+  fetchProgramLogs,
   setWorkoutLogs,
   getActiveProgramLog,
   abandonProgramLog,
@@ -32,7 +31,7 @@ const MyProgramsPage = ({
   history,
 }) => {
   useEffect(() => {
-    setProgramLogs();
+    fetchProgramLogs();
     getActiveProgramLog();
 
     if (stats && activeProgramLog) {
@@ -58,7 +57,7 @@ const MyProgramsPage = ({
     history.push(`/program-logs/${programLogId}`);
   };
 
-  if (!programLogs)
+  if (!currentProgramLogs)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -77,7 +76,7 @@ const MyProgramsPage = ({
             {activeProgramLog ? (
               <Fragment>
                 <div className='workout-program d-flex flex-column align-items-center w-100 mb-3'>
-                  <div className='bold'>{activeProgramLog.program_name}</div>
+                  <div className='bold'>{`${activeProgramLog.program_name} | ${activeProgramLog.mode}`}</div>
                   <small>Current Program</small>
                 </div>
                 <ProgressBar progress={stats ? stats.progress * 100 : 0} />
@@ -121,8 +120,8 @@ const MyProgramsPage = ({
             <header className='header-secondary d-flex align-items-center text-primary w-100'>
               Past Programs
             </header>
-            {programLogs
-              ? programLogs.map((log, i) => {
+            {currentProgramLogs
+              ? currentProgramLogs.map((log, i) => {
                   let startDate = moment(log.workout_schedule[0]).format('MM/DD/YYYY');
                   let endDate = moment(
                     log.workout_schedule[log.workout_schedule.length - 1]
@@ -134,7 +133,7 @@ const MyProgramsPage = ({
                   return (
                     <ProgramItem
                       key={i}
-                      name={`${log.program_name}`}
+                      name={`${log.program_name} | ${log.mode}`}
                       dateRange={`${startDate} - ${endDate}`}
                       history={history}
                       onClick={() => goToProgramLog(log.program_log_id)}
@@ -154,12 +153,10 @@ const MyProgramsPage = ({
 
 const mapStateToProps = state => ({
   ...state,
-  activeProgramLog: state.programLogs.activeProgramLog,
-  programLogs: state.programLogs.programLogs,
 });
 
 export default connect(mapStateToProps, {
-  setProgramLogs,
+  fetchProgramLogs,
   getActiveProgramLog,
   setWorkoutLogs,
   abandonProgramLog,

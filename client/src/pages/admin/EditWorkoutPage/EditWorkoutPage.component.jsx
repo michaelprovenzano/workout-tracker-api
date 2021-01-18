@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import './EditWorkoutPage.styles.scss';
 
 import { connect } from 'react-redux';
-import { setCurrentWorkouts } from '../../../redux/currentWorkouts/currentWorkouts.actions';
 import { setAlert } from '../../../redux/alerts/alerts.actions';
 
 // Components
@@ -12,15 +11,19 @@ import InputText from '../../../components/InputText/InputText.component';
 import Button from '../../../components/Button/Button.component';
 import ExerciseList from '../../../components/ExerciseList/ExerciseList.component';
 import LoaderSpinner from 'react-loader-spinner';
-import { updateCurrentWorkout } from '../../../redux/currentWorkout/currentWorkout.actions';
+import {
+  fetchProgramWorkouts,
+  updateProgramWorkout,
+} from '../../../redux/programWorkouts/programWorkouts.actions';
+import { fetchWorkoutExercises } from '../../../redux/workoutExercises/workoutExercises.actions';
 
 const EditWorkoutPage = ({
-  currentPrograms,
-  currentProgram,
-  currentWorkouts,
-  currentWorkout,
-  updateCurrentWorkout,
-  setCurrentWorkouts,
+  programs: { currentProgram, allPrograms },
+  programWorkouts: { currentProgramWorkouts, currentProgramWorkout },
+  workoutExercises: { currentWorkoutExercises },
+  updateProgramWorkout,
+  fetchProgramWorkouts,
+  fetchWorkoutExercises,
   setAlert,
   match,
 }) => {
@@ -29,19 +32,19 @@ const EditWorkoutPage = ({
   const [name, setName] = useState('');
 
   useEffect(() => {
-    if (!currentWorkouts) {
-      setCurrentWorkouts();
+    if (!currentProgramWorkouts) {
+      fetchProgramWorkouts();
     } else {
-      let thisWorkout = currentWorkouts.find(workout => workout.workout_id === parseInt(workoutId));
-      setName(currentWorkout.workout_name);
+      setName(currentProgramWorkout.workout_name);
+      fetchWorkoutExercises(currentProgramWorkout.workout_id);
     }
 
     // eslint-disable-next-line
-  }, [currentPrograms, currentWorkout]);
+  }, [allPrograms, currentProgramWorkout]);
 
   const saveWorkout = async () => {
-    updateCurrentWorkout({
-      ...currentWorkout,
+    updateProgramWorkout({
+      ...currentProgramWorkout,
       workout_name: name,
     });
 
@@ -49,7 +52,7 @@ const EditWorkoutPage = ({
     history.push(`/admin/edit-programs/${currentProgram.program_id}`);
   };
 
-  if (!currentProgram || !currentWorkouts)
+  if (!currentProgram || !currentProgramWorkouts)
     return (
       <div
         className='w-100 d-flex justify-content-center align-items-center'
@@ -86,7 +89,7 @@ const EditWorkoutPage = ({
               <Button
                 text='Add Exercise'
                 type='secondary'
-                onClick={e => history.push(`${currentWorkout.workout_id}/add-exercise`)}
+                onClick={e => history.push(`${currentProgramWorkout.workout_id}/add-exercise`)}
               />
             </div>
             <ExerciseList />
@@ -102,7 +105,8 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  updateCurrentWorkout,
-  setCurrentWorkouts,
+  updateProgramWorkout,
+  fetchProgramWorkouts,
+  fetchWorkoutExercises,
   setAlert,
 })(EditWorkoutPage);

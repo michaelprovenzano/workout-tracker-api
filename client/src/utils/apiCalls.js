@@ -55,6 +55,19 @@ let requestConstructor = () => {
       const data = await response.json();
       return data;
     },
+    delete: async (reqUrl, body) => {
+      const response = await fetch(reqUrl, {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: authHeader,
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+      return data;
+    },
   };
 };
 
@@ -80,6 +93,9 @@ let api = {
   },
   post: async (url, body) => {
     return await requestConstructor().post(`${baseUrl}/${url}`, body);
+  },
+  deleteOne: async (url, id) => {
+    return await requestConstructor().delete(`${baseUrl}/${url}/${id}`);
   },
 };
 
