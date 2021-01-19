@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import './MyProgramsPage.styles.scss';
 import moment from 'moment';
 
@@ -17,6 +17,7 @@ import Header from '../../components/Header/Header.component';
 import ProgramItem from '../../components/ProgramItem/ProgramItem.component';
 import Button from '../../components/Button/Button.component';
 import ProgressBar from '../../components/ProgressBar/ProgressBar.component';
+import ConfirmPrompt from '../../components/ConfirmPrompt/ConfirmPrompt.component';
 import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
@@ -30,6 +31,8 @@ const MyProgramsPage = ({
   setStats,
   history,
 }) => {
+  const [confirmModal, setConfirmModal] = useState(false);
+
   useEffect(() => {
     fetchProgramLogs();
     getActiveProgramLog();
@@ -45,6 +48,7 @@ const MyProgramsPage = ({
 
   const abandonCurrentProgram = async () => {
     abandonProgramLog(activeProgramLog.program_log_id);
+    setConfirmModal(false);
     history.push('/dashboard');
   };
 
@@ -87,7 +91,7 @@ const MyProgramsPage = ({
                       type='danger'
                       position='center'
                       className='w-100'
-                      onClick={abandonCurrentProgram}
+                      onClick={() => setConfirmModal(true)}
                     />
                   </div>
                   <div className='col-4 col-md-12'>
@@ -146,6 +150,16 @@ const MyProgramsPage = ({
               : null}
           </Col>
         </div>
+        <ConfirmPrompt
+          expanded={confirmModal}
+          onClose={() => setConfirmModal(false)}
+          onConfirm={abandonCurrentProgram}
+        >
+          <p>
+            Are you sure you want to abandon this program?{' '}
+            <strong>This action is not undoable.</strong>
+          </p>
+        </ConfirmPrompt>
       </main>
     </div>
   );
