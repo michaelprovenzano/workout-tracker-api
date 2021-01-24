@@ -30,7 +30,7 @@ import Col from '../../components/Col/Col.component';
 import LoaderSpinner from 'react-loader-spinner';
 
 const ExercisePage = ({
-  programLogs: { activeProgramLog },
+  programLogs: { currentProgramLog },
   programWorkouts: { currentProgramWorkout, currentProgramWorkouts },
   workoutLogs: { currentWorkoutLog },
   workoutExercises: { currentWorkoutExercise, currentWorkoutExercises },
@@ -148,7 +148,7 @@ const ExercisePage = ({
           <Col number='1' bgSmall='true' className='workout-list'>
             <div className='workout-program d-flex justify-content-between w-100'>
               <div className='pb-2'>{currentProgramWorkout.workout_name}</div>
-              <div className='pb-2'>{activeProgramLog.program_name}</div>
+              <div className='pb-2'>{currentProgramLog.program_name}</div>
             </div>
             <ProgressBar progress={`${progress}`} />
             <div className='hidden-sm-down'>

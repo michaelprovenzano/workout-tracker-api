@@ -63,6 +63,32 @@ export const clearCurrentWorkoutLog = () => async dispatch => {
   });
 };
 
+export const setPreviousWorkoutLog = currentLog => async dispatch => {
+  console.log('The current log id is: ' + currentLog.program_workout_id);
+  if (typeof currentLog !== 'object') return;
+
+  let pastWorkoutLogs = await api.get(
+    'workout-logs',
+    `programs_workouts.workout_id=${currentLog.workout_id}`
+  );
+
+  console.log(pastWorkoutLogs);
+
+  let workoutLog;
+  if (pastWorkoutLogs.length < 2) {
+    workoutLog = null;
+  } else if (pastWorkoutLogs[0].workout_log_id === parseInt(currentLog.workout_log_id)) {
+    workoutLog = pastWorkoutLogs[1];
+  } else {
+    workoutLog = pastWorkoutLogs[0];
+  }
+
+  dispatch({
+    type: types.SET_PREVIOUS_WORKOUT_LOG,
+    payload: workoutLog,
+  });
+};
+
 export const skipWorkoutLog = workoutLogId => async dispatch => {
   await api.updateOne('workout-logs', workoutLogId, { active: false, skipped: true });
 

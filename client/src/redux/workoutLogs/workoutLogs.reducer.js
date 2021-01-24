@@ -2,6 +2,7 @@ import types from './workoutLogs.types';
 
 const INITIAL_STATE = {
   activeWorkoutLog: null,
+  previousWorkoutLog: null,
   currentWorkoutLog: null,
   currentWorkoutLogs: [],
 };
@@ -66,6 +67,11 @@ const workoutLogsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentWorkoutLog: null,
+      };
+    case types.SET_PREVIOUS_WORKOUT_LOG:
+      return {
+        ...state,
+        previousWorkoutLog: action.payload,
       };
     case types.RESET_WORKOUT_LOGS:
       return { activeWorkoutLog: null, currentWorkoutLog: null, currentWorkoutLogs: [] };

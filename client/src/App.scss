@@ -52,6 +52,15 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
+textarea {
+  padding: 1rem;
+}
+
+hr {
+  border-color: $primary;
+  opacity: 0.08;
+}
+
 .App {
   padding-top: 80px;
   font-size: 1.6rem;
