@@ -12,6 +12,7 @@ import {
   getActiveProgramLog,
   updateProgramLog,
   clearActiveProgramLog,
+  setCurrentProgramLog,
 } from '../../redux/programLogs/programLogs.actions';
 import { fetchNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 import { clearStats, setStats } from '../../redux/stats/stats.actions';
@@ -34,6 +35,7 @@ const Dashboard = ({
   updateProgramLog,
   getActiveProgramLog,
   clearActiveProgramLog,
+  setCurrentProgramLog,
   setWorkoutLogs,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
@@ -47,6 +49,7 @@ const Dashboard = ({
 
     if (activeProgramLog) {
       let id = activeProgramLog.program_log_id;
+      setCurrentProgramLog(activeProgramLog);
       setWorkoutLogs(id);
       getActiveWorkoutLog(id);
       clearCurrentWorkoutLog();
@@ -123,6 +126,7 @@ const mapDispatchToProps = {
   updateProgramLog,
   getActiveProgramLog,
   clearActiveProgramLog,
+  setCurrentProgramLog,
   getActiveWorkoutLog,
   clearCurrentWorkoutLog,
   fetchNextProgramWorkout,
