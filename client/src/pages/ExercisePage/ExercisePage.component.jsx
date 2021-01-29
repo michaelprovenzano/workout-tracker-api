@@ -87,14 +87,14 @@ const ExercisePage = ({
 
     fetchWorkoutExercises(currentProgramWorkout.workout_id);
     setCurrentExerciseLogs(workoutLogId);
+    setCurrentWorkoutExercise(
+      currentWorkoutExercises.find(
+        log => log.workout_exercise_id === currentExerciseLog.workout_exercise_id
+      )
+    );
 
     if (currentExerciseLog) {
       setPreviousExerciseLog(currentExerciseLog);
-      setCurrentWorkoutExercise(
-        currentWorkoutExercises.find(
-          log => log.workout_exercise_id === currentExerciseLog.workout_exercise_id
-        )
-      );
       if (parseInt(exerciseLogId) !== currentExerciseLog.exercise_log_id)
         history.replace(
           `/workout-logs/${currentWorkoutLog.workout_log_id}/${currentExerciseLog.exercise_log_id}`
