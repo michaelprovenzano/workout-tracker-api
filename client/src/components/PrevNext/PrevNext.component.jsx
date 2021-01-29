@@ -12,7 +12,10 @@ import {
 import { clearCurrentWorkoutLog } from '../../redux/workoutLogs/workoutLogs.actions';
 
 import Arrow from '../Arrow/Arrow.component';
-import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
+import {
+  setCurrentWorkoutExercise,
+  clearCurrentWorkoutExercises,
+} from '../../redux/workoutExercises/workoutExercises.actions';
 import { clearCurrentProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
 
 const PrevNext = ({
@@ -65,6 +68,7 @@ const PrevNext = ({
       } else {
         addExerciseLog(currentWorkoutLog.workout_log_id, nextWorkoutExerciseId);
       }
+      setCurrentWorkoutExercise(currentWorkoutExercises[currentExerciseIndex]);
     }
   };
 
