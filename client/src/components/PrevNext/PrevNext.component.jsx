@@ -24,6 +24,7 @@ const PrevNext = ({
   exerciseLogs: { currentExerciseLog, currentExerciseLogs },
   workoutExercises: { currentWorkoutExercises },
   addExerciseLog,
+  setCurrentWorkoutExercise,
   clearCurrentProgramWorkout,
   clearCurrentWorkoutLog,
   clearCurrentExerciseLog,
@@ -68,6 +69,7 @@ const PrevNext = ({
       } else {
         addExerciseLog(currentWorkoutLog.workout_log_id, nextWorkoutExerciseId);
       }
+
       setCurrentWorkoutExercise(currentWorkoutExercises[index]);
     }
   };
@@ -102,6 +104,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   addExerciseLog,
+  setCurrentWorkoutExercise,
   clearCurrentExerciseLog,
   clearCurrentExerciseLogs,
   clearCurrentWorkoutLog,

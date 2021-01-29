@@ -35,7 +35,6 @@ const ExercisePage = ({
   workoutLogs: { currentWorkoutLog },
   workoutExercises: { currentWorkoutExercise, currentWorkoutExercises },
   exerciseLogs: { currentExerciseLog, currentExerciseLogs, previousExerciseLog },
-  exercises: { currentExercise, currentExercises },
   addExerciseLog,
   setCurrentProgramWorkout,
   setCurrentWorkoutLog,
@@ -87,11 +86,6 @@ const ExercisePage = ({
 
     fetchWorkoutExercises(currentProgramWorkout.workout_id);
     setCurrentExerciseLogs(workoutLogId);
-    setCurrentWorkoutExercise(
-      currentWorkoutExercises.find(
-        log => log.workout_exercise_id === currentExerciseLog.workout_exercise_id
-      )
-    );
 
     if (currentExerciseLog) {
       setPreviousExerciseLog(currentExerciseLog);
@@ -117,9 +111,7 @@ const ExercisePage = ({
       addExerciseLog(currentWorkoutLog.workout_log_id, workoutExerciseId);
     }
     setCurrentWorkoutExercise(
-      currentWorkoutExercises.find(
-        exercise => exercise.workout_exercise_id === currentExerciseLog.workout_exercise_id
-      )
+      currentWorkoutExercises.find(exercise => exercise.workout_exercise_id === workoutExerciseId)
     );
   };
 
