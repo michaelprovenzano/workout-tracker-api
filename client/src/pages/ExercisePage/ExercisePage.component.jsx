@@ -116,6 +116,11 @@ const ExercisePage = ({
     } else {
       addExerciseLog(currentWorkoutLog.workout_log_id, workoutExerciseId);
     }
+    setCurrentWorkoutExercise(
+      currentWorkoutExercises.find(
+        exercise => exercise.workout_exercise_id === currentExerciseLog.workout_exercise_id
+      )
+    );
   };
 
   if (
