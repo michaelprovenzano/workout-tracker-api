@@ -68,7 +68,7 @@ const PrevNext = ({
       } else {
         addExerciseLog(currentWorkoutLog.workout_log_id, nextWorkoutExerciseId);
       }
-      setCurrentWorkoutExercise(currentWorkoutExercises[currentExerciseIndex]);
+      setCurrentWorkoutExercise(currentWorkoutExercises[index]);
     }
   };
 
