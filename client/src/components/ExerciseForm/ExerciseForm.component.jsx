@@ -225,6 +225,7 @@ const ExerciseForm = ({
           id='current-notes'
           className='flex-grow-1'
           onChange={e => setInputs(e, 'notes')}
+          onBlur={e => selectRow(e, '')}
           value={notes ? notes : ''}
         ></textarea>
       </section>

@@ -36,9 +36,13 @@
     height: 112px;
 
     textarea {
-      border: 1px solid $primary;
+      background-color: transparent;
       border-radius: 0 3px 3px 0;
       border-left: none;
+    }
+
+    textarea:focus {
+      border: 1px solid $primary;
     }
   }
 
