@@ -85,6 +85,13 @@ export default (state = initialState, { type, payload }) => {
         error: payload,
         loading: false,
       };
+    case types.RESET_WORKOUT_EXERCISES:
+      return {
+        currentWorkoutExercise: null,
+        currentWorkoutExercises: [],
+        loading: false,
+        error: null,
+      };
     default:
       return state;
   }

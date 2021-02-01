@@ -41,6 +41,14 @@ const workoutsReducer = (state = INITIAL_STATE, { type, payload }) => {
         nextWorkout: null,
         loading: false,
       };
+    case types.RESET_WORKOUTS:
+      return {
+        currentWorkout: null,
+        nextWorkout: null,
+        allWorkouts: [],
+        loading: false,
+        error: null,
+      };
     default:
       return state;
   }

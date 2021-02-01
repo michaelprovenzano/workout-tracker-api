@@ -55,6 +55,12 @@ export const clearCurrentProgram = () => async dispatch => {
   });
 };
 
+export const resetPrograms = () => async dispatch => {
+  dispatch({
+    type: types.RESET_PROGRAMS,
+  });
+};
+
 const errorCheck = (dispatch, result) => {
   if (result.status === 'fail') {
     dispatch({

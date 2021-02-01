@@ -107,6 +107,12 @@ export const clearCurrentProgramWorkouts = () => async dispatch => {
   });
 };
 
+export const resetProgramWorkouts = () => async dispatch => {
+  dispatch({
+    type: types.RESET_PROGRAM_WORKOUTS,
+  });
+};
+
 const errorCheck = (dispatch, result) => {
   if (result.status === 'fail') {
     dispatch({

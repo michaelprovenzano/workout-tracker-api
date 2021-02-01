@@ -71,6 +71,10 @@ export const clearAllExercises = () => ({
   type: types.CLEAR_ALL_EXERCISES,
 });
 
+export const resetExercises = () => ({
+  type: types.RESET_EXERCISES,
+});
+
 // TODO: Implement more robustly after API handles errors more effectively
 const errorCheck = (dispatch, result) => {
   if (result.status === 'fail') {

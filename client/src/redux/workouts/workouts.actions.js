@@ -93,3 +93,9 @@ export const clearCurrentWorkouts = () => async dispatch => {
     type: types.CLEAR_ALL_WORKOUTS,
   });
 };
+
+export const resetWorkouts = () => async dispatch => {
+  dispatch({
+    type: types.RESET_WORKOUTS,
+  });
+};
