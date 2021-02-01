@@ -114,6 +114,10 @@ export const clearCurrentWorkoutExercises = () => ({
   type: types.CLEAR_CURRENT_WORKOUT_EXERCISES,
 });
 
+export const resetWorkoutExercises = () => ({
+  type: types.RESET_WORKOUT_EXERCISES,
+});
+
 // TODO: Implement more robustly after API handles errors more effectively
 const errorCheck = (dispatch, result) => {
   if (result.status === 'fail') {

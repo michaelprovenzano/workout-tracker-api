@@ -22,6 +22,8 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, currentProgram: initialState, loading: false };
     case types.SET_PROGRAMS_ERROR:
       return { ...state, error: payload, loading: false };
+    case types.RESET_PROGRAMS:
+      return { currentProgram: null, allPrograms: [], loading: false, error: null };
     default:
       return state;
   }

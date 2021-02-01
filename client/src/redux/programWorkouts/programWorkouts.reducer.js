@@ -81,6 +81,14 @@ export default (state = initialState, { type, payload }) => {
         nextProgramWorkout: null,
         loading: false,
       };
+    case types.RESET_PROGRAM_WORKOUTS:
+      return {
+        currentProgramWorkout: null,
+        nextProgramWorkout: null,
+        currentProgramWorkouts: [],
+        loading: false,
+        error: null,
+      };
     case types.SET_PROGRAM_WORKOUTS_ERROR:
       return {
         ...state,

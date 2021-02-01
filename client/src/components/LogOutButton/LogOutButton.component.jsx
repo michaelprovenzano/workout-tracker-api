@@ -5,13 +5,11 @@ import { removeCurrentUser } from '../../redux/user/user.actions';
 import { resetProgramLogs } from '../../redux/programLogs/programLogs.actions';
 import { resetWorkoutLogs } from '../../redux/workoutLogs/workoutLogs.actions';
 import { resetExerciseLogs } from '../../redux/exerciseLogs/exerciseLogs.actions';
-import {
-  clearCurrentProgramWorkout,
-  clearCurrentProgramWorkouts,
-} from '../../redux/programWorkouts/programWorkouts.actions';
-import { clearCurrentWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
-import { clearNextProgramWorkout } from '../../redux/programWorkouts/programWorkouts.actions';
-import { clearPrograms } from '../../redux/programs/programs.actions';
+import { resetProgramWorkouts } from '../../redux/programWorkouts/programWorkouts.actions';
+import { resetWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
+import { resetPrograms } from '../../redux/programs/programs.actions';
+import { resetWorkouts } from '../../redux/workouts/workouts.actions';
+import { resetExercises } from '../../redux/exercises/exercises.actions';
 import { clearStats } from '../../redux/stats/stats.actions';
 
 import './LogOutButton.styles.scss';
@@ -26,11 +24,11 @@ const LogOutButton = ({
   resetProgramLogs,
   resetWorkoutLogs,
   resetExerciseLogs,
-  clearPrograms,
-  clearCurrentProgramWorkout,
-  clearCurrentProgramWorkouts,
-  clearCurrentWorkoutExercises,
-  clearNextProgramWorkout,
+  resetProgramWorkouts,
+  resetWorkoutExercises,
+  resetPrograms,
+  resetWorkouts,
+  resetExercises,
   clearStats,
 }) => {
   const history = useHistory();
@@ -41,12 +39,12 @@ const LogOutButton = ({
     resetProgramLogs();
     resetWorkoutLogs();
     resetExerciseLogs();
-    clearCurrentProgramWorkout();
-    clearCurrentProgramWorkouts();
-    clearCurrentWorkoutExercises();
-    clearNextProgramWorkout();
+    resetProgramWorkouts();
+    resetWorkoutExercises();
+    resetPrograms();
+    resetWorkouts();
+    resetExercises();
     clearStats();
-    clearPrograms();
 
     // Redirect
     history.push('/sign-in');
@@ -74,11 +72,11 @@ const mapDispatchToProps = {
   resetProgramLogs,
   resetWorkoutLogs,
   resetExerciseLogs,
-  clearPrograms,
-  clearCurrentProgramWorkout,
-  clearCurrentProgramWorkouts,
-  clearCurrentWorkoutExercises,
-  clearNextProgramWorkout,
+  resetProgramWorkouts,
+  resetWorkoutExercises,
+  resetPrograms,
+  resetWorkouts,
+  resetExercises,
   clearStats,
 };
 
