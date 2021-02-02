@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './WorkoutPage.styles.scss';
 
 import { connect } from 'react-redux';
-import { fetchWorkoutExercises } from '../../redux/workoutExercises/workoutExercises.actions';
+import {
+  fetchWorkoutExercises,
+  setCurrentWorkoutExercise,
+} from '../../redux/workoutExercises/workoutExercises.actions';
 import {
   fetchProgramWorkouts,
   setCurrentProgramWorkout,
@@ -44,6 +47,7 @@ const WorkoutPage = ({
   setCurrentProgramWorkout,
   updateWorkoutLog,
   setCurrentWorkoutLog,
+  setCurrentWorkoutExercise,
   fetchWorkoutExercises,
   setCurrentExerciseLogs,
   setCurrentExerciseLog,
@@ -94,9 +98,11 @@ const WorkoutPage = ({
     // eslint-disable-next-line
   }, [currentWorkoutLog, currentExerciseLog, currentProgramWorkout, currentProgramWorkouts]);
 
-  const goToExerciseLog = async (exerciseLogId, workoutExerciseId) => {
+  const goToExerciseLog = async (exerciseLog, workoutExerciseId) => {
     let workoutLogId;
+    let exerciseLogId;
     if (currentWorkoutLog) workoutLogId = currentWorkoutLog.workout_log_id;
+    if (exerciseLog) exerciseLogId = exerciseLog.exercise_log_id;
 
     if (currentWorkoutLog && !exerciseLogId) {
       addExerciseLog(workoutLogId, workoutExerciseId);
@@ -104,7 +110,7 @@ const WorkoutPage = ({
     }
 
     if (currentWorkoutLog && exerciseLogId) {
-      setCurrentExerciseLog(exerciseLogId);
+      setCurrentExerciseLog(exerciseLog);
       history.push(`/workout-logs/${currentWorkoutLog.workout_log_id}/${exerciseLogId}`);
     }
   };
@@ -121,11 +127,21 @@ const WorkoutPage = ({
         currentWorkoutLog.workout_log_id,
         currentWorkoutExercises[0].workout_exercise_id
       );
+      setCurrentWorkoutExercise(currentWorkoutExercises[0]);
       setRedirect(true);
     } else {
       // If workout has exercises, go to last completed exercise log
+      const currentLog = currentExerciseLogs[currentExerciseLogs.length - 1];
+      setCurrentExerciseLog(currentLog);
+      setCurrentWorkoutExercise(
+        currentWorkoutExercises.find(
+          exercise => exercise.workout_exercise_id === currentLog.workout_exercise_id
+        )
+      );
       history.push(
-        `/workout-logs/${currentWorkoutLog.workout_log_id}/${currentExerciseLog.exercise_log_id}`
+        `/workout-logs/${currentWorkoutLog.workout_log_id}/${
+          currentExerciseLogs[currentExerciseLogs.length - 1].exercise_log_id
+        }`
       );
     }
   };
@@ -314,6 +330,7 @@ const mapDispatchToProps = {
   fetchProgramWorkouts,
   fetchNextProgramWorkout,
   fetchWorkoutExercises,
+  setCurrentWorkoutExercise,
   setCurrentProgramWorkout,
   setCurrentWorkoutLog,
   setCurrentExerciseLogs,
