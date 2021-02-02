@@ -16,6 +16,7 @@ const activeProgramLogReducer = (state = INITIAL_STATE, { type, payload }) => {
       return {
         ...state,
         activeProgramLog: log,
+        currentProgramLog: log,
       };
     case types.CLEAR_ACTIVE_PROGRAM_LOG:
       return {
