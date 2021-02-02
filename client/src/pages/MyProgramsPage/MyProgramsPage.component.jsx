@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import './MyProgramsPage.styles.scss';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 
 // Redux
 import { connect } from 'react-redux';
@@ -29,9 +30,9 @@ const MyProgramsPage = ({
   getActiveProgramLog,
   abandonProgramLog,
   setStats,
-  history,
 }) => {
   const [confirmModal, setConfirmModal] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     fetchProgramLogs();
@@ -95,7 +96,13 @@ const MyProgramsPage = ({
                     />
                   </div>
                   <div className='col-4 col-md-12'>
-                    <Button text='Stats' type='primary' position='center' className='w-100' />
+                    <Button
+                      text='Stats'
+                      type='primary'
+                      position='center'
+                      className='w-100'
+                      onClick={() => history.push('/dashboard')}
+                    />
                   </div>
                   <div className='col-4 col-md-12'>
                     <Button
@@ -134,18 +141,20 @@ const MyProgramsPage = ({
                   let abandoned = log.status === 'abandoned';
                   let completed = log.status === 'completed';
 
-                  return (
-                    <ProgramItem
-                      key={i}
-                      name={`${log.program_name} | ${log.mode}`}
-                      dateRange={`${startDate} - ${endDate}`}
-                      history={history}
-                      onClick={() => goToProgramLog(log.program_log_id)}
-                      abandoned={abandoned}
-                      completed={completed}
-                      program
-                    />
-                  );
+                  if (abandoned || completed) {
+                    return (
+                      <ProgramItem
+                        key={i}
+                        name={`${log.program_name} | ${log.mode}`}
+                        dateRange={`${startDate} - ${endDate}`}
+                        history={history}
+                        onClick={() => goToProgramLog(log.program_log_id)}
+                        abandoned={abandoned}
+                        completed={completed}
+                        program
+                      />
+                    );
+                  }
                 })
               : null}
           </Col>
