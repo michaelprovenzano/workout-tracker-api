@@ -95,7 +95,7 @@ const ExercisePage = ({
         );
     }
     // eslint-disable-next-line
-  }, [currentWorkoutLog, currentExerciseLog]);
+  }, [currentWorkoutLog, currentExerciseLog, currentWorkoutExercise]);
 
   const makeActive = workoutExerciseId => {
     let newActiveLog = currentExerciseLogs.find(
