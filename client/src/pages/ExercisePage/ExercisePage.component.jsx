@@ -60,16 +60,6 @@ const ExercisePage = ({
       return;
     }
 
-    if (currentProgramWorkouts.length === 0) {
-      fetchProgramWorkouts(currentWorkoutLog.program_id);
-      return;
-    }
-
-    if (currentProgramWorkouts[0].program_workout_id !== currentWorkoutLog.program_workout_id) {
-      fetchProgramWorkouts(currentWorkoutLog.program_id);
-      return;
-    }
-
     let current = currentProgramWorkouts.find(
       workout => currentWorkoutLog.program_workout_id === workout.program_workout_id
     );

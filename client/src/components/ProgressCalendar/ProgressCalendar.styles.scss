@@ -26,7 +26,8 @@
   .calendar-day {
     color: $black;
     background: $inactive;
-    display: inline-block;
+    display: block;
+    border: none;
     border-radius: 100%;
     width: 100%;
     padding-bottom: 100%;

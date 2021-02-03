@@ -1,9 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './ProgressCalendar.styles.scss';
 
-const ProgressCalendar = ({ calendar }) => {
+import { setCurrentWorkoutLog } from '../../redux/workoutLogs/workoutLogs.actions';
+import { setCurrentWorkoutExercise } from '../../redux/workoutExercises/workoutExercises.actions';
+
+const ProgressCalendar = ({
+  workoutLogs: { currentWorkoutLogs },
+  stats: { calendar },
+  setCurrentWorkoutLog,
+}) => {
+  const history = useHistory();
+
+  const goToWorkoutLog = calendarItem => {
+    if (calendarItem.workout_log_id) {
+      history.push(`/workout-logs/${calendarItem.workout_log_id}`);
+      setCurrentWorkoutLog(
+        currentWorkoutLogs.find(log => log.workout_log_id === calendarItem.workout_log_id)
+      );
+    }
+  };
+
   if (!calendar) calendar = [];
   return (
     <div className='progress-calendar'>
@@ -11,14 +29,14 @@ const ProgressCalendar = ({ calendar }) => {
         {calendar.map((item, i) => (
           <div className='calendar-day-container' key={i}>
             {item.workout_log_id ? (
-              <Link
-                to={item.workout_log_id ? `/workout-logs/${item.workout_log_id}` : ''}
+              <button
                 className={`calendar-day ${item.skipped ? 'skipped' : ''} ${
                   item.complete && !item.skipped ? 'complete' : ''
                 } ${item.streak ? 'streak' : ''}`}
+                onClick={() => goToWorkoutLog(item)}
               >
                 <div className='calendar-day-text text-16'>{i + 1}</div>
-              </Link>
+              </button>
             ) : (
               <div
                 className={`calendar-day ${item.skipped ? 'skipped' : ''} ${
@@ -36,7 +54,7 @@ const ProgressCalendar = ({ calendar }) => {
 };
 
 const mapStateToProps = state => ({
-  calendar: state.stats.calendar,
+  ...state,
 });
 
-export default connect(mapStateToProps, null)(ProgressCalendar);
+export default connect(mapStateToProps, { setCurrentWorkoutLog })(ProgressCalendar);

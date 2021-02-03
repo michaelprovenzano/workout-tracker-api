@@ -98,11 +98,9 @@ const WorkoutPage = ({
     // eslint-disable-next-line
   }, [currentWorkoutLog, currentExerciseLog, currentProgramWorkout, currentProgramWorkouts]);
 
-  const goToExerciseLog = async (exerciseLog, workoutExerciseId) => {
+  const goToExerciseLog = (exerciseLogId, workoutExerciseId) => {
     let workoutLogId;
-    let exerciseLogId;
     if (currentWorkoutLog) workoutLogId = currentWorkoutLog.workout_log_id;
-    if (exerciseLog) exerciseLogId = exerciseLog.exercise_log_id;
 
     if (currentWorkoutLog && !exerciseLogId) {
       addExerciseLog(workoutLogId, workoutExerciseId);
@@ -110,7 +108,12 @@ const WorkoutPage = ({
     }
 
     if (currentWorkoutLog && exerciseLogId) {
-      setCurrentExerciseLog(exerciseLog);
+      setCurrentExerciseLog(
+        currentExerciseLogs.find(log => log.exercise_log_id === parseInt(exerciseLogId))
+      );
+      setCurrentWorkoutExercise(
+        currentWorkoutExercises.find(exercise => exercise.workout_exercise_id === workoutExerciseId)
+      );
       history.push(`/workout-logs/${currentWorkoutLog.workout_log_id}/${exerciseLogId}`);
     }
   };

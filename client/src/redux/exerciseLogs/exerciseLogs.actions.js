@@ -64,10 +64,12 @@ export const setPreviousExerciseLog = currentLog => async dispatch => {
   let exerciseLog;
   if (pastExerciseLogs.length < 2) {
     exerciseLog = null;
-  } else if (pastExerciseLogs[0].exercise_log_id === parseInt(currentLog.exercise_log_id)) {
-    exerciseLog = pastExerciseLogs[1];
   } else {
-    exerciseLog = pastExerciseLogs[0];
+    const curLogIndex = pastExerciseLogs.findIndex(
+      log => log.exercise_log_id === currentLog.exercise_log_id
+    );
+    if (curLogIndex !== pastExerciseLogs.length - 1)
+      exerciseLog = pastExerciseLogs[curLogIndex + 1];
   }
 
   dispatch({
