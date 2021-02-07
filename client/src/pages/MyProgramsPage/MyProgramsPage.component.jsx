@@ -9,6 +9,7 @@ import {
   fetchProgramLogs,
   getActiveProgramLog,
   abandonProgramLog,
+  setCurrentProgramLog,
 } from '../../redux/programLogs/programLogs.actions';
 import { setStats } from '../../redux/stats/stats.actions';
 import { setWorkoutLogs } from '../../redux/workoutLogs/workoutLogs.actions';
@@ -28,6 +29,7 @@ const MyProgramsPage = ({
   fetchProgramLogs,
   setWorkoutLogs,
   getActiveProgramLog,
+  setCurrentProgramLog,
   abandonProgramLog,
   setStats,
 }) => {
@@ -54,10 +56,16 @@ const MyProgramsPage = ({
   };
 
   const goToCurrentSchedule = () => {
-    history.push(`/program-logs/${activeProgramLog.program_log_id}`);
+    const programLogId = activeProgramLog.program_log_id;
+    setCurrentProgramLog(activeProgramLog);
+    setWorkoutLogs(programLogId);
+    history.push(`/program-logs/${programLogId}`);
   };
 
   const goToProgramLog = programLogId => {
+    setCurrentProgramLog(
+      currentProgramLogs.find(log => log.program_log_id === parseInt(programLogId))
+    );
     setWorkoutLogs(programLogId);
     history.push(`/program-logs/${programLogId}`);
   };
@@ -181,6 +189,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   fetchProgramLogs,
   getActiveProgramLog,
+  setCurrentProgramLog,
   setWorkoutLogs,
   abandonProgramLog,
   setStats,

@@ -76,7 +76,7 @@ const Dashboard = ({
     );
 
   // Get the stats to check and update program progress
-  if (stats.progress >= 1 && activeProgramLog) {
+  if (stats.progress >= 1 && activeProgramLog.program_log_id === stats.program_log_id) {
     updateProgramLog({ program_log_id: activeProgramLog.program_log_id, status: 'completed' });
     clearActiveProgramLog();
     clearStats();
