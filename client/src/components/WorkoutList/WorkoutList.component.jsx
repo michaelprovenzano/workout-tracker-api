@@ -51,8 +51,17 @@ const WorkoutList = ({
     deleteProgramWorkout(workout);
   };
 
+  let weeks = [];
+  if (workouts) {
+    let length = Math.ceil(workouts.length / 7);
+    for (let i = 0; i < length; i++) {
+      weeks.push(i + 1);
+    }
+  }
+
   return (
     <div className='workout-list d-flex'>
+      <ul className='workout-list-week'>{weeks ? weeks.map(week => <li>{week}</li>) : null}</ul>
       <ul className='workout-list-numbers'>
         {workouts ? workouts.map((workout, i) => <li>{i + 1}</li>) : null}
       </ul>
