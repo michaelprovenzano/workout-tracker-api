@@ -11,7 +11,7 @@ const WorkoutItem = ({
   edit,
   del,
   programs: { currentProgram },
-  workouts: { allWorkouts },
+  programWorkouts: { currentProgramWorkouts },
   addProgramWorkout,
   setAlert,
 }) => {
@@ -20,7 +20,7 @@ const WorkoutItem = ({
 
   const addAWorkout = () => {
     let workout_order = 0;
-    if (allWorkouts) workout_order = allWorkouts.length;
+    if (currentProgramWorkouts) workout_order = currentProgramWorkouts.length;
 
     addProgramWorkout({ workout_id, program_id, workout_order, workout_name });
     setAlert('success', `Workout "${workout_name}" added to "${program_name}"`);

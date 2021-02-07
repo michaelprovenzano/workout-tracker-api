@@ -33,10 +33,7 @@ const WorkoutList = ({
     const newWorkoutOrder = [...currentProgramWorkouts];
     const [reorderedWorkout] = newWorkoutOrder.splice(result.source.index, 1);
     newWorkoutOrder.splice(result.destination.index, 0, reorderedWorkout);
-    newWorkoutOrder.forEach((workout, i) => (workout.workout_order = i));
-
-    setWorkouts(newWorkoutOrder);
-    updateProgramWorkouts(newWorkoutOrder);
+    setWorkoutOrder(newWorkoutOrder);
   };
 
   if (!currentProgramWorkouts) return <div>Loading...</div>;
@@ -49,6 +46,18 @@ const WorkoutList = ({
 
   const deleteWorkout = workout => {
     deleteProgramWorkout(workout);
+
+    const newWorkoutOrder = [...currentProgramWorkouts].filter(
+      curWorkout => curWorkout.program_workout_id !== workout.program_workout_id
+    );
+    setWorkoutOrder(newWorkoutOrder);
+  };
+
+  const setWorkoutOrder = workoutOrder => {
+    workoutOrder.forEach((workout, i) => (workout.workout_order = i));
+
+    setWorkouts(workoutOrder);
+    updateProgramWorkouts(workoutOrder);
   };
 
   let weeks = [];

@@ -21,6 +21,8 @@
   .workout-list-week {
     li {
       height: 280px;
+      display: flex;
+      justify-content: center;
 
       &:nth-child(odd) {
         background-color: $primary;
