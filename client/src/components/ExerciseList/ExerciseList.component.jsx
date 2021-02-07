@@ -30,10 +30,8 @@ const ExerciseList = ({
     const newExerciseOrder = [...currentWorkoutExercises];
     const [reorderedExercise] = newExerciseOrder.splice(result.source.index, 1);
     newExerciseOrder.splice(result.destination.index, 0, reorderedExercise);
-    newExerciseOrder.forEach((exercise, i) => (exercise.exercise_order = i));
 
-    setExercises(newExerciseOrder);
-    updateCurrentWorkoutExercises(newExerciseOrder);
+    setExerciseOrder(newExerciseOrder);
   };
 
   if (!currentWorkoutExercises) return <div>Loading...</div>;
@@ -45,6 +43,17 @@ const ExerciseList = ({
 
   const removeExercise = exercise => {
     deleteWorkoutExercise(exercise);
+    const newExerciseOrder = [...currentWorkoutExercises].filter(
+      curExercise => curExercise.workout_exercise_id !== exercise.workout_exercise_id
+    );
+    setExerciseOrder(newExerciseOrder);
+  };
+
+  const setExerciseOrder = exerciseOrder => {
+    exerciseOrder.forEach((exercise, i) => (exercise.exercise_order = i));
+
+    setExercises(exerciseOrder);
+    updateCurrentWorkoutExercises(exerciseOrder);
   };
 
   return (
