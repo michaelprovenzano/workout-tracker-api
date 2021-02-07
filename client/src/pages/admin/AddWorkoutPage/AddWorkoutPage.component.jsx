@@ -8,8 +8,7 @@ import {
   setCurrentProgram,
   clearCurrentProgram,
 } from '../../../redux/programs/programs.actions';
-import { fetchAllWorkouts } from '../../../redux/workouts/workouts.actions';
-import { addProgramWorkout } from '../../../redux/programWorkouts/programWorkouts.actions';
+import { fetchAllWorkouts, addWorkout } from '../../../redux/workouts/workouts.actions';
 
 // Components
 import Header from '../../../components/Header/Header.component';
@@ -22,7 +21,7 @@ import LoaderSpinner from 'react-loader-spinner';
 const AddWorkoutPage = ({
   allWorkouts,
   programs: { allPrograms, currentProgram },
-  addProgramWorkout,
+  addWorkout,
   fetchPrograms,
   setCurrentProgram,
   fetchAllWorkouts,
@@ -57,7 +56,7 @@ const AddWorkoutPage = ({
     );
 
   const createWorkout = async () => {
-    addProgramWorkout({
+    addWorkout({
       workout_name: name,
     });
 
@@ -95,7 +94,7 @@ const AddWorkoutPage = ({
                 <form className='mt-5 w-100'>
                   <InputText
                     type='text'
-                    label='Exercise Name'
+                    label='Workout Name'
                     value={name}
                     color='dark'
                     onInput={e => setName(e.target.value)}
@@ -149,7 +148,7 @@ const getUniqueWorkouts = workouts => {
 };
 
 export default connect(mapStateToProps, {
-  addProgramWorkout,
+  addWorkout,
   fetchPrograms,
   setCurrentProgram,
   clearCurrentProgram,
