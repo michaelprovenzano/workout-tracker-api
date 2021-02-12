@@ -3,11 +3,17 @@ import './ProgressBar.styles.scss';
 
 class ProgressBar extends React.Component {
   render() {
-    const { progress, classes } = this.props;
+    const { progress, progressSecondary, classes } = this.props;
 
     return (
       <div className={`progress-bar ${classes}`}>
-        <div className='progress' style={{ width: `${progress}%` }}></div>
+        {progressSecondary && (
+          <div
+            className='progress progress-secondary'
+            style={{ width: `${progressSecondary}%` }}
+          ></div>
+        )}
+        <div className='progress progress-primary' style={{ width: `${progress}%` }}></div>
       </div>
     );
   }

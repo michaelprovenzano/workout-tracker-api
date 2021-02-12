@@ -13,8 +13,15 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: $primary;
     border-radius: 3px;
     transition: all 0.2s ease;
+  }
+
+  .progress-primary {
+    background-color: $primary;
+  }
+
+  .progress-secondary {
+    background-color: rgba($primary, 0.4);
   }
 }

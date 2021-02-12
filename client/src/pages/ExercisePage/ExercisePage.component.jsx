@@ -122,7 +122,14 @@ const ExercisePage = ({
       </div>
     );
 
-  let progress = (currentExerciseLogs.length / currentWorkoutExercises.length) * 100;
+  let totalProgress = (currentExerciseLogs.length / currentWorkoutExercises.length) * 100;
+  let currentProgress =
+    ((currentExerciseLogs.findIndex(
+      log => currentExerciseLog.exercise_log_id === log.exercise_log_id
+    ) +
+      1) /
+      currentWorkoutExercises.length) *
+    100;
 
   return (
     <div className='exercise-page offset-header'>
@@ -137,7 +144,7 @@ const ExercisePage = ({
               <div className='pb-2'>{currentProgramWorkout.workout_name}</div>
               <div className='pb-2'>{currentProgramLog.program_name}</div>
             </div>
-            <ProgressBar progress={`${progress}`} />
+            <ProgressBar progressSecondary={`${totalProgress}`} progress={`${currentProgress}`} />
             <div className='hidden-sm-down'>
               {currentWorkoutExercises.map((exerciseObj, i) => {
                 let { exercise_name, is_isometric, has_weight, workout_exercise_id } = exerciseObj;
