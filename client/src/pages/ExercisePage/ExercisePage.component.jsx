@@ -123,13 +123,11 @@ const ExercisePage = ({
     );
 
   let totalProgress = (currentExerciseLogs.length / currentWorkoutExercises.length) * 100;
-  let currentProgress =
-    ((currentExerciseLogs.findIndex(
+  let currentExerciseNumber =
+    currentExerciseLogs.findIndex(
       log => currentExerciseLog.exercise_log_id === log.exercise_log_id
-    ) +
-      1) /
-      currentWorkoutExercises.length) *
-    100;
+    ) + 1;
+  let currentProgress = (currentExerciseNumber / currentWorkoutExercises.length) * 100;
 
   return (
     <div className='exercise-page offset-header'>
@@ -142,7 +140,7 @@ const ExercisePage = ({
           <Col number='1' bgSmall='true' className='workout-list'>
             <div className='workout-program d-flex justify-content-between w-100'>
               <div className='pb-2'>{currentProgramWorkout.workout_name}</div>
-              <div className='pb-2'>{currentProgramLog.program_name}</div>
+              <div className='pb-2'>{`${currentExerciseNumber} / ${currentWorkoutExercises.length}`}</div>
             </div>
             <ProgressBar progressSecondary={`${totalProgress}`} progress={`${currentProgress}`} />
             <div className='hidden-sm-down'>
