@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import './WorkoutSticky.styles.scss';
+import moment from 'moment';
 
 // Redux
 import { connect } from 'react-redux';
@@ -65,7 +66,7 @@ const WorkoutSticky = ({
       addWorkoutLog({
         program_log_id: activeProgramLog.program_log_id,
         program_workout_id: nextProgramWorkout.program_workout_id,
-        date: new Date(Date.now()),
+        date: moment().toDate(),
         skipped: true,
         active: false,
       });
@@ -85,7 +86,7 @@ const WorkoutSticky = ({
       addWorkoutLog({
         program_workout_id: nextProgramWorkout.program_workout_id,
         program_log_id: activeProgramLog.program_log_id,
-        date: new Date(Date.now()),
+        date: moment().toDate(),
         skipped: false,
         active: true,
       });
