@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import './WorkoutSticky.styles.scss';
-import moment from 'moment';
 
 // Redux
 import { connect } from 'react-redux';
@@ -63,10 +62,11 @@ const WorkoutSticky = ({
       skipWorkoutLog(activeWorkoutLog.workout_log_id);
       clearActiveWorkoutLog();
     } else {
+      const now = new Date(Date.now());
       addWorkoutLog({
         program_log_id: activeProgramLog.program_log_id,
         program_workout_id: nextProgramWorkout.program_workout_id,
-        date: moment().toDate(),
+        date: now.toISOString(),
         skipped: true,
         active: false,
       });
@@ -83,10 +83,11 @@ const WorkoutSticky = ({
 
     if (!activeWorkoutLog) {
       // If there's no log, create a new workout log for the current program and make it the active workout log
+      const now = new Date(Date.now());
       addWorkoutLog({
         program_workout_id: nextProgramWorkout.program_workout_id,
         program_log_id: activeProgramLog.program_log_id,
-        date: moment().toDate(),
+        date: now.toISOString(),
         skipped: false,
         active: true,
       });
@@ -95,6 +96,7 @@ const WorkoutSticky = ({
       history.push(`/workout-logs/${activeWorkoutLog.workout_log_id}`);
     }
   };
+
   let loading = false;
   if ((!nextProgramWorkout || Object.keys(nextProgramWorkout).length === 0) && !activeWorkoutLog)
     loading = true;

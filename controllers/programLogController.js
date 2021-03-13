@@ -135,8 +135,6 @@ exports.getProgramStats = catchAsync(async (req, res) => {
 
         if (i > 0) {
           prevLog = workoutLogHash[workouts[i - 1].program_workout_id];
-          console.log(workouts[i - 1].program_workout_id);
-          console.log(curLog.program_workout_id);
           let curLogDate = moment(curLog.date).endOf('day');
           let prevLogDate = moment(prevLog.date).startOf('day');
           let dateDiff = curLogDate.diff(prevLogDate, 'days');
