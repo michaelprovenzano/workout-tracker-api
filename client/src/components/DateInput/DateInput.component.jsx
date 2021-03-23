@@ -10,9 +10,14 @@ const DateInput = ({ onInput, initialDate }) => {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    // Fix postgres Date object auto-injecting timezone
+    let startDate = new Date(initialDate);
+    startDate -= startDate.getTimezoneOffset() * 60 * 1000;
+    initialDate = moment(startDate).utc().format();
+
     window.addEventListener('click', handleExpanded);
-    if (!date) setDate(moment(initialDate));
-    if (!month) setMonth(moment(initialDate));
+    if (!date) setDate(moment(initialDate).utc());
+    if (!month) setMonth(moment(initialDate).utc());
 
     return () => window.removeEventListener('click', handleExpanded);
     // eslint-disable-next-line
