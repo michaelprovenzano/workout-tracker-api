@@ -14,12 +14,17 @@ const DateInput = ({ onInput, initialDate }) => {
     initialDate = initialDate.split('T')[0] + 'T00:00:00.000Z';
 
     window.addEventListener('click', handleExpanded);
+    window.addEventListener('focusin', handleTabExpanded);
+
     if (!date) setDate(moment(initialDate).utc());
     if (!month) setMonth(moment(initialDate).utc());
 
     console.log(moment(initialDate).format('MMMM M/D/YY'));
 
-    return () => window.removeEventListener('click', handleExpanded);
+    return () => {
+      window.removeEventListener('click', handleExpanded);
+      window.removeEventListener('focusin', handleTabExpanded);
+    };
     // eslint-disable-next-line
   }, [date, month, initialDate]);
 
@@ -85,6 +90,14 @@ const DateInput = ({ onInput, initialDate }) => {
     }
   };
 
+  const handleTabExpanded = e => {
+    if (e.target.closest('.date-picker')) {
+      setExpanded(true);
+    } else {
+      setExpanded(false);
+    }
+  };
+
   if (!date || !month) return <div>Loading...</div>;
   if (!calendar) createCalendar();
 
@@ -125,12 +138,16 @@ const DateInput = ({ onInput, initialDate }) => {
                 calendar.map((day, i) => (
                   <div key={i} className='popup-day-container'>
                     <div
+                      tabIndex='0'
                       className={`popup-day ${
                         moment(month).date(day.day).isSame(moment(date), 'day') && day.active
                           ? 'active'
                           : ''
                       } ${!day.active ? 'disabled' : ''}`}
                       onClick={() => makeActive(day)}
+                      onKeyPress={e => {
+                        if (e.key === 'Enter') makeActive(day);
+                      }}
                     >
                       <span className='popup-date'>{day.day}</span>
                     </div>
