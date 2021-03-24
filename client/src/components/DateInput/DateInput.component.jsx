@@ -10,14 +10,14 @@ const DateInput = ({ onInput, initialDate }) => {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    // Fix postgres Date object auto-injecting timezone
-    let startDate = new Date(initialDate);
-    startDate -= startDate.getTimezoneOffset() * 60 * 1000;
-    initialDate = moment(startDate).utc().format();
+    // Fix postgres Date object auto-injecting timezone in development
+    initialDate = initialDate.split('T')[0] + 'T00:00:00.000Z';
 
     window.addEventListener('click', handleExpanded);
     if (!date) setDate(moment(initialDate).utc());
     if (!month) setMonth(moment(initialDate).utc());
+
+    console.log(moment(initialDate).format('MMMM M/D/YY'));
 
     return () => window.removeEventListener('click', handleExpanded);
     // eslint-disable-next-line
@@ -93,7 +93,7 @@ const DateInput = ({ onInput, initialDate }) => {
       <input
         type='text'
         className='date-picker-input btn w-100 text-center mt-1'
-        value={date.format('MMMM M/D/YY')}
+        value={date.utc().format('MMMM M/D/YY')}
         readOnly='true'
       />
       <div className={`popup-container w-100 ${!expanded ? 'hidden' : ''}`}>
